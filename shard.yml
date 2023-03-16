@@ -1,0 +1,17 @@
+name: eoyc
+version: 0.1.0
+
+authors:
+  - hahwul <hahwul@gmail.com>
+
+targets:
+  eoyc:
+    main: src/eoyc.cr
+
+dependencies:
+  logger:
+    github: crystal-lang/logger.cr
+
+crystal: 1.7.3
+
+license: MIT
