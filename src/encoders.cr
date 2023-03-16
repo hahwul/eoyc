@@ -1,4 +1,6 @@
 require "base64"
+require "digest/md5"
+require "digest/sha1"
 
 def encode(str, encoders)
     result = ""
@@ -9,6 +11,10 @@ def encode(str, encoders)
             result = Base64.encode(str.to_s)
         when "base64-decode"
             result = Base64.decode(str.to_s)
+        when "md5"
+            result = Digest::MD5.hexdigest(str.to_s)
+        when "sha1"
+            result = Digest::SHA1.base64digest(str.to_s)
         else
             result = str
         end 
