@@ -1,6 +1,9 @@
 # eoyc
 Encoding Only Your Choices
 
+## Installation
+> I'm going to apply as a homebrew 😉
+
 ## Usage
 ```
 Usage: eoyc [arguments]
@@ -55,4 +58,18 @@ cat urls.txt | eoyc -a -e "url"
 # https%3A%2F%2Fwww.hahwul.com
 # https%3A%2F%2Fgithub.com
 # https%3A%2F%2Fgoogle.com
+```
+
+## Build
+```bash
+# Clone github repo
+git clone https://github.com/hahwul/eoyc
+cd eoyc
+
+# Build eoyc
+shards install
+shards build
+
+# Run
+./bin/eoyc -h
 ```
