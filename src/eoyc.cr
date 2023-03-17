@@ -14,7 +14,7 @@ output = ""
 encoders = [""]
 
 OptionParser.parse do |parser|
-  parser.banner = "Usage: eoyc [arguments][data]"
+  parser.banner = "Usage: eoyc [arguments]"
   parser.on "-a", "--all", "Convert all string" { all = true }
   parser.on "-s STRING", "--string=STRING", "Your choice string" { |var| choice = var }
   parser.on "-r REGEX", "--regex=REGEX", "Your choice regex pattern" { |var| regex = var }
