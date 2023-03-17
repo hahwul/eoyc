@@ -32,7 +32,7 @@ Second, choose the type of encoder you wish to run via `-e`. The encoder can con
 -e "url>upcase,md5"
 ```
 
-## Case study
+## Examples
 ```bash
 echo "abcdefghijk" | eoyc -s bcde -e "md5>base64>sha1"
 # aCFV4rFRO+h/0cCngUl1Ccahz040=fghijk
