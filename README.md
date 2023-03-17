@@ -25,10 +25,11 @@ Second, choose the type of encoder you wish to run via `-e`. The encoder can con
 
 ```bash
 # Encoder chanins
-# You can use '>' and '|' characters for chain.
+# You can use '>' and '|' and ',' characters for chain.
 -e "base64"
 -e "base64>md5"
 -e "url|upcase|md5"
+-e "url>upcase,md5"
 ```
 
 ## Case study
