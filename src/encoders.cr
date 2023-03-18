@@ -24,7 +24,7 @@ def encode(str, encoders)
             result = str.to_s.upcase
         when "downcase"
             result = str.to_s.downcase
-        when "redacted"
+        when "redacted", "redaction"
             size = str.to_s.size
             result = "◼" * size
         else
