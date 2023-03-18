@@ -24,7 +24,7 @@ First, choose the range that you want to encode:
 
 Second, choose the type of encoder you wish to run via `-e`. The encoder can consist of multiple chains.
 
-> base64(base64-encode), base64-decode, md5, sha1, url(url-encode), url-decode, upcase, downcase
+> base64(base64-encode), base64-decode, md5, sha1, url(url-encode), url-decode, upcase, downcase, redacted
 
 ```bash
 # Encoder chanins
