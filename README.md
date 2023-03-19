@@ -2,7 +2,9 @@
 Encoding Only Your Choices
 
 ## Installation
-> I'm going to apply as a homebrew 😉
+```bash
+brew install hahwul/homebrew-eoyc/eoyc
+```
 
 ## Usage
 ```
