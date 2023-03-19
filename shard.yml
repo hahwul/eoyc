@@ -1,5 +1,6 @@
 name: eoyc
 version: 0.1.0
+description: Encoding Only Your Choices
 
 authors:
   - hahwul <hahwul@gmail.com>
@@ -15,3 +16,5 @@ dependencies:
 crystal: 1.7.3
 
 license: MIT
+
+repository: "https://github.com/hahwul/eoyc"
