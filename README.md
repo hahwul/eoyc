@@ -3,7 +3,8 @@ Encoding Only Your Choices
 
 ## Installation
 ```bash
-brew install hahwul/homebrew-eoyc/eoyc
+brew tap hahwul/eoyc
+brew install eoyc
 ```
 
 ## Usage
