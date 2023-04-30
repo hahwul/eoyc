@@ -4,7 +4,7 @@ require "./utils.cr"
 require "./encoders.cr"
 
 module Eoyc
-  VERSION = "0.1.0"
+  VERSION = "0.1.1"
 end
 
 all = false
