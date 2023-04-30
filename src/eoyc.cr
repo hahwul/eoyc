@@ -24,7 +24,7 @@ OptionParser.parse do |parser|
   end
   parser.on "-o PATH", "--output=PATH", "Output file" { |var| output = var }
   parser.on "-v", "--version", "Show version" do
-      puts Eoyc::VERSION
+    puts Eoyc::VERSION
     exit
   end
   parser.on "-h", "--help", "Show help" do
