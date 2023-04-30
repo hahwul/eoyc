@@ -1,6 +1,8 @@
 require "base64"
 require "digest/md5"
 require "digest/sha1"
+require "digest/sha256"
+require "digest/sha512"
 require "uri"
 
 def encode(str, encoders)
@@ -16,6 +18,10 @@ def encode(str, encoders)
             result = Digest::MD5.hexdigest(str.to_s)
         when "sha1"
             result = Digest::SHA1.base64digest(str.to_s)
+        when "sha256"
+            result = Digest::SHA256.base64digest(str.to_s)
+        when "sha512"
+            result = Digest::SHA512.base64digest(str.to_s)
         when "url", "url-encode"
             result = URI.encode_www_form(str.to_s)
         when "url-decode"
