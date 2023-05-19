@@ -76,3 +76,8 @@ shards build
 # Run
 ./bin/eoyc -h
 ```
+
+## Test
+```bash
+crystal spec
+```
