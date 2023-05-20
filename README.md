@@ -79,5 +79,5 @@ shards build
 
 ## Test
 ```bash
-crystal spec
+crystal spec -v
 ```
