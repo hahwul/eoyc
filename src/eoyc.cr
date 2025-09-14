@@ -29,6 +29,11 @@ OptionParser.parse do |parser|
   end
   parser.on "-h", "--help", "Show help" do
     puts parser
+    puts
+    puts "Encoders:"
+    encoder_help_lines.each do |l|
+      puts "  #{l}"
+    end
     exit
   end
   parser.invalid_option do |flag|
