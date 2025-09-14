@@ -17,6 +17,28 @@ Usage: eoyc [arguments]
     -o PATH, --output=PATH           Output file
     -v, --version                    Show version
     -h, --help                       Show help
+
+Encoders:
+  base64            - Base64 encode (aliases: base64-encode)
+  base64-decode     - Base64 decode
+  base64-url        - URL-safe Base64 encode (no padding) (aliases: base64-url-encode)
+  base64-url-decode - URL-safe Base64 decode
+  md5               - MD5 hex digest
+  sha1              - SHA1 Base64 digest
+  sha1-hex          - SHA1 hex digest
+  sha256            - SHA256 Base64 digest
+  sha256-hex        - SHA256 hex digest
+  sha512            - SHA512 Base64 digest
+  sha512-hex        - SHA512 hex digest
+  hex               - Hex (lowercase) encode (aliases: hex-encode)
+  hex-decode        - Hex decode
+  url               - application/x-www-form-urlencoded encode (aliases: url-encode)
+  url-decode        - application/x-www-form-urlencoded decode
+  rot13             - ROT13 substitution cipher
+  upcase            - Uppercase transform
+  downcase          - Lowercase transform
+  reverse           - Reverse text
+  redacted          - Replace all characters with blocks (aliases: redaction)
 ```
 
 First, choose the range that you want to encode:
@@ -26,8 +48,6 @@ First, choose the range that you want to encode:
 - If you want to encode the part that matches a regular expression, use `-r`.
 
 Second, choose the type of encoder you wish to run via `-e`. The encoder can consist of multiple chains.
-
-> base64(base64-encode), base64-decode, md5, sha1, url(url-encode), url-decode, upcase, downcase, redacted
 
 ```bash
 # Encoder chanins
