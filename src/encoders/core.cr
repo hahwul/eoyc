@@ -146,7 +146,7 @@ module Encoders
     specs.map do |spec|
       aliases = spec.alias_list
       alias_part = aliases.empty? ? "" : " (aliases: #{aliases.join(", ")})"
-      "#{spec.primary.ljust(14)} - #{spec.description}#{alias_part}"
+      "#{spec.primary.ljust(17)} - #{spec.description}#{alias_part}"
     end
   end
 
