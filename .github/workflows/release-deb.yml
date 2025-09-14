@@ -1,0 +1,61 @@
+---
+name: Build and Release .deb Package
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+permissions:
+  contents: write
+jobs:
+  build-deb:
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Crystal
+        uses: crystal-lang/install-crystal@v1
+      - name: Checkout source code
+        uses: actions/checkout@v5
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Get Version
+        id: get_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Build eoyc Binary
+        run: |
+          docker run --rm --platform linux/${{ matrix.arch }} -v $(pwd):/eoyc -w /eoyc --entrypoint="" 84codes/crystal:latest-debian-12 sh -c "
+            apt-get update && apt-get install -y libyaml-dev ca-certificates git curl &&
+            shards install --production &&
+            /usr/bin/crystal build src/eoyc.cr -o eoyc --release --no-debug --static
+          "
+      - name: Create Debian Package Structure
+        run: |
+          mkdir -p eoyc_${{ env.VERSION }}_${{ matrix.arch }}/DEBIAN
+          mkdir -p eoyc_${{ env.VERSION }}_${{ matrix.arch }}/usr/bin
+          mkdir -p eoyc_${{ env.VERSION }}_${{ matrix.arch }}/usr/share/doc/eoyc
+          cp eoyc eoyc_${{ env.VERSION }}_${{ matrix.arch }}/usr/bin/
+          cp README.md eoyc_${{ env.VERSION }}_${{ matrix.arch }}/usr/share/doc/eoyc/
+          cp LICENSE eoyc_${{ env.VERSION }}_${{ matrix.arch }}/usr/share/doc/eoyc/
+      - name: Create DEBIAN/control file
+        run: |
+          cat > eoyc_${{ env.VERSION }}_${{ matrix.arch }}/DEBIAN/control << EOF
+          Package: eoyc
+          Version: ${{ env.VERSION }}
+          Architecture: ${{ matrix.arch }}
+          maintainer: HAHWUL <hahwul@gmail.com>, KSG <ksg97031@gmail.com>
+          Description: Attack surface detector that identifies endpoints by static analysis
+          Depends: libc6 (>= 2.17)
+          EOF
+      - name: Build .deb Package
+        run: |
+          dpkg-deb --build eoyc_${{ env.VERSION }}_${{ matrix.arch }}
+      - name: Upload .deb to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            eoyc_${{ env.VERSION }}_${{ matrix.arch }}.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
