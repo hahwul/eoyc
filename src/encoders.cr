@@ -35,6 +35,7 @@ require "./encoders/digests"
 require "./encoders/hex"
 require "./encoders/url_form"
 require "./encoders/text"
+require "./encoders/binary"
 #
 # Optionally force a no-op reference to ensure the module is linked
 # (useful in some build optimization scenarios)

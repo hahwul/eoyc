@@ -111,6 +111,31 @@ module EncoderUtils
   def redact(s : String) : String
     "◼" * s.size
   end
+
+  def bin_encode(s : String) : String
+    s.bytes.map(&.to_s(2).rjust(8, '0')).join(" ")
+  end
+
+  def bin_decode(s : String) : String
+    clean = s.strip
+    # Split on spaces and try to convert each 8-bit binary string back to a byte
+    parts = clean.split(/\s+/)
+    bytes = [] of UInt8
+
+    parts.each do |part|
+      # Check if it's a valid 8-bit binary string
+      if part =~ /^[01]{1,8}$/
+        bytes << part.to_i(2).to_u8
+      else
+        # If invalid binary, return original string
+        return s
+      end
+    end
+
+    String.new(Bytes.new(bytes.to_unsafe, bytes.size))
+  rescue
+    s
+  end
 end
 
 module Encoders
