@@ -4,3 +4,7 @@
 /.shards/
 *.dwarf
 .DS_Store
+
+# Crystal installation directories
+crystal-*/
+crystal-*-*/
