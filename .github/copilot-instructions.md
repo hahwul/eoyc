@@ -11,10 +11,10 @@ EOYC (Encoding Only Your Choices) is a Crystal CLI tool for encoding and hashing
 Install Crystal 1.11.2+ from GitHub releases:
 
 ```bash
-# Download and install Crystal 1.11.2 (or latest)
-curl -L https://github.com/crystal-lang/crystal/releases/download/1.11.2/crystal-1.11.2-1-linux-x86_64.tar.gz | tar xz
+# Download and install Crystal 1.17.1 (or latest)
+curl -L https://github.com/crystal-lang/crystal/releases/download/1.17.1/crystal-1.17.1-1-linux-x86_64.tar.gz | tar xz
 export PATH=$PWD/crystal-1.11.2-1/bin:$PATH
-crystal --version  # Should show Crystal 1.11.2
+crystal --version  # Should show Crystal 1.17.1
 ```
 
 **Time expectation**: ~30 seconds for download and extraction
@@ -88,7 +88,7 @@ crystal spec -v
 
 ### Individual Test Files
 - `spec/encoders_spec.cr` - Encoder functionality tests
-- `spec/eoyc_spec.cr` - Main CLI tests  
+- `spec/eoyc_spec.cr` - Main CLI tests
 - `spec/utils_spec.cr` - Utility function tests
 
 ## Code Quality
@@ -122,18 +122,6 @@ ameba
 └── .github/
     └── workflows/       # CI/CD pipelines
 ```
-
-## Available Encoders
-
-- `base64` - Base64 encoding
-- `base64-decode` - Base64 decoding  
-- `md5` - MD5 hashing
-- `sha1` - SHA1 hashing
-- `url` - URL encoding
-- `url-decode` - URL decoding
-- `upcase` - Uppercase transformation
-- `downcase` - Lowercase transformation
-- `redacted` - Redaction/masking
 
 ## Encoder Chaining
 
@@ -197,7 +185,7 @@ crystal spec spec/encoders_spec.cr -v
 ## Time Expectations Summary
 
 - Crystal installation: ~30 seconds
-- Dependencies install: ~1 second  
+- Dependencies install: ~1 second
 - Build: ~1.5 seconds
 - Test suite: ~2 seconds
 - **Total setup**: ~35 seconds from fresh environment
