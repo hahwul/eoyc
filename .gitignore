@@ -4,3 +4,6 @@
 /.shards/
 *.dwarf
 .DS_Store
+
+# For Github Copilot
+crystal-*/
