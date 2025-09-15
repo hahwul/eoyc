@@ -43,7 +43,7 @@ OptionParser.parse do |parser|
   end
 end
 
-log = Logger.new(STDOUT)
+
 
 STDIN.each_line do |line|
   new_encoders = encoders.clone

@@ -4,7 +4,8 @@ require "./spec_helper"
 describe "find" do
   it "returns the correct value" do
     result = find("abcd", "bc")
-    result.not_nil![0].should eq("bc")
+    result.should_not be_nil
+    result.try(&.[0].should(eq("bc")))
   end
 end
 
