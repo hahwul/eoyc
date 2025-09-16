@@ -138,17 +138,17 @@ module EncoderUtils
   end
 
   def oct_encode(s : String) : String
-    s.bytes.map { |b| b.to_s(8).rjust(3, '0') }.join
+    s.bytes.map(&.to_s(8).rjust(3, '0')).join
   end
 
   def oct_decode(s : String) : String
     clean = s.strip
     return s if clean.empty? || clean.size % 3 != 0
-    
+
     # Each character should be exactly 3 octal digits
     bytes = [] of UInt8
     i = 0
-    
+
     while i < clean.size
       chunk = clean[i, 3]
       if chunk =~ /^[0-7]{3}$/
@@ -157,13 +157,13 @@ module EncoderUtils
           bytes << val.to_u8
           i += 3
         else
-          return s  # Invalid octal value > 255
+          return s # Invalid octal value > 255
         end
       else
-        return s  # Invalid octal format
+        return s # Invalid octal format
       end
     end
-    
+
     String.new(Bytes.new(bytes.to_unsafe, bytes.size))
   rescue
     s

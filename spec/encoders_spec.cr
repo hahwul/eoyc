@@ -63,12 +63,12 @@ describe "encode" do
   end
 
   it "octal encode with leading zeros" do
-    result = encode(" ", ["oct"])  # space = 32 = 040 in octal
+    result = encode(" ", ["oct"]) # space = 32 = 040 in octal
     result.should eq("040")
   end
 
   it "octal encode-decode with special chars" do
-    original = "AB"  # 'A' = 65 = 101, 'B' = 66 = 102
+    original = "AB" # 'A' = 65 = 101, 'B' = 66 = 102
     encoded = encode(original, ["oct"])
     encoded.should eq("101102")
     decoded = encode(encoded, ["oct-decode"])
