@@ -168,6 +168,21 @@ module EncoderUtils
   rescue
     s
   end
+
+  def unicode_encode(s : String) : String
+    s.each_char.map { |char| "\\u" + char.ord.to_s(16).rjust(4, '0') }.join
+  end
+
+  def unicode_decode(s : String) : String
+    # Match \uXXXX patterns and convert back to characters
+    decoded = s.gsub(/\\u([0-9a-fA-F]{4})/) do |_|
+      code_point = $1.to_i(16)
+      code_point.chr.to_s
+    end
+    decoded
+  rescue
+    s
+  end
 end
 
 module Encoders

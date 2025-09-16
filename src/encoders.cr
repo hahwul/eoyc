@@ -37,6 +37,7 @@ require "./encoders/url_form"
 require "./encoders/text"
 require "./encoders/binary"
 require "./encoders/octal"
+require "./encoders/unicode"
 #
 # Optionally force a no-op reference to ensure the module is linked
 # (useful in some build optimization scenarios)

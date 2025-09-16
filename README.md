@@ -43,6 +43,8 @@ Encoders:
   bin-decode        - Binary decode
   oct               - Octal (base 8) encode (aliases: oct-encode)
   oct-decode        - Octal decode
+  unicode           - Unicode encode (aliases: unicode-encode)
+  unicode-decode    - Unicode decode
 ```
 
 First, choose the range that you want to encode:
