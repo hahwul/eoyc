@@ -57,7 +57,7 @@ echo "abcdefghijk" | ./bin/eoyc -s bcde -e "md5>base64>sha1"
 
 ### 3. Full Line Encoding
 ```bash
-echo "abcdefghijk" | ./bin/eoyc -a -e "md5>base64>sha1"
+echo "abcdefghijk" | ./bin/eoyc -e "md5>base64>sha1"
 # Expected: 9EG0tX9wWhKDghHJECSS8E+XZ3U=
 ```
 
@@ -69,7 +69,7 @@ echo "user@domain.com" | ./bin/eoyc -r "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-
 
 ### 5. URL Encoding
 ```bash
-echo "https://www.example.com" | ./bin/eoyc -a -e "url"
+echo "https://www.example.com" | ./bin/eoyc -e "url"
 # Expected: https%3A%2F%2Fwww.example.com
 ```
 
