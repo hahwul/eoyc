@@ -175,7 +175,7 @@ module EncoderUtils
 
   def unicode_decode(s : String) : String
     # Match \uXXXX patterns and convert back to characters
-    decoded = s.gsub(/\\u([0-9a-fA-F]{4})/) do |match|
+    decoded = s.gsub(/\\u([0-9a-fA-F]{4})/) do |_|
       code_point = $1.to_i(16)
       code_point.chr.to_s
     end
