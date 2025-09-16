@@ -7,7 +7,6 @@ module Eoyc
   VERSION = "0.2.0"
 end
 
-all = false
 choice = ""
 regex = ""
 output = ""
@@ -15,7 +14,6 @@ encoders = [""]
 
 OptionParser.parse do |parser|
   parser.banner = "Usage: eoyc [arguments]"
-  parser.on "-a", "--all", "Convert all string" { all = true }
   parser.on "-s STRING", "--string=STRING", "Your choice string" { |var| choice = var }
   parser.on "-r REGEX", "--regex=REGEX", "Your choice regex pattern" { |var| regex = var }
   parser.on "-e ENCODERS", "--encoders=ENCODERS", "Encoders chain [char: >|,]" do |var|
@@ -46,14 +44,12 @@ end
 STDIN.each_line do |line|
   new_encoders = encoders.clone
   target = ""
-  if all
-    target = line
+  if choice != ""
+    target = choice
+  elsif regex != ""
+    target = find(line, regex)
   else
-    if choice != ""
-      target = choice
-    elsif regex != ""
-      target = find(line, regex)
-    end
+    target = line
   end
   replacement = encode(target, new_encoders)
   puts replace(line, target, replacement)

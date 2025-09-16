@@ -10,7 +10,6 @@ brew install eoyc
 ## Usage
 ```
 Usage: eoyc [arguments]
-    -a, --all                        Convert all string
     -s STRING, --string=STRING       Your choice string
     -r REGEX, --regex=REGEX          Your choice regex pattern
     -e ENCODERS, --encoders=ENCODERS Encoders chain [char: >|,]
@@ -49,7 +48,7 @@ Encoders:
 
 First, choose the range that you want to encode:
 
-- If you want to encode the entire line, use `-a`.
+- By default, the entire line is encoded.
 - If you want to encode a specific string, use `-s`.
 - If you want to encode the part that matches a regular expression, use `-r`.
 
@@ -71,19 +70,19 @@ echo "abcdefghijk" | eoyc -s bcde -e "md5>base64>sha1"
 ```
 
 ```bash
-echo "abcdefghijk" | eoyc -a -e "md5>base64>sha1"
+echo "abcdefghijk" | eoyc -e "md5>base64>sha1"
 # 9EG0tX9wWhKDghHJECSS8E+XZ3U=
 ```
 
 ```bash
-cat urls.txt | eoyc -a -e "sha1"
+cat urls.txt | eoyc -e "sha1"
 # uGDZ7JWU88EM8kFoGzIldEUtQc8=
 # hLfkSqVNAC6sjQD1v6nMk0EPKkg=
 # cv6VxVduxjTiFIFKMqt4VWjtp2o=
 ```
 
 ```bash
-cat urls.txt | eoyc -a -e "url"
+cat urls.txt | eoyc -e "url"
 # https%3A%2F%2Fwww.hahwul.com
 # https%3A%2F%2Fgithub.com
 # https%3A%2F%2Fgoogle.com
