@@ -43,8 +43,6 @@ OptionParser.parse do |parser|
   end
 end
 
-
-
 STDIN.each_line do |line|
   new_encoders = encoders.clone
   target = ""

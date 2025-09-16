@@ -39,6 +39,10 @@ Encoders:
   downcase          - Lowercase transform
   reverse           - Reverse text
   redacted          - Replace all characters with blocks (aliases: redaction)
+  bin               - Binary (8-bit) encode with spaces (aliases: bin-encode)
+  bin-decode        - Binary decode
+  oct               - Octal (base 8) encode (aliases: oct-encode)
+  oct-decode        - Octal decode
 ```
 
 First, choose the range that you want to encode:
@@ -77,7 +81,7 @@ cat urls.txt | eoyc -a -e "sha1"
 ```
 
 ```bash
-cat urls.txt | eoyc -a -e "url"   
+cat urls.txt | eoyc -a -e "url"
 # https%3A%2F%2Fwww.hahwul.com
 # https%3A%2F%2Fgithub.com
 # https%3A%2F%2Fgoogle.com
