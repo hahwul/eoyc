@@ -38,6 +38,7 @@ require "./encoders/text"
 require "./encoders/binary"
 require "./encoders/octal"
 require "./encoders/unicode"
+require "./encoders/charcode"
 #
 # Optionally force a no-op reference to ensure the module is linked
 # (useful in some build optimization scenarios)
