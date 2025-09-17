@@ -183,6 +183,37 @@ module EncoderUtils
   rescue
     s
   end
+
+  def charcode_encode(s : String) : String
+    s.bytes.map(&.to_s).join(" ")
+  end
+
+  def charcode_decode(s : String) : String
+    clean = s.strip
+    return s if clean.empty?
+
+    # Split on spaces and try to convert each decimal string back to a byte
+    parts = clean.split(/\s+/)
+    bytes = [] of UInt8
+
+    parts.each do |part|
+      # Check if it's a valid decimal number
+      if part =~ /^[0-9]+$/
+        val = part.to_i
+        if val >= 0 && val <= 255
+          bytes << val.to_u8
+        else
+          return s # Invalid char code value
+        end
+      else
+        return s # Invalid format
+      end
+    end
+
+    String.new(Bytes.new(bytes.to_unsafe, bytes.size))
+  rescue
+    s
+  end
 end
 
 module Encoders

@@ -44,6 +44,8 @@ Encoders:
   oct-decode        - Octal decode
   unicode           - Unicode encode (aliases: unicode-encode)
   unicode-decode    - Unicode decode
+  charcode          - Character code encode (decimal ASCII values with spaces) (aliases: charcode-encode)
+  charcode-decode   - Character code decode
 ```
 
 First, choose the range that you want to encode:
