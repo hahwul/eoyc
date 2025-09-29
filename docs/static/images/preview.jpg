@@ -1,0 +1,6 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#1e40af"/>
+  <text x="600" y="280" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="72" font-weight="bold">EOYC</text>
+  <text x="600" y="340" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="32">Encoding Only Your Choices</text>
+  <text x="600" y="390" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24">Crystal CLI tool for flexible string encoding</text>
+</svg>

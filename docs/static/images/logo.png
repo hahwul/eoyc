@@ -1,0 +1,7 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#2563eb"/>
+  <text x="50" y="35" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">EOYC</text>
+  <text x="50" y="55" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="8">Encoding</text>
+  <text x="50" y="70" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="8">Only Your</text>
+  <text x="50" y="85" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="8">Choices</text>
+</svg>
