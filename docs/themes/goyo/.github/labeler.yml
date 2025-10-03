@@ -1,0 +1,20 @@
+---
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: [content/**, config.toml]
+
+theme:
+  - changed-files:
+      - any-glob-to-any-file: [templates/**, theme.toml]
+
+workflow:
+  - changed-files:
+      - any-glob-to-any-file: [.github/**]
+
+shortcode:
+  - changed-files:
+      - any-glob-to-any-file: [templates/shortcodes/**]
+
+resource:
+  - changed-files:
+      - any-glob-to-any-file: [static/**, src/**]

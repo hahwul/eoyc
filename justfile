@@ -1,10 +1,12 @@
 # Alias
 alias b := build
+alias ds := docs-serve
+alias db := docs-build
 
 # Default task, lists all available tasks.
 default:
     @echo "Listing available tasks..."
-    @echo "Aliases: b (build), ds (docs-serve), dsup (docs-supported)"
+    @echo "Aliases: b (build), ds (docs-serve), db (docs-build)"
     @just --list
 
 # Build the application using Crystal Shards.
@@ -28,3 +30,13 @@ check:
 test:
     @echo "Running tests..."
     crystal spec
+
+# Serve documentation site locally with Zola.
+docs-serve:
+    @echo "Serving documentation site..."
+    @cd docs && zola serve
+
+# Build documentation site with Zola.
+docs-build:
+    @echo "Building documentation site..."
+    @cd docs && zola build

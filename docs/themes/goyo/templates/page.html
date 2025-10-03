@@ -1,0 +1,83 @@
+{% extends "index.html" %}
+
+{% block header %}
+    {{ macros_header::header(config=config, lang=lang, page=page) }}
+{% endblock header %}
+
+{% block content %}
+    <div class="mb-12 pb-4 border-b border-gray-500/15">
+        <h1>{{ page.title }}</h1>
+        <p class="text-gray-500">{{ page.description }}</p>
+    </div>
+    {{ page.content | safe }}
+{% endblock content %}
+
+{% block prev_link %}
+    {% if page.smaller %}
+        <a class="nav-button nav-button-prev group" href="{{ page.smaller.permalink | safe }}">
+            <div class="nav-button-content">
+                <div class="nav-button-direction">
+                    <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span class="nav-button-label">Previous</span>
+                </div>
+                <div class="nav-button-title">{{ page.smaller.title }}</div>
+            </div>
+        </a>
+    {% else %}
+        {% set parent = get_section(path=page.ancestors | reverse | first) %}
+        <a class="nav-button nav-button-prev group" href="{{ parent.permalink | safe }}">
+            <div class="nav-button-content">
+                <div class="nav-button-direction">
+                    <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span class="nav-button-label">Back to</span>
+                </div>
+                <div class="nav-button-title">{{ parent.title }}</div>
+            </div>
+        </a>
+    {% endif %}
+{% endblock prev_link %}
+
+{% block next_link %}
+    {% if page.higher %}
+        <a class="nav-button nav-button-next group" href="{{ page.higher.permalink | safe }}">
+            <div class="nav-button-content">
+                <div class="nav-button-direction">
+                    <span class="nav-button-label">Next</span>
+                    <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+                <div class="nav-button-title">{{ page.higher.title }}</div>
+            </div>
+        </a>
+    {% else %}
+        {% set index = get_section(path="_index.md") %}
+        {% set found_current = false %}
+        {% for s in index.subsections %}
+            {% set subsection = get_section(path=s) %}
+            {% if found_current %}
+                <a class="nav-button nav-button-next group" href="{{ subsection.permalink | safe }}">
+                    <div class="nav-button-content">
+                        <div class="nav-button-direction">
+                            <span class="nav-button-label">Next</span>
+                            <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                        <div class="nav-button-title">{{ subsection.title }}</div>
+                    </div>
+                </a>
+                {% set_global found_current = false %}
+            {% endif %}
+            {% for p in subsection.pages %}
+                {% if p.permalink == page.permalink %}
+                    {% set_global found_current = true %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+{% endblock next_link %}

@@ -1,9 +1,9 @@
-/docs/
 /lib/
 /bin/
 /.shards/
 *.dwarf
 .DS_Store
+/docs/public/
 
 # For Github Copilot
 crystal-*/
