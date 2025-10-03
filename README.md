@@ -1,6 +1,16 @@
 # eoyc
 Encoding Only Your Choices
 
+## Documentation
+
+For comprehensive documentation, visit: [https://eoyc.hahwul.com](https://eoyc.hahwul.com)
+
+Or view the documentation locally:
+```bash
+cd docs
+zola serve
+```
+
 ## Installation
 ```bash
 brew tap hahwul/eoyc

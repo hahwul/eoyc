@@ -1,0 +1,108 @@
+{% extends "index.html" %}
+
+{% block header %}
+    {{ macros_header::header(config=config, lang=lang, section=section) }}
+{% endblock header %}
+
+{% block content %}
+    <div class="mb-12 pb-4 border-b border-gray-500/15">
+        <h1>{{ section.title }}</h1>
+        <p class="text-gray-500">{{ section.description }}</p>
+    </div>
+    {{ section.content | safe }}
+
+    {% if section.pages %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+            {% for page in section.pages %}
+                <a href="{{ page.permalink | safe }}" class="btn bg-base-100 border border-gray-500/15 shadow-lg rounded-xl transition-transform hover:scale-105 hover:shadow-2xl shadow-md h-full cursor-pointer hover:bg-base-300 transition-shadow no-underline">
+                    <div class="p-4">
+                        <h2 class="m-2">
+                            {{ page.title }}
+                        </h2>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock content %}
+
+{% block prev_link %}
+    {% set index = get_section(path="_index.md") %}
+    {% set found_current = false %}
+    {% for s in index.subsections | reverse %}
+        {% set subsection = get_section(path=s) %}
+        {% if subsection.permalink == section.permalink %}
+            {% set_global found_current = true %}
+        {% else %}
+            {% if found_current and subsection.title and subsection.title != "" %}
+                {% if subsection.pages %}
+                    {% set last_page = subsection.pages | last %}
+                    <a class="nav-button nav-button-prev group" href="{{ last_page.permalink | safe }}">
+                        <div class="nav-button-content">
+                            <div class="nav-button-direction">
+                                <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                <span class="nav-button-label">Previous</span>
+                            </div>
+                            <div class="nav-button-title">{{ last_page.title }}</div>
+                        </div>
+                    </a>
+                {% else %}
+                    <a class="nav-button nav-button-prev group" href="{{ subsection.permalink | safe }}">
+                        <div class="nav-button-content">
+                            <div class="nav-button-direction">
+                                <svg class="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                <span class="nav-button-label">Previous</span>
+                            </div>
+                            <div class="nav-button-title">{{ subsection.title }}</div>
+                        </div>
+                    </a>
+                {% endif %}
+                {% set_global found_current = false %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endblock prev_link %}
+
+{% block next_link %}
+    {% if section.pages %}
+        {% set next_page = section.pages | first %}
+        <a class="nav-button nav-button-next group" href="{{ next_page.permalink | safe }}">
+            <div class="nav-button-content">
+                <div class="nav-button-direction">
+                    <span class="nav-button-label">Next</span>
+                    <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+                <div class="nav-button-title">{{ next_page.title }}</div>
+            </div>
+        </a>
+    {% else %}
+        {% set index = get_section(path="_index.md") %}
+        {% set found_current = false %}
+        {% for s in index.subsections %}
+            {% set subsection = get_section(path=s) %}
+            {% if found_current and subsection.title and subsection.title != "" %}
+                <a class="nav-button nav-button-next group" href="{{ subsection.permalink | safe }}">
+                    <div class="nav-button-content">
+                        <div class="nav-button-direction">
+                            <span class="nav-button-label">Next</span>
+                            <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                        <div class="nav-button-title">{{ subsection.title }}</div>
+                    </div>
+                </a>
+                {% set_global found_current = false %}
+            {% endif %}
+            {% if subsection.permalink == section.permalink %}
+                {% set_global found_current = true %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock next_link %}
