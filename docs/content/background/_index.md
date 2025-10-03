@@ -83,9 +83,3 @@ Eoyc is open source software licensed under the MIT License. See the [LICENSE](h
 ## Contributing
 
 Contributions are welcome! Please see the [GitHub repository](https://github.com/hahwul/eoyc) for more information on how to contribute.
-
-## Author
-
-Created by [@hahwul](https://github.com/hahwul)
-- Blog: [https://www.hahwul.com](https://www.hahwul.com)
-- Twitter: [@hahwul](https://twitter.com/hahwul)
