@@ -214,6 +214,96 @@ module EncoderUtils
   rescue
     s
   end
+
+  # Base32 (RFC 4648) encode with padding
+  def base32_encode(s : String) : String
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
+    bits = 0_u32
+    bits_left = 0
+    out_len = 0
+    String.build do |io|
+      bytes = s.to_slice
+      i = 0
+      while i < bytes.size
+        bits = (bits << 8) | bytes[i].to_u32
+        bits_left += 8
+        while bits_left >= 5
+          val = ((bits >> (bits_left - 5)) & 0x1F).to_i
+          io << alphabet[val]
+          out_len += 1
+          bits_left -= 5
+        end
+        i += 1
+      end
+      if bits_left > 0
+        val = ((bits << (5 - bits_left)) & 0x1F).to_i
+        io << alphabet[val]
+        out_len += 1
+        bits_left = 0
+      end
+      while out_len % 8 != 0
+        io << '='
+        out_len += 1
+      end
+    end
+  rescue
+    s
+  end
+
+  # Base32 (RFC 4648) decode
+  def base32_decode(s : String) : String
+    cleaned = s.upcase.gsub(/[^A-Z2-7=]/, "")
+    bits = 0_u32
+    bits_left = 0
+    bytes = [] of UInt8
+
+    cleaned.each_char do |ch|
+      next if ch == '='
+      val = case ch
+            when 'A'..'Z' then ch.ord - 'A'.ord
+            when '2'..'7' then ch.ord - '2'.ord + 26
+            else
+              return s
+            end
+      bits = (bits << 5) | val.to_u32
+      bits_left += 5
+      if bits_left >= 8
+        byte = ((bits >> (bits_left - 8)) & 0xFF).to_u8
+        bytes << byte
+        bits_left -= 8
+      end
+    end
+
+    String.new(Bytes.new(bytes.to_unsafe, bytes.size))
+  rescue
+    s
+  end
+
+  # CRC32 (IEEE 802.3) value as UInt32
+  def crc32_uint(s : String) : UInt32
+    crc = 0xFFFF_FFFF_u32
+    s.each_byte do |b|
+      crc ^= b.to_u32
+      8.times do
+        if (crc & 1_u32) == 1_u32
+          crc = (crc >> 1) ^ 0xEDB8_8320_u32
+        else
+          crc >>= 1
+        end
+      end
+    end
+    crc ^ 0xFFFF_FFFF_u32
+  rescue
+    0_u32
+  end
+
+  # CRC32 hex string (lowercase, 8 chars)
+  def crc32_hex(s : String) : String
+    v = crc32_uint(s)
+    v.to_s(16).rjust(8, '0')
+  rescue
+    "00000000"
+  end
 end
 
 module Encoders

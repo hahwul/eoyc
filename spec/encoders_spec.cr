@@ -166,4 +166,39 @@ describe "encode" do
     decoded = encode(encoded, ["charcode-decode"])
     decoded.should eq(original)
   end
+  it "base32 encode single case" do
+    result = encode("f", ["base32"])
+    result.should eq("MY======")
+  end
+
+  it "base32 decode single case" do
+    result = encode("MY======", ["base32-decode"])
+    result.should eq("f")
+  end
+
+  it "base32 encode-decode round trip" do
+    original = "foobar"
+    encoded = encode(original, ["base32"])
+    decoded = encode(encoded, ["base32-decode"])
+    decoded.should eq(original)
+  end
+
+  it "crc32 standard test vector" do
+    result = encode("123456789", ["crc32"])
+    result.should eq("cbf43926")
+  end
+
+  it "base64-url-pad encode-decode round trip" do
+    original = "abcd"
+    encoded = encode(original, ["base64-url-pad"])
+    decoded = encode(encoded, ["base64-url-pad-decode"])
+    decoded.should eq(original)
+  end
+
+  it "base64-url-pad decode compatibility" do
+    original = "abcd"
+    encoded_unpadded = encode(original, ["base64-url"])
+    decoded = encode(encoded_unpadded, ["base64-url-pad-decode"])
+    decoded.should eq(original)
+  end
 end
