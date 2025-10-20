@@ -25,6 +25,7 @@ Usage: eoyc [arguments]
     -e ENCODERS, --encoders=ENCODERS Encoders chain [char: >|,]
     -o PATH, --output=PATH           Output file
     -v, --version                    Show version
+    -l, --list                       List encoders
     -h, --help                       Show help
 
 Encoders:
@@ -32,6 +33,11 @@ Encoders:
   base64-decode     - Base64 decode
   base64-url        - URL-safe Base64 encode (no padding) (aliases: base64-url-encode)
   base64-url-decode - URL-safe Base64 decode
+  base64-url-pad    - URL-safe Base64 encode (with padding) (aliases: base64-url-encode-pad)
+  base64-url-pad-decode - URL-safe Base64 decode (accepts padding)
+  base32            - Base32 encode (RFC 4648, with padding) (aliases: base32-encode)
+  base32-decode     - Base32 decode (RFC 4648)
+  crc32             - CRC32 hex digest (IEEE 802.3) (aliases: crc32-hex)
   md5               - MD5 hex digest
   sha1              - SHA1 Base64 digest
   sha1-hex          - SHA1 hex digest
@@ -62,7 +68,7 @@ First, choose the range that you want to encode:
 
 - By default, the entire line is encoded.
 - If you want to encode a specific string, use `-s`.
-- If you want to encode the part that matches a regular expression, use `-r`.
+- If you want to encode the part that matches a regular expression, use `-r`. Lines that do not match are passed through unchanged.
 
 Second, choose the type of encoder you wish to run via `-e`. The encoder can consist of multiple chains.
 
@@ -98,6 +104,22 @@ cat urls.txt | eoyc -e "url"
 # https%3A%2F%2Fwww.hahwul.com
 # https%3A%2F%2Fgithub.com
 # https%3A%2F%2Fgoogle.com
+```
+
+```bash
+# Save to output file (no shell redirection needed)
+cat data.txt | eoyc -e "base64" -o encoded.txt
+# Note: the output file is overwritten on each run
+```
+
+```bash
+# Regex no-match pass-through
+echo "no digits here" | eoyc -r "\\d+" -e "base64"
+# no digits here
+
+# Regex match example
+echo "user: alice, id: 42" | eoyc -r "\\d+" -e "hex"
+# user: alice, id: 3432
 ```
 
 ## Build
