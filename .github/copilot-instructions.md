@@ -181,7 +181,7 @@ just fix      # Auto-format and fix issues
 
 ## Known Limitations
 
-- Output file flag (`-o`) is not fully implemented in current version (option exists but does not write to file)
+- Output file flag (`-o`) writes encoded results to the specified file; when omitted, output is printed to stdout
 - Some advanced regex patterns may need escaping in shell
 
 ## Troubleshooting
