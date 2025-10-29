@@ -56,7 +56,11 @@ def process_line(line, choice, regex, encoders)
   elsif regex != ""
     m = find(line, regex)
     if m
-      target = m[1]? || m[0]
+      if g = m[1]?
+        target = g
+      else
+        target = m[0]
+      end
     else
       return line
     end
@@ -68,7 +72,7 @@ def process_line(line, choice, regex, encoders)
   replace(line, target, replacement)
 end
 
-io = output.empty? ? STDOUT : File.open(output, "w")
+io = output != "" ? File.open(output, "w") : STDOUT
 begin
   STDIN.each_line do |line|
     io.puts process_line(line, choice, regex, encoders)
