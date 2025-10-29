@@ -47,54 +47,36 @@ OptionParser.parse do |parser|
   end
 end
 
-if output != ""
-  File.open(output, "w") do |io|
-    STDIN.each_line do |line|
-      new_encoders = encoders.clone
-      target = ""
-      if choice != ""
-        target = choice
-      elsif regex != ""
-        m = find(line, regex)
-        if m
-          if g = m[1]?
-            target = g
-          else
-            target = m[0]
-          end
-        else
-          io.puts line
-          next
-        end
+def process_line(line, choice, regex, encoders)
+  new_encoders = encoders.clone
+  target = ""
+
+  if choice != ""
+    target = choice
+  elsif regex != ""
+    m = find(line, regex)
+    if m
+      if g = m[1]?
+        target = g
       else
-        target = line
-      end
-      replacement = encode(target, new_encoders)
-      io.puts replace(line, target, replacement)
-    end
-  end
-else
-  STDIN.each_line do |line|
-    new_encoders = encoders.clone
-    target = ""
-    if choice != ""
-      target = choice
-    elsif regex != ""
-      m = find(line, regex)
-      if m
-        if g = m[1]?
-          target = g
-        else
-          target = m[0]
-        end
-      else
-        puts line
-        next
+        target = m[0]
       end
     else
-      target = line
+      return line
     end
-    replacement = encode(target, new_encoders)
-    puts replace(line, target, replacement)
+  else
+    target = line
   end
+
+  replacement = encode(target, new_encoders)
+  replace(line, target, replacement)
+end
+
+io = output != "" ? File.open(output, "w") : STDOUT
+begin
+  STDIN.each_line do |line|
+    io.puts process_line(line, choice, regex, encoders)
+  end
+ensure
+  io.close unless io == STDOUT
 end

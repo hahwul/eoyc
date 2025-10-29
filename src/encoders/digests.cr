@@ -26,18 +26,6 @@ require "digest/sha1"
 require "digest/sha256"
 require "digest/sha512"
 
-# Helper to DRY exception safety
-private def safe_digest
-  ->(blk : -> String) {
-    begin
-      blk.call
-    rescue
-      # Fail-safe: return original string captured via closure outside
-      nil
-    end
-  }
-end
-
 # MD5 hex
 Encoders.register(
   EncoderSpec.new(
