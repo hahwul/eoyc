@@ -1,5 +1,5 @@
 name: eoyc
-version: 0.1.0
+version: 0.2.0
 description: Encoding Only Your Choices
 
 authors:
@@ -8,10 +8,6 @@ authors:
 targets:
   eoyc:
     main: src/eoyc.cr
-
-dependencies:
-  logger:
-    github: crystal-lang/logger.cr
 
 crystal: 1.7.3
 
