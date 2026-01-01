@@ -1,10 +1,35 @@
-require "logger"
 require "option_parser"
 require "./utils.cr"
 require "./encoders.cr"
 
 module Eoyc
   VERSION = "0.2.0"
+
+  # Process a single line with the given choice, regex, and encoders
+  def self.process_line(line : String, choice : String, regex : String, encoders : Array(String)) : String
+    new_encoders = encoders.clone
+    target = ""
+
+    if choice != ""
+      target = choice
+    elsif regex != ""
+      m = find(line, regex)
+      if m
+        if g = m[1]?
+          target = g
+        else
+          target = m[0]
+        end
+      else
+        return line
+      end
+    else
+      target = line
+    end
+
+    replacement = encode(target, new_encoders)
+    replace(line, target, replacement)
+  end
 end
 
 choice = ""
@@ -47,35 +72,10 @@ OptionParser.parse do |parser|
   end
 end
 
-def process_line(line, choice, regex, encoders)
-  new_encoders = encoders.clone
-  target = ""
-
-  if choice != ""
-    target = choice
-  elsif regex != ""
-    m = find(line, regex)
-    if m
-      if g = m[1]?
-        target = g
-      else
-        target = m[0]
-      end
-    else
-      return line
-    end
-  else
-    target = line
-  end
-
-  replacement = encode(target, new_encoders)
-  replace(line, target, replacement)
-end
-
 io = output != "" ? File.open(output, "w") : STDOUT
 begin
   STDIN.each_line do |line|
-    io.puts process_line(line, choice, regex, encoders)
+    io.puts Eoyc.process_line(line, choice, regex, encoders)
   end
 ensure
   io.close unless io == STDOUT

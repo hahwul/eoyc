@@ -70,6 +70,11 @@ end
 module EncoderUtils
   extend self
 
+  # Convert an array of UInt8 bytes to a String
+  def bytes_to_string(bytes : Array(UInt8)) : String
+    String.new(Bytes.new(bytes.to_unsafe, bytes.size))
+  end
+
   # URL-safe Base64 (no padding)
   def base64_url_encode(s : String) : String
     Base64.encode(s).gsub('+', '-').gsub('/', '_').gsub(/=+$/, "")
@@ -132,7 +137,7 @@ module EncoderUtils
       end
     end
 
-    String.new(Bytes.new(bytes.to_unsafe, bytes.size))
+    bytes_to_string(bytes)
   rescue
     s
   end
@@ -164,7 +169,7 @@ module EncoderUtils
       end
     end
 
-    String.new(Bytes.new(bytes.to_unsafe, bytes.size))
+    bytes_to_string(bytes)
   rescue
     s
   end
@@ -210,7 +215,7 @@ module EncoderUtils
       end
     end
 
-    String.new(Bytes.new(bytes.to_unsafe, bytes.size))
+    bytes_to_string(bytes)
   rescue
     s
   end
@@ -274,7 +279,7 @@ module EncoderUtils
       end
     end
 
-    String.new(Bytes.new(bytes.to_unsafe, bytes.size))
+    bytes_to_string(bytes)
   rescue
     s
   end
