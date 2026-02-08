@@ -1,4 +1,4 @@
-# GitHub Copilot Instructions for EOYC
+# Agents Instructions for EOYC
 
 ## Project Overview
 
