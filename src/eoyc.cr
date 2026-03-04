@@ -6,13 +6,13 @@ module Eoyc
   VERSION = "0.2.0"
 
   # Process a single line with the given choice, regex, and encoders
-  def self.process_line(line : String, choice : String, regex : String, encoders : Array(String)) : String
+  def self.process_line(line : String, choice : String, regex : Regex | String, encoders : Array(String)) : String
     new_encoders = encoders.clone
     target = ""
 
     if choice != ""
       target = choice
-    elsif regex != ""
+    elsif regex.is_a?(Regex) || !regex.empty?
       m = find(line, regex)
       if m
         if g = m[1]?
@@ -74,8 +74,9 @@ end
 
 io = output != "" ? File.open(output, "w") : STDOUT
 begin
+  compiled_regex = regex.empty? ? "" : Regex.new(regex)
   STDIN.each_line do |line|
-    io.puts Eoyc.process_line(line, choice, regex, encoders)
+    io.puts Eoyc.process_line(line, choice, compiled_regex, encoders)
   end
 ensure
   io.close unless io == STDOUT
