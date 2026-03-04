@@ -201,4 +201,24 @@ describe "encode" do
     decoded = encode(encoded_unpadded, ["base64-url-pad-decode"])
     decoded.should eq(original)
   end
+
+  it "upcase encode lowercase text" do
+    result = encode("hello", ["upcase"])
+    result.should eq("HELLO")
+  end
+
+  it "upcase encode mixed case text" do
+    result = encode("HeLlO wOrLd", ["upcase"])
+    result.should eq("HELLO WORLD")
+  end
+
+  it "upcase encode already uppercase text" do
+    result = encode("HELLO", ["upcase"])
+    result.should eq("HELLO")
+  end
+
+  it "upcase encode with special characters and numbers" do
+    result = encode("hello 123 !@#", ["upcase"])
+    result.should eq("HELLO 123 !@#")
+  end
 end
