@@ -262,6 +262,8 @@ describe "encode" do
   it "redaction alias works" do
     result = encode("secret", ["redaction"])
     result.should eq("◼◼◼◼◼◼")
+  end
+
   it "downcase encode uppercase string" do
     result = encode("HELLO", ["downcase"])
     result.should eq("hello")
@@ -275,6 +277,8 @@ describe "encode" do
   it "downcase encode string with numbers" do
     result = encode("HELLO123", ["downcase"])
     result.should eq("hello123")
+  end
+
   it "reverse encode single case" do
     result = encode("abc", ["reverse"])
     result.should eq("cba")
@@ -294,6 +298,9 @@ describe "encode" do
     original = "reversible"
     encoded = encode(original, ["reverse"])
     decoded = encode(encoded, ["reverse"])
+    decoded.should eq(original)
+  end
+
   it "hex encode single case" do
     result = encode("hello", ["hex"])
     result.should eq("68656c6c6f")
@@ -329,9 +336,13 @@ describe "encode" do
   it "hex decode uppercase characters" do
     result = encode("68656C6C6F", ["hex-decode"])
     result.should eq("hello")
+  end
+
   it "sha256 encode single case" do
     result = encode("test", ["sha256"])
     result.should eq("n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=")
+  end
+
   it "upcase encode lowercase text" do
     result = encode("hello", ["upcase"])
     result.should eq("HELLO")
@@ -350,6 +361,8 @@ describe "encode" do
   it "upcase encode with special characters and numbers" do
     result = encode("hello 123 !@#", ["upcase"])
     result.should eq("HELLO 123 !@#")
+  end
+
   it "base64-url decode unpadded single char (2 padding chars needed)" do
     encoded = encode("A", ["base64-url"])
     encoded.should eq("QQ")
@@ -377,6 +390,9 @@ describe "encode" do
     encoded = encode(original, ["base64-url"])
     encoded.should eq("_--_")
     decoded = encode(encoded, ["base64-url-decode"])
+    decoded.should eq(original)
+  end
+
   it "rot13 encode lowercase" do
     result = encode("hello", ["rot13"])
     result.should eq("uryyb")
