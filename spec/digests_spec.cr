@@ -35,5 +35,27 @@ describe "digests" do
   it "sha512 hex digest" do
     result = encode("abc", ["sha512-hex"])
     result.should eq("ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f")
+  describe "sha1" do
+    it "encodes 'test' to SHA1 Base64" do
+      result = encode("test", ["sha1"])
+      result.should eq("qUqP5cyxm6YcTAhz05Hph5gvu9M=")
+    end
+
+    it "encodes 'abc' to SHA1 Base64" do
+      result = encode("abc", ["sha1"])
+      result.should eq("qZk+NkcGgWq6PiVxeFDCbJzQ2J0=")
+    end
+  end
+
+  describe "sha1-hex" do
+    it "encodes 'test' to SHA1 hex" do
+      result = encode("test", ["sha1-hex"])
+      result.should eq("a94a8fe5ccb19ba61c4c0873d391e987982fbbd3")
+    end
+
+    it "encodes 'abc' to SHA1 hex" do
+      result = encode("abc", ["sha1-hex"])
+      result.should eq("a9993e364706816aba3e25717850c26c9cd0d89d")
+    end
   end
 end
