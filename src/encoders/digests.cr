@@ -35,7 +35,7 @@ Encoders.register(
   ) do |s|
     begin
       Digest::MD5.hexdigest(s)
-    rescue
+    rescue ex : Exception
       s
     end
   end
@@ -50,7 +50,7 @@ Encoders.register(
   ) do |s|
     begin
       Digest::SHA1.base64digest(s)
-    rescue
+    rescue ex : Exception
       s
     end
   end
@@ -65,7 +65,7 @@ Encoders.register(
   ) do |s|
     begin
       Digest::SHA1.hexdigest(s)
-    rescue
+    rescue ex : Exception
       s
     end
   end
@@ -80,7 +80,7 @@ Encoders.register(
   ) do |s|
     begin
       Digest::SHA256.base64digest(s)
-    rescue
+    rescue ex : Exception
       s
     end
   end
@@ -95,7 +95,7 @@ Encoders.register(
   ) do |s|
     begin
       Digest::SHA256.hexdigest(s)
-    rescue
+    rescue ex : Exception
       s
     end
   end
@@ -110,7 +110,7 @@ Encoders.register(
   ) do |s|
     begin
       Digest::SHA512.base64digest(s)
-    rescue
+    rescue ex : Exception
       s
     end
   end
@@ -125,7 +125,7 @@ Encoders.register(
   ) do |s|
     begin
       Digest::SHA512.hexdigest(s)
-    rescue
+    rescue ex : Exception
       s
     end
   end

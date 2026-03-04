@@ -7,7 +7,6 @@ module Eoyc
 
   # Process a single line with the given choice, regex, and encoders
   def self.process_line(line : String, choice : String, regex : Regex | String, encoders : Array(String)) : String
-    new_encoders = encoders.clone
     target = ""
 
     if choice != ""
@@ -27,7 +26,7 @@ module Eoyc
       target = line
     end
 
-    replacement = encode(target, new_encoders)
+    replacement = encode(target, encoders)
     replace(line, target, replacement)
   end
 end

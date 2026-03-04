@@ -35,7 +35,7 @@ Encoders.register(
   ) do |s|
     begin
       Base64.decode_string(s)
-    rescue
+    rescue ex : Exception
       s
     end
   end

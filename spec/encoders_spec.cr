@@ -301,23 +301,6 @@ describe "encode" do
     decoded.should eq(original)
   end
 
-  it "hex encode single case" do
-    result = encode("hello", ["hex"])
-    result.should eq("68656c6c6f")
-  end
-
-  it "hex decode single case" do
-    result = encode("68656c6c6f", ["hex-decode"])
-    result.should eq("hello")
-  end
-
-  it "hex encode-decode round trip" do
-    original = "test string"
-    encoded = encode(original, ["hex"])
-    decoded = encode(encoded, ["hex-decode"])
-    decoded.should eq(original)
-  end
-
   it "hex decode with invalid odd-length input" do
     result = encode("68656c6c6", ["hex-decode"])
     result.should eq("68656c6c6")

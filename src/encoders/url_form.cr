@@ -25,7 +25,7 @@ Encoders.register(
   ) do |s|
     begin
       URI.encode_www_form(s)
-    rescue
+    rescue ex : Exception
       s
     end
   end
@@ -40,7 +40,7 @@ Encoders.register(
   ) do |s|
     begin
       URI.decode_www_form(s)
-    rescue
+    rescue ex : Exception
       s
     end
   end

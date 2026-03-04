@@ -85,7 +85,7 @@ module EncoderUtils
     padding = (4 - work.size % 4) % 4
     work += "=" * padding
     Base64.decode_string(work)
-  rescue
+  rescue ex : Exception
     s
   end
 
@@ -105,7 +105,7 @@ module EncoderUtils
       bi += 1
     end
     String.new(bytes)
-  rescue
+  rescue ex : Exception
     s
   end
 
@@ -138,7 +138,7 @@ module EncoderUtils
     end
 
     bytes_to_string(bytes)
-  rescue
+  rescue ex : Exception
     s
   end
 
@@ -170,7 +170,7 @@ module EncoderUtils
     end
 
     bytes_to_string(bytes)
-  rescue
+  rescue ex : Exception
     s
   end
 
@@ -185,7 +185,7 @@ module EncoderUtils
       code_point.chr.to_s
     end
     decoded
-  rescue
+  rescue ex : Exception
     s
   end
 
@@ -216,7 +216,7 @@ module EncoderUtils
     end
 
     bytes_to_string(bytes)
-  rescue
+  rescue ex : Exception
     s
   end
 
@@ -251,7 +251,7 @@ module EncoderUtils
         out_len += 1
       end
     end
-  rescue
+  rescue ex : Exception
     s
   end
 
@@ -280,7 +280,7 @@ module EncoderUtils
     end
 
     bytes_to_string(bytes)
-  rescue
+  rescue ex : Exception
     s
   end
 
@@ -298,7 +298,7 @@ module EncoderUtils
       end
     end
     crc ^ 0xFFFF_FFFF_u32
-  rescue
+  rescue ex : Exception
     0_u32
   end
 
@@ -306,7 +306,7 @@ module EncoderUtils
   def crc32_hex(s : String) : String
     v = crc32_uint(s)
     v.to_s(16).rjust(8, '0')
-  rescue
+  rescue ex : Exception
     "00000000"
   end
 end
@@ -348,23 +348,21 @@ module Encoders
     end
   end
 
-  # Apply a chain of encoders (mutates the passed encoders array via pop).
+  # Apply a chain of encoders (processes from last to first).
   def encode_chain(str, encoders : Array(String)) : String
     current = str.to_s
     return current.strip if current.empty? || encoders.empty?
 
-    while encoders.size > 0
-      name = encoders.pop.to_s.strip.downcase
+    (encoders.size - 1).downto(0) do |i|
+      name = encoders[i].strip.downcase
       spec = find(name)
-      current = if spec
-                  begin
-                    spec.apply(current)
-                  rescue
-                    current
-                  end
-                else
-                  current
-                end
+      if spec
+        begin
+          current = spec.apply(current)
+        rescue ex : Exception
+          # fail-safe: keep current value
+        end
+      end
     end
     current.to_s.strip
   end
