@@ -262,6 +262,33 @@ describe "encode" do
   it "upcase encode with special characters and numbers" do
     result = encode("hello 123 !@#", ["upcase"])
     result.should eq("HELLO 123 !@#")
+  it "base64-url decode unpadded single char (2 padding chars needed)" do
+    encoded = encode("A", ["base64-url"])
+    encoded.should eq("QQ")
+    decoded = encode(encoded, ["base64-url-decode"])
+    decoded.should eq("A")
+  end
+
+  it "base64-url decode unpadded two chars (1 padding char needed)" do
+    encoded = encode("AB", ["base64-url"])
+    encoded.should eq("QUI")
+    decoded = encode(encoded, ["base64-url-decode"])
+    decoded.should eq("AB")
+  end
+
+  it "base64-url decode unpadded three chars (0 padding chars needed)" do
+    encoded = encode("ABC", ["base64-url"])
+    encoded.should eq("QUJD")
+    decoded = encode(encoded, ["base64-url-decode"])
+    decoded.should eq("ABC")
+  end
+
+  it "base64-url encode-decode with characters requiring - and _" do
+    # Bytes [255, 239, 191] encode to "/++/" in base64, which is "_--_" in base64-url
+    original = String.new(Bytes[255, 239, 191])
+    encoded = encode(original, ["base64-url"])
+    encoded.should eq("_--_")
+    decoded = encode(encoded, ["base64-url-decode"])
   it "rot13 encode lowercase" do
     result = encode("hello", ["rot13"])
     result.should eq("uryyb")
