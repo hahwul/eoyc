@@ -201,4 +201,19 @@ describe "encode" do
     decoded = encode(encoded_unpadded, ["base64-url-pad-decode"])
     decoded.should eq(original)
   end
+
+  it "downcase encode uppercase string" do
+    result = encode("HELLO", ["downcase"])
+    result.should eq("hello")
+  end
+
+  it "downcase encode mixed case string" do
+    result = encode("HeLlO", ["downcase"])
+    result.should eq("hello")
+  end
+
+  it "downcase encode string with numbers" do
+    result = encode("HELLO123", ["downcase"])
+    result.should eq("hello123")
+  end
 end
