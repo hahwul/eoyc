@@ -110,7 +110,7 @@ module EncoderUtils
   end
 
   def rot13(s : String) : String
-    s.tr("A-Za-z", "N-ZA-Mn-za-m")
+    s.tr("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", "nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM")
   end
 
   def redact(s : String) : String
