@@ -166,6 +166,43 @@ describe "encode" do
     decoded = encode(encoded, ["charcode-decode"])
     decoded.should eq(original)
   end
+  it "hex encode single char" do
+    result = encode("a", ["hex"])
+    result.should eq("61")
+  end
+
+  it "hex encode multiple chars" do
+    result = encode("abc", ["hex"])
+    result.should eq("616263")
+  end
+
+  it "hex decode single char" do
+    result = encode("61", ["hex-decode"])
+    result.should eq("a")
+  end
+
+  it "hex decode multiple chars" do
+    result = encode("616263", ["hex-decode"])
+    result.should eq("abc")
+  end
+
+  it "hex encode-decode round trip" do
+    original = "hello"
+    encoded = encode(original, ["hex"])
+    decoded = encode(encoded, ["hex-decode"])
+    decoded.should eq(original)
+  end
+
+  it "hex decode invalid input" do
+    result = encode("invalid", ["hex-decode"])
+    result.should eq("invalid")
+  end
+
+  it "hex decode with mixed case input" do
+    result = encode("6A6b", ["hex-decode"])
+    result.should eq("jk")
+  end
+
   it "base32 encode single case" do
     result = encode("f", ["base32"])
     result.should eq("MY======")
