@@ -220,6 +220,351 @@ module EncoderUtils
     s
   end
 
+  def rot47(s : String) : String
+    s.each_char.map { |c|
+      o = c.ord
+      if o >= 33 && o <= 126
+        ((o - 33 + 47) % 94 + 33).chr
+      else
+        c
+      end
+    }.join
+  end
+
+  def atbash(s : String) : String
+    s.each_char.map { |c|
+      case c
+      when 'a'..'z' then ('z'.ord - (c.ord - 'a'.ord)).chr
+      when 'A'..'Z' then ('Z'.ord - (c.ord - 'A'.ord)).chr
+      else                c
+      end
+    }.join
+  end
+
+  def html_encode(s : String) : String
+    s.gsub('&', "&amp;")
+      .gsub('<', "&lt;")
+      .gsub('>', "&gt;")
+      .gsub('"', "&quot;")
+      .gsub('\'', "&#39;")
+  end
+
+  def html_decode(s : String) : String
+    s.gsub("&#39;", "'")
+      .gsub("&quot;", "\"")
+      .gsub("&gt;", ">")
+      .gsub("&lt;", "<")
+      .gsub("&amp;", "&")
+  end
+
+  def json_escape(s : String) : String
+    String.build do |io|
+      s.each_char do |c|
+        case c
+        when '"'  then io << "\\\""
+        when '\\' then io << "\\\\"
+        when '\n' then io << "\\n"
+        when '\r' then io << "\\r"
+        when '\t' then io << "\\t"
+        when '\b' then io << "\\b"
+        when '\f' then io << "\\f"
+        else
+          if c.ord < 0x20
+            io << "\\u" << c.ord.to_s(16).rjust(4, '0')
+          else
+            io << c
+          end
+        end
+      end
+    end
+  end
+
+  def json_unescape(s : String) : String
+    result = s.gsub("\\\"", "\"")
+      .gsub("\\\\", "\\")
+      .gsub("\\n", "\n")
+      .gsub("\\r", "\r")
+      .gsub("\\t", "\t")
+      .gsub("\\b", "\b")
+      .gsub("\\f", "\f")
+    result.gsub(/\\u([0-9a-fA-F]{4})/) { $1.to_i(16).chr.to_s }
+  rescue ex : Exception
+    s
+  end
+
+  MORSE_TABLE = {
+    'A' => ".-", 'B' => "-...", 'C' => "-.-.", 'D' => "-..", 'E' => ".",
+    'F' => "..-.", 'G' => "--.", 'H' => "....", 'I' => "..", 'J' => ".---",
+    'K' => "-.-", 'L' => ".-..", 'M' => "--", 'N' => "-.", 'O' => "---",
+    'P' => ".--.", 'Q' => "--.-", 'R' => ".-.", 'S' => "...", 'T' => "-",
+    'U' => "..-", 'V' => "...-", 'W' => ".--", 'X' => "-..-", 'Y' => "-.--",
+    'Z' => "--..", '0' => "-----", '1' => ".----", '2' => "..---",
+    '3' => "...--", '4' => "....-", '5' => ".....", '6' => "-....",
+    '7' => "--...", '8' => "---..", '9' => "----.",
+  }
+
+  MORSE_REVERSE = MORSE_TABLE.invert
+
+  def morse_encode(s : String) : String
+    s.upcase.split("").map { |c|
+      if c == " "
+        "/"
+      elsif MORSE_TABLE.has_key?(c[0])
+        MORSE_TABLE[c[0]]
+      else
+        c
+      end
+    }.join(" ")
+  end
+
+  def morse_decode(s : String) : String
+    s.split(" ").map { |token|
+      if token == "/"
+        " "
+      elsif MORSE_REVERSE.has_key?(token)
+        MORSE_REVERSE[token].to_s
+      else
+        token
+      end
+    }.join
+  rescue ex : Exception
+    s
+  end
+
+  def ascii85_encode(s : String) : String
+    bytes = s.bytes
+    return "" if bytes.empty?
+
+    String.build do |io|
+      io << "<~"
+      i = 0
+      while i < bytes.size
+        # Pack up to 4 bytes into a 32-bit value
+        group_size = Math.min(4, bytes.size - i)
+        val = 0_u32
+        4.times do |j|
+          val <<= 8
+          val |= (j < group_size ? bytes[i + j].to_u32 : 0_u32)
+        end
+
+        if val == 0 && group_size == 4
+          io << 'z'
+        else
+          chars = Array(Char).new(5, '!' )
+          4.downto(0) do |j|
+            chars[j] = (val % 85 + 33).chr
+            val //= 85
+          end
+          # Output group_size + 1 characters
+          (group_size + 1).times { |j| io << chars[j] }
+        end
+        i += 4
+      end
+      io << "~>"
+    end
+  end
+
+  def ascii85_decode(s : String) : String
+    work = s.strip
+    work = work[2..] if work.starts_with?("<~")
+    work = work[...-2] if work.ends_with?("~>")
+    work = work.gsub(/\s/, "")
+
+    bytes = [] of UInt8
+    i = 0
+    while i < work.size
+      if work[i] == 'z'
+        4.times { bytes << 0_u8 }
+        i += 1
+      else
+        group_size = Math.min(5, work.size - i)
+        chunk = work[i, group_size]
+        # Pad with 'u' (84 + 33 = 117 = 'u') to make 5 chars
+        padded = chunk + "u" * (5 - chunk.size)
+
+        val = 0_u64
+        padded.each_char do |c|
+          val = val * 85 + (c.ord - 33).to_u64
+        end
+
+        out_bytes = group_size - 1
+        out_bytes.times do |j|
+          bytes << ((val >> (8 * (3 - j))) & 0xFF).to_u8
+        end
+        i += group_size
+      end
+    end
+
+    String.new(Bytes.new(bytes.to_unsafe, bytes.size))
+  rescue ex : Exception
+    s
+  end
+
+  LEET_MAP = {
+    'a' => '4', 'e' => '3', 'i' => '1', 'o' => '0', 's' => '5',
+    't' => '7', 'l' => '1', 'g' => '9', 'b' => '8',
+  }
+
+  def leet(s : String) : String
+    s.each_char.map { |c|
+      lower = c.downcase
+      if LEET_MAP.has_key?(lower)
+        LEET_MAP[lower]
+      else
+        c
+      end
+    }.join
+  end
+
+  def punycode_encode(s : String) : String
+    # Simple Punycode encoder (RFC 3492)
+    n = 128
+    delta = 0
+    bias = 72
+    output = [] of Char
+    basic_chars = [] of Char
+    non_basic = [] of Int32
+
+    s.each_char do |c|
+      if c.ord < 128
+        basic_chars << c
+        output << c
+      else
+        non_basic << c.ord
+      end
+    end
+
+    h = basic_chars.size
+    b = basic_chars.size
+
+    output << '-' if b > 0 && non_basic.size > 0
+
+    return s if non_basic.empty?
+
+    all_codepoints = s.each_char.map(&.ord).to_a
+
+    while h < s.each_char.to_a.size
+      m = all_codepoints.select { |cp| cp >= n }.min
+
+      delta += (m - n) * (h + 1)
+      n = m
+
+      all_codepoints.each do |cp|
+        if cp < n
+          delta += 1
+        elsif cp == n
+          q = delta
+          k = 36
+          loop do
+            t = if k <= bias + 1
+                  1
+                elsif k >= bias + 26
+                  26
+                else
+                  k - bias
+                end
+            break if q < t
+            output << punycode_digit(t + (q - t) % (36 - t))
+            q = (q - t) // (36 - t)
+            k += 36
+          end
+          output << punycode_digit(q)
+          bias = punycode_adapt(delta, h + 1, h == b)
+          delta = 0
+          h += 1
+        end
+      end
+
+      delta += 1
+      n += 1
+    end
+
+    output.join
+  rescue ex : Exception
+    s
+  end
+
+  def punycode_decode(s : String) : String
+    # Find the last '-' to separate basic from encoded parts
+    delim = s.rindex('-')
+    output = if delim
+               s[0...delim].each_char.to_a
+             else
+               [] of Char
+             end
+    encoded = if delim
+                s[(delim + 1)..]
+              else
+                s
+              end
+
+    n = 128
+    i = 0
+    bias = 72
+    idx = 0
+
+    while idx < encoded.size
+      old_i = i
+      w = 1
+      k = 36
+      loop do
+        break if idx >= encoded.size
+        c = encoded[idx]
+        idx += 1
+        digit = punycode_digit_value(c)
+        i += digit * w
+        t = if k <= bias + 1
+              1
+            elsif k >= bias + 26
+              26
+            else
+              k - bias
+            end
+        break if digit < t
+        w *= (36 - t)
+        k += 36
+      end
+
+      bias = punycode_adapt(i - old_i, output.size + 1, old_i == 0)
+      n += i // (output.size + 1)
+      i = i % (output.size + 1)
+      output.insert(i, n.chr)
+      i += 1
+    end
+
+    output.join
+  rescue ex : Exception
+    s
+  end
+
+  private def punycode_digit(d : Int32) : Char
+    if d < 26
+      ('a'.ord + d).chr
+    else
+      ('0'.ord + d - 26).chr
+    end
+  end
+
+  private def punycode_digit_value(c : Char) : Int32
+    case c
+    when 'a'..'z' then c.ord - 'a'.ord
+    when 'A'..'Z' then c.ord - 'A'.ord
+    when '0'..'9' then c.ord - '0'.ord + 26
+    else               0
+    end
+  end
+
+  private def punycode_adapt(delta : Int32, numpoints : Int32, firsttime : Bool) : Int32
+    d = firsttime ? delta // 700 : delta // 2
+    d += d // numpoints
+    k = 0
+    while d > 455 # ((36 - 1) * 26) // 2
+      d //= 35
+      k += 36
+    end
+    k + (36 * d) // (d + 38)
+  end
+
   # Base32 (RFC 4648) encode with padding
   def base32_encode(s : String) : String
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"

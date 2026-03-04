@@ -39,6 +39,14 @@ require "./encoders/binary"
 require "./encoders/octal"
 require "./encoders/unicode"
 require "./encoders/charcode"
+require "./encoders/html"
+require "./encoders/json_escape"
+require "./encoders/morse"
+require "./encoders/case_transform"
+require "./encoders/ascii85"
+require "./encoders/compression"
+require "./encoders/punycode"
+require "./encoders/leet"
 #
 # Optionally force a no-op reference to ensure the module is linked
 # (useful in some build optimization scenarios)

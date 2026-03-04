@@ -1,0 +1,79 @@
+require "./core"
+require "compress/zlib"
+require "compress/gzip"
+
+# Zlib Encode (compress + base64)
+Encoders.register(
+  EncoderSpec.new(
+    "zlib-encode",
+    %w[zlib-encode zlib],
+    "Zlib compress then Base64 encode"
+  ) do |s|
+    begin
+      compressed = IO::Memory.new
+      Compress::Zlib::Writer.open(compressed) do |zlib|
+        zlib.print(s)
+      end
+      Base64.strict_encode(compressed.to_slice)
+    rescue ex : Exception
+      s
+    end
+  end
+)
+
+# Zlib Decode (base64 + decompress)
+Encoders.register(
+  EncoderSpec.new(
+    "zlib-decode",
+    %w[zlib-decode],
+    "Base64 decode then Zlib decompress"
+  ) do |s|
+    begin
+      decoded = Base64.decode(s)
+      input = IO::Memory.new(decoded)
+      Compress::Zlib::Reader.open(input) do |zlib|
+        zlib.gets_to_end
+      end
+    rescue ex : Exception
+      s
+    end
+  end
+)
+
+# Gzip Encode (compress + base64)
+Encoders.register(
+  EncoderSpec.new(
+    "gzip-encode",
+    %w[gzip-encode gzip],
+    "Gzip compress then Base64 encode"
+  ) do |s|
+    begin
+      compressed = IO::Memory.new
+      Compress::Gzip::Writer.open(compressed) do |gz|
+        gz.print(s)
+      end
+      Base64.strict_encode(compressed.to_slice)
+    rescue ex : Exception
+      s
+    end
+  end
+)
+
+# Gzip Decode (base64 + decompress)
+Encoders.register(
+  EncoderSpec.new(
+    "gzip-decode",
+    %w[gzip-decode],
+    "Base64 decode then Gzip decompress"
+  ) do |s|
+    begin
+      decoded = Base64.decode(s)
+      input = IO::Memory.new(decoded)
+      Compress::Gzip::Reader.open(input) do |gz|
+        gz.gets_to_end
+      end
+    rescue ex : Exception
+      s
+    end
+  end
+)

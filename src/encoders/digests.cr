@@ -25,6 +25,7 @@ require "digest/md5"
 require "digest/sha1"
 require "digest/sha256"
 require "digest/sha512"
+require "openssl"
 
 # MD5 hex
 Encoders.register(
@@ -125,6 +126,40 @@ Encoders.register(
   ) do |s|
     begin
       Digest::SHA512.hexdigest(s)
+    rescue ex : Exception
+      s
+    end
+  end
+)
+
+# SHA384 Base64
+Encoders.register(
+  EncoderSpec.new(
+    "sha384",
+    %w[sha384],
+    "SHA384 Base64 digest"
+  ) do |s|
+    begin
+      digest = OpenSSL::Digest.new("SHA384")
+      digest.update(s)
+      Base64.strict_encode(digest.final)
+    rescue ex : Exception
+      s
+    end
+  end
+)
+
+# SHA384 hex
+Encoders.register(
+  EncoderSpec.new(
+    "sha384-hex",
+    %w[sha384-hex],
+    "SHA384 hex digest"
+  ) do |s|
+    begin
+      digest = OpenSSL::Digest.new("SHA384")
+      digest.update(s)
+      digest.final.map(&.to_s(16).rjust(2, '0')).join
     rescue ex : Exception
       s
     end

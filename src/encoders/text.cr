@@ -61,3 +61,21 @@ Encoders.register(
     "Replace all characters with blocks"
   ) { |s| EncoderUtils.redact(s) }
 )
+
+# ROT47
+Encoders.register(
+  EncoderSpec.new(
+    "rot47",
+    %w[rot47],
+    "ROT47 cipher (printable ASCII)"
+  ) { |s| EncoderUtils.rot47(s) }
+)
+
+# Atbash
+Encoders.register(
+  EncoderSpec.new(
+    "atbash",
+    %w[atbash],
+    "Atbash cipher (reverse alphabet)"
+  ) { |s| EncoderUtils.atbash(s) }
+)
