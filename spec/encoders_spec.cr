@@ -201,4 +201,31 @@ describe "encode" do
     decoded = encode(encoded_unpadded, ["base64-url-pad-decode"])
     decoded.should eq(original)
   end
+
+  it "rot13 encode lowercase" do
+    result = encode("hello", ["rot13"])
+    result.should eq("uryyb")
+  end
+
+  it "rot13 encode uppercase" do
+    result = encode("HELLO", ["rot13"])
+    result.should eq("URYYB")
+  end
+
+  it "rot13 encode mixed case" do
+    result = encode("Hello World", ["rot13"])
+    result.should eq("Uryyb Jbeyq")
+  end
+
+  it "rot13 ignores non-alphabetic characters" do
+    result = encode("123!@#", ["rot13"])
+    result.should eq("123!@#")
+  end
+
+  it "rot13 encode-decode round trip" do
+    original = "The quick brown fox jumps over the lazy dog! 123"
+    encoded = encode(original, ["rot13"])
+    decoded = encode(encoded, ["rot13"])
+    decoded.should eq(original)
+  end
 end
