@@ -257,6 +257,108 @@ describe "encode" do
   it "downcase encode string with numbers" do
     result = encode("HELLO123", ["downcase"])
     result.should eq("hello123")
+  it "reverse encode single case" do
+    result = encode("abc", ["reverse"])
+    result.should eq("cba")
+  end
+
+  it "reverse encode with spaces" do
+    result = encode("hello world", ["reverse"])
+    result.should eq("dlrow olleh")
+  end
+
+  it "reverse encode empty string" do
+    result = encode("", ["reverse"])
+    result.should eq("")
+  end
+
+  it "reverse encode-decode round trip" do
+    original = "reversible"
+    encoded = encode(original, ["reverse"])
+    decoded = encode(encoded, ["reverse"])
+  it "hex encode single case" do
+    result = encode("hello", ["hex"])
+    result.should eq("68656c6c6f")
+  end
+
+  it "hex decode single case" do
+    result = encode("68656c6c6f", ["hex-decode"])
+    result.should eq("hello")
+  end
+
+  it "hex encode-decode round trip" do
+    original = "test string"
+    encoded = encode(original, ["hex"])
+    decoded = encode(encoded, ["hex-decode"])
+    decoded.should eq(original)
+  end
+
+  it "hex decode with invalid odd-length input" do
+    result = encode("68656c6c6", ["hex-decode"])
+    result.should eq("68656c6c6")
+  end
+
+  it "hex decode with invalid characters" do
+    result = encode("68656c6c6g", ["hex-decode"])
+    result.should eq("68656c6c6g")
+  end
+
+  it "hex decode with surrounding whitespace" do
+    result = encode("  68656c6c6f  ", ["hex-decode"])
+    result.should eq("hello")
+  end
+
+  it "hex decode uppercase characters" do
+    result = encode("68656C6C6F", ["hex-decode"])
+    result.should eq("hello")
+  it "sha256 encode single case" do
+    result = encode("test", ["sha256"])
+    result.should eq("n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=")
+  it "upcase encode lowercase text" do
+    result = encode("hello", ["upcase"])
+    result.should eq("HELLO")
+  end
+
+  it "upcase encode mixed case text" do
+    result = encode("HeLlO wOrLd", ["upcase"])
+    result.should eq("HELLO WORLD")
+  end
+
+  it "upcase encode already uppercase text" do
+    result = encode("HELLO", ["upcase"])
+    result.should eq("HELLO")
+  end
+
+  it "upcase encode with special characters and numbers" do
+    result = encode("hello 123 !@#", ["upcase"])
+    result.should eq("HELLO 123 !@#")
+  it "base64-url decode unpadded single char (2 padding chars needed)" do
+    encoded = encode("A", ["base64-url"])
+    encoded.should eq("QQ")
+    decoded = encode(encoded, ["base64-url-decode"])
+    decoded.should eq("A")
+  end
+
+  it "base64-url decode unpadded two chars (1 padding char needed)" do
+    encoded = encode("AB", ["base64-url"])
+    encoded.should eq("QUI")
+    decoded = encode(encoded, ["base64-url-decode"])
+    decoded.should eq("AB")
+  end
+
+  it "base64-url decode unpadded three chars (0 padding chars needed)" do
+    encoded = encode("ABC", ["base64-url"])
+    encoded.should eq("QUJD")
+    decoded = encode(encoded, ["base64-url-decode"])
+    decoded.should eq("ABC")
+  end
+
+  it "base64-url encode-decode with characters requiring - and _" do
+    # Bytes [255, 239, 191] encode to "/++/" in base64, which is "_--_" in base64-url
+    original = String.new(Bytes[255, 239, 191])
+    encoded = encode(original, ["base64-url"])
+    encoded.should eq("_--_")
+    decoded = encode(encoded, ["base64-url-decode"])
   it "rot13 encode lowercase" do
     result = encode("hello", ["rot13"])
     result.should eq("uryyb")
