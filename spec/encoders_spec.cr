@@ -166,6 +166,43 @@ describe "encode" do
     decoded = encode(encoded, ["charcode-decode"])
     decoded.should eq(original)
   end
+  it "hex encode single char" do
+    result = encode("a", ["hex"])
+    result.should eq("61")
+  end
+
+  it "hex encode multiple chars" do
+    result = encode("abc", ["hex"])
+    result.should eq("616263")
+  end
+
+  it "hex decode single char" do
+    result = encode("61", ["hex-decode"])
+    result.should eq("a")
+  end
+
+  it "hex decode multiple chars" do
+    result = encode("616263", ["hex-decode"])
+    result.should eq("abc")
+  end
+
+  it "hex encode-decode round trip" do
+    original = "hello"
+    encoded = encode(original, ["hex"])
+    decoded = encode(encoded, ["hex-decode"])
+    decoded.should eq(original)
+  end
+
+  it "hex decode invalid input" do
+    result = encode("invalid", ["hex-decode"])
+    result.should eq("invalid")
+  end
+
+  it "hex decode with mixed case input" do
+    result = encode("6A6b", ["hex-decode"])
+    result.should eq("jk")
+  end
+
   it "base32 encode single case" do
     result = encode("f", ["base32"])
     result.should eq("MY======")
@@ -186,6 +223,11 @@ describe "encode" do
   it "crc32 standard test vector" do
     result = encode("123456789", ["crc32"])
     result.should eq("cbf43926")
+  end
+
+  it "md5 digest standard test vector" do
+    result = encode("123456789", ["md5"])
+    result.should eq("25f9e794323b453885f5181f1b624d0b")
   end
 
   it "base64-url-pad encode-decode round trip" do
@@ -220,5 +262,30 @@ describe "encode" do
   it "upcase encode with special characters and numbers" do
     result = encode("hello 123 !@#", ["upcase"])
     result.should eq("HELLO 123 !@#")
+  it "rot13 encode lowercase" do
+    result = encode("hello", ["rot13"])
+    result.should eq("uryyb")
+  end
+
+  it "rot13 encode uppercase" do
+    result = encode("HELLO", ["rot13"])
+    result.should eq("URYYB")
+  end
+
+  it "rot13 encode mixed case" do
+    result = encode("Hello World", ["rot13"])
+    result.should eq("Uryyb Jbeyq")
+  end
+
+  it "rot13 ignores non-alphabetic characters" do
+    result = encode("123!@#", ["rot13"])
+    result.should eq("123!@#")
+  end
+
+  it "rot13 encode-decode round trip" do
+    original = "The quick brown fox jumps over the lazy dog! 123"
+    encoded = encode(original, ["rot13"])
+    decoded = encode(encoded, ["rot13"])
+    decoded.should eq(original)
   end
 end
