@@ -201,4 +201,9 @@ describe "encode" do
     decoded = encode(encoded_unpadded, ["base64-url-pad-decode"])
     decoded.should eq(original)
   end
+
+  it "sha256 encode single case" do
+    result = encode("test", ["sha256"])
+    result.should eq("n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=")
+  end
 end
