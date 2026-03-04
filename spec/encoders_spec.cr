@@ -188,6 +188,11 @@ describe "encode" do
     result.should eq("cbf43926")
   end
 
+  it "md5 digest standard test vector" do
+    result = encode("123456789", ["md5"])
+    result.should eq("25f9e794323b453885f5181f1b624d0b")
+  end
+
   it "base64-url-pad encode-decode round trip" do
     original = "abcd"
     encoded = encode(original, ["base64-url-pad"])
