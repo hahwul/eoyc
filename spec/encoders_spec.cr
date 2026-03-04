@@ -201,4 +201,26 @@ describe "encode" do
     decoded = encode(encoded_unpadded, ["base64-url-pad-decode"])
     decoded.should eq(original)
   end
+
+  it "reverse encode single case" do
+    result = encode("abc", ["reverse"])
+    result.should eq("cba")
+  end
+
+  it "reverse encode with spaces" do
+    result = encode("hello world", ["reverse"])
+    result.should eq("dlrow olleh")
+  end
+
+  it "reverse encode empty string" do
+    result = encode("", ["reverse"])
+    result.should eq("")
+  end
+
+  it "reverse encode-decode round trip" do
+    original = "reversible"
+    encoded = encode(original, ["reverse"])
+    decoded = encode(encoded, ["reverse"])
+    decoded.should eq(original)
+  end
 end
