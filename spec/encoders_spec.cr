@@ -244,6 +244,24 @@ describe "encode" do
     decoded.should eq(original)
   end
 
+  it "redacted encode standard string" do
+    result = encode("hello", ["redacted"])
+    result.should eq("◼◼◼◼◼")
+  end
+
+  it "redacted encode empty string" do
+    result = encode("", ["redacted"])
+    result.should eq("")
+  end
+
+  it "redacted encode with spaces and special chars" do
+    result = encode("a b c!", ["redacted"])
+    result.should eq("◼◼◼◼◼◼")
+  end
+
+  it "redaction alias works" do
+    result = encode("secret", ["redaction"])
+    result.should eq("◼◼◼◼◼◼")
   it "downcase encode uppercase string" do
     result = encode("HELLO", ["downcase"])
     result.should eq("hello")
