@@ -22,11 +22,11 @@ Encoders.register(
     "url",
     %w[url url-encode],
     "application/x-www-form-urlencoded encode"
-  ) do |s|
+  ) do |str|
     begin
-      URI.encode_www_form(s)
-    rescue ex : Exception
-      s
+      URI.encode_www_form(str)
+    rescue
+      str
     end
   end
 )
@@ -37,11 +37,11 @@ Encoders.register(
     "url-decode",
     %w[url-decode],
     "application/x-www-form-urlencoded decode"
-  ) do |s|
+  ) do |str|
     begin
-      URI.decode_www_form(s)
-    rescue ex : Exception
-      s
+      URI.decode_www_form(str)
+    rescue
+      str
     end
   end
 )

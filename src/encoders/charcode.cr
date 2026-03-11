@@ -21,7 +21,7 @@ Encoders.register(
     "charcode",
     %w[charcode charcode-encode],
     "Character code encode (decimal ASCII values with spaces)"
-  ) { |s| EncoderUtils.charcode_encode(s) }
+  ) { |str| EncoderUtils.charcode_encode(str) }
 )
 
 # Charcode decode
@@ -30,5 +30,5 @@ Encoders.register(
     "charcode-decode",
     %w[charcode-decode],
     "Character code decode"
-  ) { |s| EncoderUtils.charcode_decode(s) }
+  ) { |str| EncoderUtils.charcode_decode(str) }
 )

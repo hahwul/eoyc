@@ -33,11 +33,11 @@ Encoders.register(
     "md5",
     %w[md5],
     "MD5 hex digest"
-  ) do |s|
+  ) do |str|
     begin
-      Digest::MD5.hexdigest(s)
-    rescue ex : Exception
-      s
+      Digest::MD5.hexdigest(str)
+    rescue
+      str
     end
   end
 )
@@ -48,11 +48,11 @@ Encoders.register(
     "sha1",
     %w[sha1],
     "SHA1 Base64 digest"
-  ) do |s|
+  ) do |str|
     begin
-      Digest::SHA1.base64digest(s)
-    rescue ex : Exception
-      s
+      Digest::SHA1.base64digest(str)
+    rescue
+      str
     end
   end
 )
@@ -63,11 +63,11 @@ Encoders.register(
     "sha1-hex",
     %w[sha1-hex],
     "SHA1 hex digest"
-  ) do |s|
+  ) do |str|
     begin
-      Digest::SHA1.hexdigest(s)
-    rescue ex : Exception
-      s
+      Digest::SHA1.hexdigest(str)
+    rescue
+      str
     end
   end
 )
@@ -78,11 +78,11 @@ Encoders.register(
     "sha256",
     %w[sha256],
     "SHA256 Base64 digest"
-  ) do |s|
+  ) do |str|
     begin
-      Digest::SHA256.base64digest(s)
-    rescue ex : Exception
-      s
+      Digest::SHA256.base64digest(str)
+    rescue
+      str
     end
   end
 )
@@ -93,11 +93,11 @@ Encoders.register(
     "sha256-hex",
     %w[sha256-hex],
     "SHA256 hex digest"
-  ) do |s|
+  ) do |str|
     begin
-      Digest::SHA256.hexdigest(s)
-    rescue ex : Exception
-      s
+      Digest::SHA256.hexdigest(str)
+    rescue
+      str
     end
   end
 )
@@ -108,11 +108,11 @@ Encoders.register(
     "sha512",
     %w[sha512],
     "SHA512 Base64 digest"
-  ) do |s|
+  ) do |str|
     begin
-      Digest::SHA512.base64digest(s)
-    rescue ex : Exception
-      s
+      Digest::SHA512.base64digest(str)
+    rescue
+      str
     end
   end
 )
@@ -123,11 +123,11 @@ Encoders.register(
     "sha512-hex",
     %w[sha512-hex],
     "SHA512 hex digest"
-  ) do |s|
+  ) do |str|
     begin
-      Digest::SHA512.hexdigest(s)
-    rescue ex : Exception
-      s
+      Digest::SHA512.hexdigest(str)
+    rescue
+      str
     end
   end
 )
@@ -138,13 +138,13 @@ Encoders.register(
     "sha384",
     %w[sha384],
     "SHA384 Base64 digest"
-  ) do |s|
+  ) do |str|
     begin
       digest = OpenSSL::Digest.new("SHA384")
-      digest.update(s)
+      digest.update(str)
       Base64.strict_encode(digest.final)
-    rescue ex : Exception
-      s
+    rescue
+      str
     end
   end
 )
@@ -155,13 +155,13 @@ Encoders.register(
     "sha384-hex",
     %w[sha384-hex],
     "SHA384 hex digest"
-  ) do |s|
+  ) do |str|
     begin
       digest = OpenSSL::Digest.new("SHA384")
-      digest.update(s)
+      digest.update(str)
       digest.final.map(&.to_s(16).rjust(2, '0')).join
-    rescue ex : Exception
-      s
+    rescue
+      str
     end
   end
 )

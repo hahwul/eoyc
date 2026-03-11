@@ -6,7 +6,7 @@ Encoders.register(
     "punycode-encode",
     %w[punycode-encode punycode],
     "Punycode encode (IDN)"
-  ) { |s| EncoderUtils.punycode_encode(s) }
+  ) { |str| EncoderUtils.punycode_encode(str) }
 )
 
 # Punycode Decode
@@ -15,5 +15,5 @@ Encoders.register(
     "punycode-decode",
     %w[punycode-decode],
     "Punycode decode"
-  ) { |s| EncoderUtils.punycode_decode(s) }
+  ) { |str| EncoderUtils.punycode_decode(str) }
 )

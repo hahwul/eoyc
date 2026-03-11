@@ -4,8 +4,6 @@ require "./spec_helper"
 # This mirrors the process_line method from src/eoyc.cr.
 module Eoyc
   def self.process_line(line : String, choice : String, regex : Regex | String, encoders : Array(String)) : String
-    target = ""
-
     if choice != ""
       target = choice
     elsif regex.is_a?(Regex) || !regex.empty?

@@ -22,7 +22,7 @@ Encoders.register(
     "unicode",
     %w[unicode unicode-encode],
     "Unicode escape sequence encode"
-  ) { |s| EncoderUtils.unicode_encode(s) }
+  ) { |str| EncoderUtils.unicode_encode(str) }
 )
 
 # Unicode decode
@@ -31,5 +31,5 @@ Encoders.register(
     "unicode-decode",
     %w[unicode-decode],
     "Unicode escape sequence decode"
-  ) { |s| EncoderUtils.unicode_decode(s) }
+  ) { |str| EncoderUtils.unicode_decode(str) }
 )

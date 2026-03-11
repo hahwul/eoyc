@@ -6,7 +6,7 @@ Encoders.register(
     "morse-encode",
     %w[morse-encode morse],
     "Morse code encode"
-  ) { |s| EncoderUtils.morse_encode(s) }
+  ) { |str| EncoderUtils.morse_encode(str) }
 )
 
 # Morse Code Decode
@@ -15,5 +15,5 @@ Encoders.register(
     "morse-decode",
     %w[morse-decode],
     "Morse code decode"
-  ) { |s| EncoderUtils.morse_decode(s) }
+  ) { |str| EncoderUtils.morse_decode(str) }
 )

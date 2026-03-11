@@ -23,7 +23,7 @@ Encoders.register(
     "rot13",
     %w[rot13],
     "ROT13 substitution cipher"
-  ) { |s| EncoderUtils.rot13(s) }
+  ) { |str| EncoderUtils.rot13(str) }
 )
 
 # Uppercase
@@ -32,7 +32,7 @@ Encoders.register(
     "upcase",
     %w[upcase],
     "Uppercase transform"
-  ) { |s| s.upcase }
+  ) { |str| str.upcase }
 )
 
 # Lowercase
@@ -41,7 +41,7 @@ Encoders.register(
     "downcase",
     %w[downcase],
     "Lowercase transform"
-  ) { |s| s.downcase }
+  ) { |str| str.downcase }
 )
 
 # Reverse
@@ -50,7 +50,7 @@ Encoders.register(
     "reverse",
     %w[reverse],
     "Reverse text"
-  ) { |s| s.reverse }
+  ) { |str| str.reverse }
 )
 
 # Redaction
@@ -59,7 +59,7 @@ Encoders.register(
     "redacted",
     %w[redacted redaction],
     "Replace all characters with blocks"
-  ) { |s| EncoderUtils.redact(s) }
+  ) { |str| EncoderUtils.redact(str) }
 )
 
 # ROT47
@@ -68,7 +68,7 @@ Encoders.register(
     "rot47",
     %w[rot47],
     "ROT47 cipher (printable ASCII)"
-  ) { |s| EncoderUtils.rot47(s) }
+  ) { |str| EncoderUtils.rot47(str) }
 )
 
 # Atbash
@@ -77,5 +77,5 @@ Encoders.register(
     "atbash",
     %w[atbash],
     "Atbash cipher (reverse alphabet)"
-  ) { |s| EncoderUtils.atbash(s) }
+  ) { |str| EncoderUtils.atbash(str) }
 )

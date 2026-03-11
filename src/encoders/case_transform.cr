@@ -6,15 +6,15 @@ Encoders.register(
     "title-case",
     %w[title-case],
     "Title Case transform"
-  ) { |s|
-    s.split(/(\s+)/).map { |word|
+  ) do |str|
+    str.split(/(\s+)/).map do |word|
       if word =~ /^\s+$/
         word
       else
         word[0].upcase.to_s + (word.size > 1 ? word[1..].downcase : "")
       end
-    }.join
-  }
+    end.join
+  end
 )
 
 # camelCase
@@ -23,13 +23,13 @@ Encoders.register(
     "camel-case",
     %w[camel-case],
     "camelCase transform"
-  ) { |s|
-    words = s.split(/[\s_\-]+/)
+  ) do |str|
+    words = str.split(/[\s_\-]+/)
     next "" if words.empty?
-    words[0].downcase + words[1..].map { |w|
-      w[0].upcase.to_s + (w.size > 1 ? w[1..].downcase : "")
-    }.join
-  }
+    words[0].downcase + words[1..].map do |word|
+      word[0].upcase.to_s + (word.size > 1 ? word[1..].downcase : "")
+    end.join
+  end
 )
 
 # snake_case
@@ -38,12 +38,12 @@ Encoders.register(
     "snake-case",
     %w[snake-case],
     "snake_case transform"
-  ) { |s|
+  ) do |str|
     # Split on spaces, hyphens, underscores, and camelCase boundaries
-    s.gsub(/([a-z])([A-Z])/, "\\1_\\2")
+    str.gsub(/([a-z])([A-Z])/, "\\1_\\2")
       .gsub(/[\s\-]+/, "_")
       .downcase
-  }
+  end
 )
 
 # kebab-case
@@ -52,11 +52,11 @@ Encoders.register(
     "kebab-case",
     %w[kebab-case],
     "kebab-case transform"
-  ) { |s|
-    s.gsub(/([a-z])([A-Z])/, "\\1-\\2")
+  ) do |str|
+    str.gsub(/([a-z])([A-Z])/, "\\1-\\2")
       .gsub(/[\s_]+/, "-")
       .downcase
-  }
+  end
 )
 
 # PascalCase
@@ -65,9 +65,9 @@ Encoders.register(
     "pascal-case",
     %w[pascal-case],
     "PascalCase transform"
-  ) { |s|
-    s.split(/[\s_\-]+/).map { |w|
-      w[0].upcase.to_s + (w.size > 1 ? w[1..].downcase : "")
-    }.join
-  }
+  ) do |str|
+    str.split(/[\s_\-]+/).map do |word|
+      word[0].upcase.to_s + (word.size > 1 ? word[1..].downcase : "")
+    end.join
+  end
 )

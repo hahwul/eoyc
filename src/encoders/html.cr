@@ -6,7 +6,7 @@ Encoders.register(
     "html-encode",
     %w[html-encode html],
     "HTML entity encode"
-  ) { |s| EncoderUtils.html_encode(s) }
+  ) { |str| EncoderUtils.html_encode(str) }
 )
 
 # HTML Entity Decode
@@ -15,5 +15,5 @@ Encoders.register(
     "html-decode",
     %w[html-decode],
     "HTML entity decode"
-  ) { |s| EncoderUtils.html_decode(s) }
+  ) { |str| EncoderUtils.html_decode(str) }
 )

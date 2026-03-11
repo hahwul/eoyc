@@ -21,7 +21,7 @@ Encoders.register(
     "bin",
     %w[bin bin-encode],
     "Binary (8-bit) encode with spaces"
-  ) { |s| EncoderUtils.bin_encode(s) }
+  ) { |str| EncoderUtils.bin_encode(str) }
 )
 
 # Binary decode
@@ -30,5 +30,5 @@ Encoders.register(
     "bin-decode",
     %w[bin-decode],
     "Binary decode"
-  ) { |s| EncoderUtils.bin_decode(s) }
+  ) { |str| EncoderUtils.bin_decode(str) }
 )

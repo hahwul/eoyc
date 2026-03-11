@@ -1,2 +1,10 @@
 version: 2.0
-shards: {}
+shards:
+  ameba:
+    git: https://github.com/crystal-ameba/ameba.git
+    version: 1.7.0-dev+git.commit.a753933e6c8becc93883766b6696414cf49a1469
+
+  cyclonedx-cr:
+    git: https://github.com/hahwul/cyclonedx-cr.git
+    version: 1.1.0+git.commit.a6003fc99b69a5c354361710fca785a7c11ebc0c
+

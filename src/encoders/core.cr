@@ -62,7 +62,7 @@ struct EncoderSpec
   end
 
   def alias_list : Array(String)
-    names.reject { |n| n == primary }
+    names.reject { |name| name == primary }
   end
 end
 
@@ -76,43 +76,43 @@ module EncoderUtils
   end
 
   # URL-safe Base64 (no padding)
-  def base64_url_encode(s : String) : String
-    Base64.encode(s).gsub('+', '-').gsub('/', '_').gsub(/=+$/, "")
+  def base64_url_encode(str : String) : String
+    Base64.encode(str).gsub('+', '-').gsub('/', '_').gsub(/=+$/, "")
   end
 
-  def base64_url_decode(s : String) : String
-    work = s.tr("-", "+").tr("_", "/")
+  def base64_url_decode(str : String) : String
+    work = str.tr("-", "+").tr("_", "/")
     padding = (4 - work.size % 4) % 4
     work += "=" * padding
     Base64.decode_string(work)
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
-  def hex_encode(s : String) : String
-    s.to_slice.hexstring
+  def hex_encode(str : String) : String
+    str.to_slice.hexstring
   end
 
-  def hex_decode(s : String) : String
-    String.new(s.strip.hexbytes)
-  rescue ex : ArgumentError
-    s
+  def hex_decode(str : String) : String
+    String.new(str.strip.hexbytes)
+  rescue
+    str
   end
 
-  def rot13(s : String) : String
-    s.tr("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", "nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM")
+  def rot13(str : String) : String
+    str.tr("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", "nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM")
   end
 
-  def redact(s : String) : String
-    "◼" * s.size
+  def redact(str : String) : String
+    "◼" * str.size
   end
 
-  def bin_encode(s : String) : String
-    s.bytes.map(&.to_s(2).rjust(8, '0')).join(" ")
+  def bin_encode(str : String) : String
+    str.bytes.map(&.to_s(2).rjust(8, '0')).join(" ")
   end
 
-  def bin_decode(s : String) : String
-    clean = s.strip
+  def bin_decode(str : String) : String
+    clean = str.strip
     # Split on spaces and try to convert each 8-bit binary string back to a byte
     parts = clean.split(/\s+/)
     bytes = [] of UInt8
@@ -123,22 +123,22 @@ module EncoderUtils
         bytes << part.to_i(2).to_u8
       else
         # If invalid binary, return original string
-        return s
+        return str
       end
     end
 
     bytes_to_string(bytes)
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
-  def oct_encode(s : String) : String
-    s.bytes.map(&.to_s(8).rjust(3, '0')).join
+  def oct_encode(str : String) : String
+    str.bytes.map(&.to_s(8).rjust(3, '0')).join
   end
 
-  def oct_decode(s : String) : String
-    clean = s.strip
-    return s if clean.empty? || clean.size % 3 != 0
+  def oct_decode(str : String) : String
+    clean = str.strip
+    return str if clean.empty? || clean.size % 3 != 0
 
     # Each character should be exactly 3 octal digits
     bytes = [] of UInt8
@@ -152,40 +152,40 @@ module EncoderUtils
           bytes << val.to_u8
           i += 3
         else
-          return s # Invalid octal value > 255
+          return str # Invalid octal value > 255
         end
       else
-        return s # Invalid octal format
+        return str # Invalid octal format
       end
     end
 
     bytes_to_string(bytes)
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
-  def unicode_encode(s : String) : String
-    s.each_char.map { |char| "\\u" + char.ord.to_s(16).rjust(4, '0') }.join
+  def unicode_encode(str : String) : String
+    str.each_char.map { |char| "\\u" + char.ord.to_s(16).rjust(4, '0') }.join
   end
 
-  def unicode_decode(s : String) : String
+  def unicode_decode(str : String) : String
     # Match \uXXXX patterns and convert back to characters
-    decoded = s.gsub(/\\u([0-9a-fA-F]{4})/) do |_|
+    decoded = str.gsub(/\\u([0-9a-fA-F]{4})/) do |_|
       code_point = $1.to_i(16)
       code_point.chr.to_s
     end
     decoded
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
-  def charcode_encode(s : String) : String
-    s.bytes.map(&.to_s).join(" ")
+  def charcode_encode(str : String) : String
+    str.bytes.map(&.to_s).join(" ")
   end
 
-  def charcode_decode(s : String) : String
-    clean = s.strip
-    return s if clean.empty?
+  def charcode_decode(str : String) : String
+    clean = str.strip
+    return str if clean.empty?
 
     # Split on spaces and try to convert each decimal string back to a byte
     parts = clean.split(/\s+/)
@@ -198,59 +198,59 @@ module EncoderUtils
         if val >= 0 && val <= 255
           bytes << val.to_u8
         else
-          return s # Invalid char code value
+          return str # Invalid char code value
         end
       else
-        return s # Invalid format
+        return str # Invalid format
       end
     end
 
     bytes_to_string(bytes)
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
-  def rot47(s : String) : String
-    s.each_char.map { |c|
-      o = c.ord
-      if o >= 33 && o <= 126
-        ((o - 33 + 47) % 94 + 33).chr
+  def rot47(str : String) : String
+    str.each_char.map do |char|
+      ord = char.ord
+      if ord >= 33 && ord <= 126
+        ((ord - 33 + 47) % 94 + 33).chr
       else
-        c
+        char
       end
-    }.join
+    end.join
   end
 
-  def atbash(s : String) : String
-    s.each_char.map { |c|
-      case c
-      when 'a'..'z' then ('z'.ord - (c.ord - 'a'.ord)).chr
-      when 'A'..'Z' then ('Z'.ord - (c.ord - 'A'.ord)).chr
-      else                c
+  def atbash(str : String) : String
+    str.each_char.map do |char|
+      case char
+      when 'a'..'z' then ('z'.ord - (char.ord - 'a'.ord)).chr
+      when 'A'..'Z' then ('Z'.ord - (char.ord - 'A'.ord)).chr
+      else                char
       end
-    }.join
+    end.join
   end
 
-  def html_encode(s : String) : String
-    s.gsub('&', "&amp;")
+  def html_encode(str : String) : String
+    str.gsub('&', "&amp;")
       .gsub('<', "&lt;")
       .gsub('>', "&gt;")
       .gsub('"', "&quot;")
       .gsub('\'', "&#39;")
   end
 
-  def html_decode(s : String) : String
-    s.gsub("&#39;", "'")
+  def html_decode(str : String) : String
+    str.gsub("&#39;", "'")
       .gsub("&quot;", "\"")
       .gsub("&gt;", ">")
       .gsub("&lt;", "<")
       .gsub("&amp;", "&")
   end
 
-  def json_escape(s : String) : String
+  def json_escape(str : String) : String
     String.build do |io|
-      s.each_char do |c|
-        case c
+      str.each_char do |char|
+        case char
         when '"'  then io << "\\\""
         when '\\' then io << "\\\\"
         when '\n' then io << "\\n"
@@ -259,18 +259,18 @@ module EncoderUtils
         when '\b' then io << "\\b"
         when '\f' then io << "\\f"
         else
-          if c.ord < 0x20
-            io << "\\u" << c.ord.to_s(16).rjust(4, '0')
+          if char.ord < 0x20
+            io << "\\u" << char.ord.to_s(16).rjust(4, '0')
           else
-            io << c
+            io << char
           end
         end
       end
     end
   end
 
-  def json_unescape(s : String) : String
-    result = s.gsub("\\\"", "\"")
+  def json_unescape(str : String) : String
+    result = str.gsub("\\\"", "\"")
       .gsub("\\\\", "\\")
       .gsub("\\n", "\n")
       .gsub("\\r", "\r")
@@ -278,8 +278,8 @@ module EncoderUtils
       .gsub("\\b", "\b")
       .gsub("\\f", "\f")
     result.gsub(/\\u([0-9a-fA-F]{4})/) { $1.to_i(16).chr.to_s }
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
   MORSE_TABLE = {
@@ -295,20 +295,20 @@ module EncoderUtils
 
   MORSE_REVERSE = MORSE_TABLE.invert
 
-  def morse_encode(s : String) : String
-    s.upcase.split("").map { |c|
-      if c == " "
+  def morse_encode(str : String) : String
+    str.upcase.split("").map do |char|
+      if char == " "
         "/"
-      elsif MORSE_TABLE.has_key?(c[0])
-        MORSE_TABLE[c[0]]
+      elsif MORSE_TABLE.has_key?(char[0])
+        MORSE_TABLE[char[0]]
       else
-        c
+        char
       end
-    }.join(" ")
+    end.join(" ")
   end
 
-  def morse_decode(s : String) : String
-    s.split(" ").map { |token|
+  def morse_decode(str : String) : String
+    str.split(" ").map do |token|
       if token == "/"
         " "
       elsif MORSE_REVERSE.has_key?(token)
@@ -316,13 +316,13 @@ module EncoderUtils
       else
         token
       end
-    }.join
-  rescue ex : Exception
-    s
+    end.join
+  rescue
+    str
   end
 
-  def ascii85_encode(s : String) : String
-    bytes = s.bytes
+  def ascii85_encode(str : String) : String
+    bytes = str.bytes
     return "" if bytes.empty?
 
     String.build do |io|
@@ -354,8 +354,8 @@ module EncoderUtils
     end
   end
 
-  def ascii85_decode(s : String) : String
-    work = s.strip
+  def ascii85_decode(str : String) : String
+    work = str.strip
     work = work[2..] if work.starts_with?("<~")
     work = work[...-2] if work.ends_with?("~>")
     work = work.gsub(/\s/, "")
@@ -373,8 +373,8 @@ module EncoderUtils
         padded = chunk + "u" * (5 - chunk.size)
 
         val = 0_u64
-        padded.each_char do |c|
-          val = val * 85 + (c.ord - 33).to_u64
+        padded.each_char do |char|
+          val = val * 85 + (char.ord - 33).to_u64
         end
 
         out_bytes = group_size - 1
@@ -386,8 +386,8 @@ module EncoderUtils
     end
 
     String.new(Bytes.new(bytes.to_unsafe, bytes.size))
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
   LEET_MAP = {
@@ -395,18 +395,18 @@ module EncoderUtils
     't' => '7', 'l' => '1', 'g' => '9', 'b' => '8',
   }
 
-  def leet(s : String) : String
-    s.each_char.map { |c|
-      lower = c.downcase
+  def leet(str : String) : String
+    str.each_char.map do |char|
+      lower = char.downcase
       if LEET_MAP.has_key?(lower)
         LEET_MAP[lower]
       else
-        c
+        char
       end
-    }.join
+    end.join
   end
 
-  def punycode_encode(s : String) : String
+  def punycode_encode(str : String) : String
     # Simple Punycode encoder (RFC 3492)
     n = 128
     delta = 0
@@ -415,12 +415,12 @@ module EncoderUtils
     basic_chars = [] of Char
     non_basic = [] of Int32
 
-    s.each_char do |c|
-      if c.ord < 128
-        basic_chars << c
-        output << c
+    str.each_char do |char|
+      if char.ord < 128
+        basic_chars << char
+        output << char
       else
-        non_basic << c.ord
+        non_basic << char.ord
       end
     end
 
@@ -429,20 +429,20 @@ module EncoderUtils
 
     output << '-' if b > 0 && non_basic.size > 0
 
-    return s if non_basic.empty?
+    return str if non_basic.empty?
 
-    all_codepoints = s.each_char.map(&.ord).to_a
+    all_codepoints = str.each_char.map(&.ord).to_a
 
-    while h < s.each_char.to_a.size
-      m = all_codepoints.select { |cp| cp >= n }.min
+    while h < str.each_char.to_a.size
+      m = all_codepoints.select { |codepoint| codepoint >= n }.min
 
       delta += (m - n) * (h + 1)
       n = m
 
-      all_codepoints.each do |cp|
-        if cp < n
+      all_codepoints.each do |codepoint|
+        if codepoint < n
           delta += 1
-        elsif cp == n
+        elsif codepoint == n
           q = delta
           k = 36
           loop do
@@ -470,22 +470,22 @@ module EncoderUtils
     end
 
     output.join
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
-  def punycode_decode(s : String) : String
+  def punycode_decode(str : String) : String
     # Find the last '-' to separate basic from encoded parts
-    delim = s.rindex('-')
+    delim = str.rindex('-')
     output = if delim
-               s[0...delim].each_char.to_a
+               str[0...delim].each_char.to_a
              else
                [] of Char
              end
     encoded = if delim
-                s[(delim + 1)..]
+                str[(delim + 1)..]
               else
-                s
+                str
               end
 
     n = 128
@@ -499,9 +499,9 @@ module EncoderUtils
       k = 36
       loop do
         break if idx >= encoded.size
-        c = encoded[idx]
+        char = encoded[idx]
         idx += 1
-        digit = punycode_digit_value(c)
+        digit = punycode_digit_value(char)
         i += digit * w
         t = if k <= bias + 1
               1
@@ -523,8 +523,8 @@ module EncoderUtils
     end
 
     output.join
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
   private def punycode_digit(d : Int32) : Char
@@ -535,11 +535,11 @@ module EncoderUtils
     end
   end
 
-  private def punycode_digit_value(c : Char) : Int32
-    case c
-    when 'a'..'z' then c.ord - 'a'.ord
-    when 'A'..'Z' then c.ord - 'A'.ord
-    when '0'..'9' then c.ord - '0'.ord + 26
+  private def punycode_digit_value(char : Char) : Int32
+    case char
+    when 'a'..'z' then char.ord - 'a'.ord
+    when 'A'..'Z' then char.ord - 'A'.ord
+    when '0'..'9' then char.ord - '0'.ord + 26
     else               0
     end
   end
@@ -556,13 +556,13 @@ module EncoderUtils
   end
 
   # Base32 (RFC 4648) encode with padding
-  def base32_encode(s : String) : String
+  def base32_encode(str : String) : String
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
     bits = 0_u32
     bits_left = 0
     out_len = 0
     String.build do |io|
-      bytes = s.to_slice
+      bytes = str.to_slice
       i = 0
       while i < bytes.size
         bits = (bits << 8) | bytes[i].to_u32
@@ -586,24 +586,24 @@ module EncoderUtils
         out_len += 1
       end
     end
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
   # Base32 (RFC 4648) decode
-  def base32_decode(s : String) : String
-    cleaned = s.upcase.gsub(/[^A-Z2-7=]/, "")
+  def base32_decode(str : String) : String
+    cleaned = str.upcase.gsub(/[^A-Z2-7=]/, "")
     bits = 0_u32
     bits_left = 0
     bytes = [] of UInt8
 
-    cleaned.each_char do |ch|
-      next if ch == '='
-      val = case ch
-            when 'A'..'Z' then ch.ord - 'A'.ord
-            when '2'..'7' then ch.ord - '2'.ord + 26
+    cleaned.each_char do |char|
+      next if char == '='
+      val = case char
+            when 'A'..'Z' then char.ord - 'A'.ord
+            when '2'..'7' then char.ord - '2'.ord + 26
             else
-              return s
+              return str
             end
       bits = (bits << 5) | val.to_u32
       bits_left += 5
@@ -615,14 +615,14 @@ module EncoderUtils
     end
 
     bytes_to_string(bytes)
-  rescue ex : Exception
-    s
+  rescue
+    str
   end
 
   # CRC32 (IEEE 802.3) value as UInt32
-  def crc32_uint(s : String) : UInt32
+  def crc32_uint(str : String) : UInt32
     crc = 0xFFFF_FFFF_u32
-    s.each_byte do |b|
+    str.each_byte do |b|
       crc ^= b.to_u32
       8.times do
         if (crc & 1_u32) == 1_u32
@@ -633,15 +633,15 @@ module EncoderUtils
       end
     end
     crc ^ 0xFFFF_FFFF_u32
-  rescue ex : Exception
+  rescue
     0_u32
   end
 
   # CRC32 hex string (lowercase, 8 chars)
-  def crc32_hex(s : String) : String
-    v = crc32_uint(s)
+  def crc32_hex(str : String) : String
+    v = crc32_uint(str)
     v.to_s(16).rjust(8, '0')
-  rescue ex : Exception
+  rescue
     "00000000"
   end
 end
@@ -658,8 +658,8 @@ module Encoders
   def register(spec : EncoderSpec)
     @@mutex.synchronize do
       @@specs << spec
-      spec.names.each do |n|
-        @@name_to_spec[n.downcase] = spec
+      spec.names.each do |name|
+        @@name_to_spec[name.downcase] = spec
       end
     end
   end
@@ -694,7 +694,7 @@ module Encoders
       if spec
         begin
           current = spec.apply(current)
-        rescue ex : Exception
+        rescue
           # fail-safe: keep current value
         end
       end

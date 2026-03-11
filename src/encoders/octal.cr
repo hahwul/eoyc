@@ -22,7 +22,7 @@ Encoders.register(
     "oct",
     %w[oct oct-encode],
     "Octal (base 8) encode"
-  ) { |s| EncoderUtils.oct_encode(s) }
+  ) { |str| EncoderUtils.oct_encode(str) }
 )
 
 # Octal decode
@@ -31,5 +31,5 @@ Encoders.register(
     "oct-decode",
     %w[oct-decode],
     "Octal decode"
-  ) { |s| EncoderUtils.oct_decode(s) }
+  ) { |str| EncoderUtils.oct_decode(str) }
 )

@@ -6,7 +6,7 @@ Encoders.register(
     "ascii85-encode",
     %w[ascii85-encode ascii85],
     "ASCII85/Base85 encode"
-  ) { |s| EncoderUtils.ascii85_encode(s) }
+  ) { |str| EncoderUtils.ascii85_encode(str) }
 )
 
 # ASCII85/Base85 Decode
@@ -15,5 +15,5 @@ Encoders.register(
     "ascii85-decode",
     %w[ascii85-decode],
     "ASCII85/Base85 decode"
-  ) { |s| EncoderUtils.ascii85_decode(s) }
+  ) { |str| EncoderUtils.ascii85_decode(str) }
 )

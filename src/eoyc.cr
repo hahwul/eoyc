@@ -7,8 +7,6 @@ module Eoyc
 
   # Process a single line with the given choice, regex, and encoders
   def self.process_line(line : String, choice : String, regex : Regex | String, encoders : Array(String)) : String
-    target = ""
-
     if choice != ""
       target = choice
     elsif regex.is_a?(Regex) || !regex.empty?
@@ -50,8 +48,8 @@ OptionParser.parse do |parser|
     exit
   end
   parser.on "-l", "--list", "List encoders" do
-    encoder_help_lines.each do |l|
-      puts l
+    encoder_help_lines.each do |line|
+      puts line
     end
     exit
   end
@@ -59,8 +57,8 @@ OptionParser.parse do |parser|
     puts parser
     puts
     puts "Encoders:"
-    encoder_help_lines.each do |l|
-      puts "  #{l}"
+    encoder_help_lines.each do |line|
+      puts "  #{line}"
     end
     exit
   end

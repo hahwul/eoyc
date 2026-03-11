@@ -6,7 +6,7 @@ Encoders.register(
     "json-escape",
     %w[json-escape json],
     "JSON string escape"
-  ) { |s| EncoderUtils.json_escape(s) }
+  ) { |str| EncoderUtils.json_escape(str) }
 )
 
 # JSON String Unescape
@@ -15,5 +15,5 @@ Encoders.register(
     "json-unescape",
     %w[json-unescape],
     "JSON string unescape"
-  ) { |s| EncoderUtils.json_unescape(s) }
+  ) { |str| EncoderUtils.json_unescape(str) }
 )

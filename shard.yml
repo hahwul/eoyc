@@ -1,16 +1,23 @@
 name: eoyc
 version: 0.2.0
 description: Encoding Only Your Choices
-
+repository: "https://github.com/hahwul/eoyc"
+license: MIT
 authors:
   - hahwul <hahwul@gmail.com>
+
+crystal: ~> 1.19
 
 targets:
   eoyc:
     main: src/eoyc.cr
 
-crystal: 1.7.3
 
-license: MIT
-
-repository: "https://github.com/hahwul/eoyc"
+# Development Dependencies
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+    branch: master
+  cyclonedx-cr:
+    github: hahwul/cyclonedx-cr
+    branch: main

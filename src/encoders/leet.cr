@@ -6,5 +6,5 @@ Encoders.register(
     "leet",
     %w[leet l33t],
     "Leet speak transform"
-  ) { |s| EncoderUtils.leet(s) }
+  ) { |str| EncoderUtils.leet(str) }
 )

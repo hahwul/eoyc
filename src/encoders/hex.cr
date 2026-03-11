@@ -27,7 +27,7 @@ Encoders.register(
     "hex",
     %w[hex hex-encode],
     "Hex (lowercase) encode"
-  ) { |s| EncoderUtils.hex_encode(s) }
+  ) { |str| EncoderUtils.hex_encode(str) }
 )
 
 # Hex decode
@@ -36,5 +36,5 @@ Encoders.register(
     "hex-decode",
     %w[hex-decode],
     "Hex decode"
-  ) { |s| EncoderUtils.hex_decode(s) }
+  ) { |str| EncoderUtils.hex_decode(str) }
 )

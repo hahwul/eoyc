@@ -23,7 +23,7 @@ Encoders.register(
     "base64",
     %w[base64 base64-encode],
     "Base64 encode"
-  ) { |s| Base64.encode(s) }
+  ) { |str| Base64.encode(str) }
 )
 
 # Standard Base64 decode
@@ -32,11 +32,11 @@ Encoders.register(
     "base64-decode",
     %w[base64-decode],
     "Base64 decode"
-  ) do |s|
+  ) do |str|
     begin
-      Base64.decode_string(s)
-    rescue ex : Exception
-      s
+      Base64.decode_string(str)
+    rescue
+      str
     end
   end
 )
@@ -47,7 +47,7 @@ Encoders.register(
     "base64-url",
     %w[base64-url base64-url-encode],
     "URL-safe Base64 encode (no padding)"
-  ) { |s| EncoderUtils.base64_url_encode(s) }
+  ) { |str| EncoderUtils.base64_url_encode(str) }
 )
 
 # URL-safe Base64 decode
@@ -56,7 +56,7 @@ Encoders.register(
     "base64-url-decode",
     %w[base64-url-decode],
     "URL-safe Base64 decode"
-  ) { |s| EncoderUtils.base64_url_decode(s) }
+  ) { |str| EncoderUtils.base64_url_decode(str) }
 )
 
 # Base32 encode (RFC 4648, with padding)
@@ -65,7 +65,7 @@ Encoders.register(
     "base32",
     %w[base32 base32-encode],
     "Base32 encode (RFC 4648, with padding)"
-  ) { |s| EncoderUtils.base32_encode(s) }
+  ) { |str| EncoderUtils.base32_encode(str) }
 )
 
 # Base32 decode (RFC 4648)
@@ -74,7 +74,7 @@ Encoders.register(
     "base32-decode",
     %w[base32-decode],
     "Base32 decode (RFC 4648)"
-  ) { |s| EncoderUtils.base32_decode(s) }
+  ) { |str| EncoderUtils.base32_decode(str) }
 )
 
 # CRC32 (IEEE 802.3) hex digest
@@ -83,7 +83,7 @@ Encoders.register(
     "crc32",
     %w[crc32 crc32-hex],
     "CRC32 hex digest (IEEE 802.3)"
-  ) { |s| EncoderUtils.crc32_hex(s) }
+  ) { |str| EncoderUtils.crc32_hex(str) }
 )
 
 # URL-safe Base64 encode (with padding)
@@ -92,7 +92,7 @@ Encoders.register(
     "base64-url-pad",
     %w[base64-url-pad base64-url-encode-pad],
     "URL-safe Base64 encode (with padding)"
-  ) { |s| Base64.encode(s).gsub('+', '-').gsub('/', '_') }
+  ) { |str| Base64.encode(str).gsub('+', '-').gsub('/', '_') }
 )
 
 # URL-safe Base64 decode (accepts padded or unpadded)
@@ -101,5 +101,5 @@ Encoders.register(
     "base64-url-pad-decode",
     %w[base64-url-pad-decode],
     "URL-safe Base64 decode (accepts padding)"
-  ) { |s| EncoderUtils.base64_url_decode(s) }
+  ) { |str| EncoderUtils.base64_url_decode(str) }
 )
