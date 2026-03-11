@@ -1,9 +1,9 @@
 name: eoyc
 base: core20
 version: 0.2.0
-summary: Encoding Only Your Choices
+summary: Endless Options, Your Chain
 description: |
-  Encoding Only Your Choices
+  Endless Options, Your Chain
 
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots

@@ -4,7 +4,7 @@ template = "landing.html"
 [extra.hero]
 title = "Welcome to Eoyc!"
 badge = "v0.2.0"
-description = "Encoding Only Your Choices - A powerful CLI tool for encoding and hashing strings with flexible chain operations"
+description = "Endless Options, Your Chain - A powerful CLI tool for encoding and hashing strings with flexible chain operations"
 # image = "/images/preview.jpg" # Background image
 cta_buttons = [
     { text = "Get Started", url = "/get_started/installation", style = "primary" },

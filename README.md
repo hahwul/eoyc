@@ -1,5 +1,5 @@
 # eoyc
-Encoding Only Your Choices
+Endless Options, Your Chain
 
 ## Documentation
 

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-EOYC (Encoding Only Your Choices) is a Crystal CLI tool for encoding and hashing strings with flexible options. It supports various encoding chains including base64 (standard and URL-safe), MD5, SHA1, SHA256, SHA512, hex, URL encoding/decoding, ROT13, case transformations (upcase, downcase), reverse, redaction, binary, octal, and Unicode encoding/decoding.
+EOYC (Endless Options, Your Chain) is a Crystal CLI tool for encoding and hashing strings with flexible options. It supports various encoding chains including base64 (standard and URL-safe), MD5, SHA1, SHA256, SHA512, hex, URL encoding/decoding, ROT13, case transformations (upcase, downcase), reverse, redaction, binary, octal, and Unicode encoding/decoding.
 
 ## Prerequisites
 

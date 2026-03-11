@@ -7,7 +7,7 @@ weight = 3
 
 ## About Eoyc
 
-Eoyc (Encoding Only Your Choices) is a command-line tool designed to provide flexible and powerful text encoding and transformation capabilities. Built with Crystal for high performance and ease of use, eoyc enables users to encode specific parts of text using a variety of encoders and hash functions.
+Eoyc (Endless Options, Your Chain) is a command-line tool designed to provide flexible and powerful text encoding and transformation capabilities. Built with Crystal for high performance and ease of use, eoyc enables users to encode specific parts of text using a variety of encoders and hash functions.
 
 ## Why Eoyc?
 
