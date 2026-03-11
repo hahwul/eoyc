@@ -90,22 +90,12 @@ module EncoderUtils
   end
 
   def hex_encode(s : String) : String
-    s.bytes.map(&.to_s(16).rjust(2, '0')).join
+    s.to_slice.hexstring
   end
 
   def hex_decode(s : String) : String
-    clean = s.strip
-    return s unless clean.size.even? && clean =~ /^[0-9a-fA-F]+$/
-    bytes = Bytes.new(clean.size // 2)
-    i = 0
-    bi = 0
-    while i < clean.size
-      bytes[bi] = clean[i, 2].to_i(16).to_u8
-      i += 2
-      bi += 1
-    end
-    String.new(bytes)
-  rescue ex : Exception
+    String.new(s.strip.hexbytes)
+  rescue ex : ArgumentError
     s
   end
 
