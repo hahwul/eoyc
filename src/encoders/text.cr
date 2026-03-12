@@ -1,20 +1,4 @@
 # Text transform encoder registrations
-#
-# Provides simple, stateless text transformers:
-#   rot13      -> ROT13 substitution
-#   upcase     -> Uppercase
-#   downcase   -> Lowercase
-#   reverse    -> Reverse string
-#   redacted   -> Replace every character with the block '◼'
-#
-# Depends on:
-#   ./core (EncoderSpec, Encoders, EncoderUtils)
-#
-# NOTE:
-# If these were already defined in the legacy monolithic encoders.cr,
-# whichever file loads last will "win" for each alias. That is fine
-# because all implementations are idempotent and side‑effect free.
-
 require "./core"
 
 # ROT13
@@ -22,7 +6,9 @@ Encoders.register(
   EncoderSpec.new(
     "rot13",
     %w[rot13],
-    "ROT13 substitution cipher"
+    "ROT13 substitution cipher",
+    category: "cipher",
+    flags: %w[encode decode reversible symmetric]
   ) { |str| EncoderUtils.rot13(str) }
 )
 
@@ -31,7 +17,9 @@ Encoders.register(
   EncoderSpec.new(
     "upcase",
     %w[upcase],
-    "Uppercase transform"
+    "Uppercase transform",
+    category: "transform",
+    flags: %w[transform text]
   ) { |str| str.upcase }
 )
 
@@ -40,7 +28,9 @@ Encoders.register(
   EncoderSpec.new(
     "downcase",
     %w[downcase],
-    "Lowercase transform"
+    "Lowercase transform",
+    category: "transform",
+    flags: %w[transform text]
   ) { |str| str.downcase }
 )
 
@@ -49,7 +39,9 @@ Encoders.register(
   EncoderSpec.new(
     "reverse",
     %w[reverse],
-    "Reverse text"
+    "Reverse text",
+    category: "transform",
+    flags: %w[transform reversible symmetric]
   ) { |str| str.reverse }
 )
 
@@ -58,7 +50,9 @@ Encoders.register(
   EncoderSpec.new(
     "redacted",
     %w[redacted redaction],
-    "Replace all characters with blocks"
+    "Replace all characters with blocks",
+    category: "transform",
+    flags: %w[one-way transform]
   ) { |str| EncoderUtils.redact(str) }
 )
 
@@ -67,7 +61,9 @@ Encoders.register(
   EncoderSpec.new(
     "rot47",
     %w[rot47],
-    "ROT47 cipher (printable ASCII)"
+    "ROT47 cipher (printable ASCII)",
+    category: "cipher",
+    flags: %w[encode decode reversible symmetric]
   ) { |str| EncoderUtils.rot47(str) }
 )
 
@@ -76,6 +72,8 @@ Encoders.register(
   EncoderSpec.new(
     "atbash",
     %w[atbash],
-    "Atbash cipher (reverse alphabet)"
+    "Atbash cipher (reverse alphabet)",
+    category: "cipher",
+    flags: %w[encode decode reversible symmetric]
   ) { |str| EncoderUtils.atbash(str) }
 )

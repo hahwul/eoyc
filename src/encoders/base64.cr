@@ -1,19 +1,4 @@
 # Base64-related encoder registrations
-#
-# This file defines and registers:
-#  - base64 / base64-encode
-#  - base64-decode
-#  - base64-url / base64-url-encode
-#  - base64-url-decode
-#
-# Depends on:
-#   - ./core.cr (EncoderSpec, Encoders, EncoderUtils)
-#
-# NOTE:
-#   If the legacy monolithic encoders registry (encoders.cr) still
-#   contains these specs, you should remove them there to avoid
-#   duplicate registrations (not harmful, but redundant).
-
 require "./core"
 require "base64"
 
@@ -22,7 +7,9 @@ Encoders.register(
   EncoderSpec.new(
     "base64",
     %w[base64 base64-encode],
-    "Base64 encode"
+    "Base64 encode",
+    category: "encoding",
+    flags: %w[encode reversible]
   ) { |str| Base64.encode(str) }
 )
 
@@ -31,7 +18,9 @@ Encoders.register(
   EncoderSpec.new(
     "base64-decode",
     %w[base64-decode],
-    "Base64 decode"
+    "Base64 decode",
+    category: "encoding",
+    flags: %w[decode reversible]
   ) do |str|
     begin
       Base64.decode_string(str)
@@ -46,7 +35,9 @@ Encoders.register(
   EncoderSpec.new(
     "base64-url",
     %w[base64-url base64-url-encode],
-    "URL-safe Base64 encode (no padding)"
+    "URL-safe Base64 encode (no padding)",
+    category: "encoding",
+    flags: %w[encode reversible url-safe]
   ) { |str| EncoderUtils.base64_url_encode(str) }
 )
 
@@ -55,7 +46,9 @@ Encoders.register(
   EncoderSpec.new(
     "base64-url-decode",
     %w[base64-url-decode],
-    "URL-safe Base64 decode"
+    "URL-safe Base64 decode",
+    category: "encoding",
+    flags: %w[decode reversible url-safe]
   ) { |str| EncoderUtils.base64_url_decode(str) }
 )
 
@@ -64,7 +57,9 @@ Encoders.register(
   EncoderSpec.new(
     "base32",
     %w[base32 base32-encode],
-    "Base32 encode (RFC 4648, with padding)"
+    "Base32 encode (RFC 4648, with padding)",
+    category: "encoding",
+    flags: %w[encode reversible]
   ) { |str| EncoderUtils.base32_encode(str) }
 )
 
@@ -73,7 +68,9 @@ Encoders.register(
   EncoderSpec.new(
     "base32-decode",
     %w[base32-decode],
-    "Base32 decode (RFC 4648)"
+    "Base32 decode (RFC 4648)",
+    category: "encoding",
+    flags: %w[decode reversible]
   ) { |str| EncoderUtils.base32_decode(str) }
 )
 
@@ -82,7 +79,9 @@ Encoders.register(
   EncoderSpec.new(
     "crc32",
     %w[crc32 crc32-hex],
-    "CRC32 hex digest (IEEE 802.3)"
+    "CRC32 hex digest (IEEE 802.3)",
+    category: "hash",
+    flags: %w[one-way checksum]
   ) { |str| EncoderUtils.crc32_hex(str) }
 )
 
@@ -91,7 +90,9 @@ Encoders.register(
   EncoderSpec.new(
     "base64-url-pad",
     %w[base64-url-pad base64-url-encode-pad],
-    "URL-safe Base64 encode (with padding)"
+    "URL-safe Base64 encode (with padding)",
+    category: "encoding",
+    flags: %w[encode reversible url-safe]
   ) { |str| Base64.encode(str).gsub('+', '-').gsub('/', '_') }
 )
 
@@ -100,6 +101,8 @@ Encoders.register(
   EncoderSpec.new(
     "base64-url-pad-decode",
     %w[base64-url-pad-decode],
-    "URL-safe Base64 decode (accepts padding)"
+    "URL-safe Base64 decode (accepts padding)",
+    category: "encoding",
+    flags: %w[decode reversible url-safe]
   ) { |str| EncoderUtils.base64_url_decode(str) }
 )

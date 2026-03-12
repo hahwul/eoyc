@@ -1,27 +1,14 @@
-# URL form encoding/decoding encoders
-#
-# Registers:
-#  - url / url-encode      : form-style encode (single value)
-#  - url-decode            : form-style decode
-#
-# Behavior:
-#  - Encoding uses URI.encode_www_form on the raw string (single value semantics)
-#  - Decoding uses URI.decode_www_form and returns the resulting String
-#  - Fail-safe: on exception returns original input
-#
-# NOTE:
-#  If earlier monolithic encoders.cr file still contains these
-#  registrations, whichever file is required last wins.
-
 require "./core"
 require "uri"
 
-# Encode
+# URL encode
 Encoders.register(
   EncoderSpec.new(
     "url",
     %w[url url-encode],
-    "application/x-www-form-urlencoded encode"
+    "URL encode (application/x-www-form-urlencoded)",
+    category: "encoding",
+    flags: %w[encode reversible web]
   ) do |str|
     begin
       URI.encode_www_form(str)
@@ -31,12 +18,14 @@ Encoders.register(
   end
 )
 
-# Decode
+# URL decode
 Encoders.register(
   EncoderSpec.new(
     "url-decode",
     %w[url-decode],
-    "application/x-www-form-urlencoded decode"
+    "URL decode (application/x-www-form-urlencoded)",
+    category: "encoding",
+    flags: %w[decode reversible web]
   ) do |str|
     begin
       URI.decode_www_form(str)

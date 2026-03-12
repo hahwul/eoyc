@@ -39,21 +39,28 @@
 
 require "mutex"
 require "base64"
+require "json"
 
 # Single specification for an encoder / transformer.
 struct EncoderSpec
   getter primary : String
   getter names : Array(String)
   getter description : String
+  getter category : String
+  getter flags : Array(String)
   getter proc : Proc(String, String)
 
-  def initialize(primary : String, names : Array(String), description : String, &block : String -> String)
+  def initialize(primary : String, names : Array(String), description : String,
+                 category : String = "other", flags : Array(String) = [] of String,
+                 &block : String -> String)
     unless names.includes?(primary)
       raise ArgumentError.new("Primary name '#{primary}' must be included in names array")
     end
     @primary = primary
     @names = names
     @description = description
+    @category = category
+    @flags = flags
     @proc = block
   end
 
@@ -63,6 +70,16 @@ struct EncoderSpec
 
   def alias_list : Array(String)
     names.reject { |name| name == primary }
+  end
+
+  def to_json(json : JSON::Builder)
+    json.object do
+      json.field "name", primary
+      json.field "aliases", alias_list
+      json.field "description", description
+      json.field "category", category
+      json.field "flags", flags
+    end
   end
 end
 
@@ -226,7 +243,7 @@ module EncoderUtils
       case char
       when 'a'..'z' then ('z'.ord - (char.ord - 'a'.ord)).chr
       when 'A'..'Z' then ('Z'.ord - (char.ord - 'A'.ord)).chr
-      else                char
+      else               char
       end
     end.join
   end
@@ -340,7 +357,7 @@ module EncoderUtils
         if val == 0 && group_size == 4
           io << 'z'
         else
-          chars = Array(Char).new(5, '!' )
+          chars = Array(Char).new(5, '!')
           4.downto(0) do |j|
             chars[j] = (val % 85 + 33).chr
             val //= 85
@@ -549,7 +566,7 @@ module EncoderUtils
     d += d // numpoints
     k = 0
     while d > 455 # ((36 - 1) * 26) // 2
-      d //= 35
+      d = d // 35
       k += 36
     end
     k + (36 * d) // (d + 38)
@@ -622,8 +639,8 @@ module EncoderUtils
   # CRC32 (IEEE 802.3) value as UInt32
   def crc32_uint(str : String) : UInt32
     crc = 0xFFFF_FFFF_u32
-    str.each_byte do |b|
-      crc ^= b.to_u32
+    str.each_byte do |byte|
+      crc ^= byte.to_u32
       8.times do
         if (crc & 1_u32) == 1_u32
           crc = (crc >> 1) ^ 0xEDB8_8320_u32
@@ -683,6 +700,56 @@ module Encoders
     end
   end
 
+  # Return all unique categories.
+  def categories : Array(String)
+    specs.map(&.category).uniq!
+  end
+
+  # Search encoders by keyword (matches name, aliases, description, category).
+  def search(keyword : String) : Array(EncoderSpec)
+    kw = keyword.downcase
+    specs.select do |spec|
+      spec.primary.downcase.includes?(kw) ||
+        spec.names.any?(&.downcase.includes?(kw)) ||
+        spec.description.downcase.includes?(kw) ||
+        spec.category.downcase.includes?(kw)
+    end
+  end
+
+  # JSON: list all encoders.
+  def to_json_array : String
+    JSON.build do |json|
+      json.array do
+        specs.each(&.to_json(json))
+      end
+    end
+  end
+
+  # JSON: describe a single encoder by name.
+  def describe_json(name : String) : String?
+    spec = find(name)
+    return nil unless spec
+    JSON.build do |json|
+      spec.to_json(json)
+    end
+  end
+
+  # JSON: list categories with their encoders.
+  def categories_json : String
+    grouped = specs.group_by(&.category)
+    JSON.build do |json|
+      json.object do
+        grouped.each do |cat, cat_specs|
+          json.field cat do
+            json.array do
+              cat_specs.each { |spec| json.string spec.primary }
+            end
+          end
+        end
+      end
+    end
+  end
+
   # Apply a chain of encoders (processes from last to first).
   def encode_chain(str, encoders : Array(String)) : String
     current = str.to_s
@@ -700,6 +767,27 @@ module Encoders
       end
     end
     current.to_s.strip
+  end
+
+  # Apply a chain and return step-by-step results (for --chain-info).
+  def encode_chain_steps(str, encoders : Array(String)) : Array(NamedTuple(encoder: String, output: String))
+    current = str.to_s
+    steps = [] of NamedTuple(encoder: String, output: String)
+    return steps if current.empty? || encoders.empty?
+
+    (encoders.size - 1).downto(0) do |i|
+      name = encoders[i].strip.downcase
+      spec = find(name)
+      if spec
+        begin
+          current = spec.apply(current)
+          steps << {encoder: spec.primary, output: current.strip}
+        rescue
+          steps << {encoder: name, output: current.strip}
+        end
+      end
+    end
+    steps
   end
 end
 

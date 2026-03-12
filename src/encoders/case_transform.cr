@@ -5,7 +5,9 @@ Encoders.register(
   EncoderSpec.new(
     "title-case",
     %w[title-case],
-    "Title Case transform"
+    "Title Case transform",
+    category: "transform",
+    flags: %w[transform text]
   ) do |str|
     str.split(/(\s+)/).map do |word|
       if word =~ /^\s+$/
@@ -22,7 +24,9 @@ Encoders.register(
   EncoderSpec.new(
     "camel-case",
     %w[camel-case],
-    "camelCase transform"
+    "camelCase transform",
+    category: "transform",
+    flags: %w[transform text]
   ) do |str|
     words = str.split(/[\s_\-]+/)
     next "" if words.empty?
@@ -37,9 +41,10 @@ Encoders.register(
   EncoderSpec.new(
     "snake-case",
     %w[snake-case],
-    "snake_case transform"
+    "snake_case transform",
+    category: "transform",
+    flags: %w[transform text]
   ) do |str|
-    # Split on spaces, hyphens, underscores, and camelCase boundaries
     str.gsub(/([a-z])([A-Z])/, "\\1_\\2")
       .gsub(/[\s\-]+/, "_")
       .downcase
@@ -51,7 +56,9 @@ Encoders.register(
   EncoderSpec.new(
     "kebab-case",
     %w[kebab-case],
-    "kebab-case transform"
+    "kebab-case transform",
+    category: "transform",
+    flags: %w[transform text]
   ) do |str|
     str.gsub(/([a-z])([A-Z])/, "\\1-\\2")
       .gsub(/[\s_]+/, "-")
@@ -64,7 +71,9 @@ Encoders.register(
   EncoderSpec.new(
     "pascal-case",
     %w[pascal-case],
-    "PascalCase transform"
+    "PascalCase transform",
+    category: "transform",
+    flags: %w[transform text]
   ) do |str|
     str.split(/[\s_\-]+/).map do |word|
       word[0].upcase.to_s + (word.size > 1 ? word[1..].downcase : "")

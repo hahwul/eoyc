@@ -7,7 +7,9 @@ Encoders.register(
   EncoderSpec.new(
     "zlib-encode",
     %w[zlib-encode zlib],
-    "Zlib compress then Base64 encode"
+    "Zlib compress then Base64 encode",
+    category: "compression",
+    flags: %w[encode reversible compression]
   ) do |str|
     begin
       compressed = IO::Memory.new
@@ -26,7 +28,9 @@ Encoders.register(
   EncoderSpec.new(
     "zlib-decode",
     %w[zlib-decode],
-    "Base64 decode then Zlib decompress"
+    "Base64 decode then Zlib decompress",
+    category: "compression",
+    flags: %w[decode reversible compression]
   ) do |str|
     begin
       decoded = Base64.decode(str)
@@ -45,7 +49,9 @@ Encoders.register(
   EncoderSpec.new(
     "gzip-encode",
     %w[gzip-encode gzip],
-    "Gzip compress then Base64 encode"
+    "Gzip compress then Base64 encode",
+    category: "compression",
+    flags: %w[encode reversible compression]
   ) do |str|
     begin
       compressed = IO::Memory.new
@@ -64,7 +70,9 @@ Encoders.register(
   EncoderSpec.new(
     "gzip-decode",
     %w[gzip-decode],
-    "Base64 decode then Gzip decompress"
+    "Base64 decode then Gzip decompress",
+    category: "compression",
+    flags: %w[decode reversible compression]
   ) do |str|
     begin
       decoded = Base64.decode(str)

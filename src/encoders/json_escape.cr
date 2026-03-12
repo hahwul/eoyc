@@ -5,7 +5,9 @@ Encoders.register(
   EncoderSpec.new(
     "json-escape",
     %w[json-escape json],
-    "JSON string escape"
+    "JSON string escape",
+    category: "encoding",
+    flags: %w[encode reversible web]
   ) { |str| EncoderUtils.json_escape(str) }
 )
 
@@ -14,6 +16,8 @@ Encoders.register(
   EncoderSpec.new(
     "json-unescape",
     %w[json-unescape],
-    "JSON string unescape"
+    "JSON string unescape",
+    category: "encoding",
+    flags: %w[decode reversible web]
   ) { |str| EncoderUtils.json_unescape(str) }
 )
