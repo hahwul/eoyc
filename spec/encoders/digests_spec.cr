@@ -1,10 +1,15 @@
 require "spec"
-require "./spec_helper"
+require "../spec_helper"
 
 describe "digests" do
   it "md5 digest" do
     result = encode("abc", ["md5"])
     result.should eq("900150983cd24fb0d6963f7d28e17f72")
+  end
+
+  it "md5 digest standard test vector" do
+    result = encode("123456789", ["md5"])
+    result.should eq("25f9e794323b453885f5181f1b624d0b")
   end
 
   it "sha1 Base64 digest" do
@@ -25,6 +30,11 @@ describe "digests" do
   it "sha256 hex digest" do
     result = encode("abc", ["sha256-hex"])
     result.should eq("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
+  end
+
+  it "sha256 encode single case" do
+    result = encode("test", ["sha256"])
+    result.should eq("n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=")
   end
 
   it "sha512 Base64 digest" do

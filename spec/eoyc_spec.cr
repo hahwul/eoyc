@@ -1,3 +1,4 @@
+require "spec"
 require "./spec_helper"
 
 # Define the Eoyc module here since requiring src/eoyc.cr would trigger CLI parsing.

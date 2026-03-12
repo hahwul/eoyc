@@ -1,6 +1,6 @@
 require "spec"
 require "json"
-require "./spec_helper"
+require "../spec_helper"
 
 describe "EncoderSpec metadata" do
   it "has category field" do
