@@ -46,7 +46,7 @@ After installation, verify that eoyc is working correctly:
 
 ```bash
 eoyc --version
-# Output: 0.2.0
+# Output: 0.3.0
 ```
 
 ```bash

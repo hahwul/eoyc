@@ -1,5 +1,5 @@
 name: eoyc
-version: 0.2.0
+version: 0.3.0
 description: Endless Options, Your Chain
 repository: "https://github.com/hahwul/eoyc"
 license: MIT
@@ -11,7 +11,6 @@ crystal: ~> 1.19
 targets:
   eoyc:
     main: src/eoyc.cr
-
 
 # Development Dependencies
 development_dependencies:

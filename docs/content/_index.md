@@ -3,7 +3,7 @@ template = "landing.html"
 
 [extra.hero]
 title = "Welcome to Eoyc!"
-badge = "v0.2.0"
+badge = "v0.3.0"
 description = "Endless Options, Your Chain - A powerful CLI tool for encoding and hashing strings with flexible chain operations"
 # image = "/images/preview.jpg" # Background image
 cta_buttons = [

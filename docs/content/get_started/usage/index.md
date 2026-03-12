@@ -54,7 +54,7 @@ Show version information.
 
 ```bash
 eoyc --version
-# Output: 0.2.0
+# Output: 0.3.0
 ```
 
 ### `-h, --help`
