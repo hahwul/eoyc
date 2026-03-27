@@ -66,10 +66,6 @@ exclude = []
 [robots]
 enabled = true
 filename = "robots.txt"
-rules = [
-  { user_agent = "*", disallow = ["/admin", "/private"] },
-  { user_agent = "GPTBot", disallow = ["/"] }
-]
 
 # =============================================================================
 # RSS/Atom Feeds
