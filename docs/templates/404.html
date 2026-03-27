@@ -1,0 +1,22 @@
+{% include "header.html" %}
+<header class="bp-header">
+  <div class="bp-header-inner">
+    <a href="{{ base_url }}/" class="bp-logo">
+      <span class="bp-logo-mark">&gt;</span> {{ site.title }}
+    </a>
+    <nav class="bp-nav">
+      <a href="{{ base_url }}/get_started/installation/">Docs</a>
+      <a href="{{ base_url }}/encoders/">Encoders</a>
+      <a href="{{ base_url }}/background/">Background</a>
+    </nav>
+  </div>
+</header>
+<div class="bp-container">
+  <main class="bp-main">
+    <div class="bp-error">
+      <div class="bp-error-code">404</div>
+      <div class="bp-error-label">PAGE NOT FOUND</div>
+      <p>The requested page does not exist.</p>
+      <a href="{{ base_url }}/" class="bp-btn">Return to Home</a>
+    </div>
+{% include "footer.html" %}
