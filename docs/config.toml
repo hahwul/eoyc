@@ -4,7 +4,7 @@
 
 title = "Eoyc"
 description = "Endless Options, Your Chain - A powerful CLI tool for encoding and hashing strings with flexible chain operations"
-base_url = "" #base_url = "https://eoyc.hahwul.com"
+base_url = "https://eoyc.hahwul.com"
 
 # =============================================================================
 # Plugins
