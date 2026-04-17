@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Endless Options, Your Chain - A powerful CLI tool for encoding and hashing strings">
+  <title>Background - Eoyc</title>
+  <meta property="og:title" content="Background">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://eoyc.hahwul.com/background/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Background">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://eoyc.hahwul.com/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  
+</head>
+<body>
+<header class="bp-header">
+  <div class="bp-header-inner">
+    <a href="https://eoyc.hahwul.com/" class="bp-logo">
+      <span class="bp-logo-mark">&gt;</span> Eoyc
+    </a>
+    <nav class="bp-nav">
+      <a href="https://eoyc.hahwul.com/get_started/installation/">Docs</a>
+      <a href="https://eoyc.hahwul.com/encoders/">Encoders</a>
+      <a href="https://eoyc.hahwul.com/background/">Background</a>
+      <a href="https://github.com/hahwul/eoyc" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <div class="bp-header-right">
+      
+      <button class="bp-sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      
+      <button class="bp-search-trigger" onclick="openSearch()" title="Search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+        <kbd>Ctrl+K</kbd>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-modal">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Search documentation..." autocomplete="off">
+      <kbd onclick="closeSearch()">ESC</kbd>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<div class="bp-container bp-container--docs">
+  <aside class="bp-sidebar" id="sidebar">
+    <nav class="bp-sidebar-nav">
+      <div class="bp-sidebar-section">
+        <div class="bp-sidebar-heading">Get Started</div>
+        <a href="https://eoyc.hahwul.com/get_started/installation/" class="bp-sidebar-link">Installation</a>
+        <a href="https://eoyc.hahwul.com/get_started/usage/" class="bp-sidebar-link">Usage</a>
+        <a href="https://eoyc.hahwul.com/get_started/examples/" class="bp-sidebar-link">Examples</a>
+      </div>
+      <div class="bp-sidebar-section">
+        <div class="bp-sidebar-heading">Encoders</div>
+        <a href="https://eoyc.hahwul.com/encoders/base64/" class="bp-sidebar-link">Base64</a>
+        <a href="https://eoyc.hahwul.com/encoders/digests/" class="bp-sidebar-link">Hash & Digests</a>
+        <a href="https://eoyc.hahwul.com/encoders/hex/" class="bp-sidebar-link">Hex</a>
+        <a href="https://eoyc.hahwul.com/encoders/url/" class="bp-sidebar-link">URL</a>
+        <a href="https://eoyc.hahwul.com/encoders/text/" class="bp-sidebar-link">Text</a>
+        <a href="https://eoyc.hahwul.com/encoders/binary/" class="bp-sidebar-link">Binary & Character</a>
+      </div>
+      <div class="bp-sidebar-section">
+        <div class="bp-sidebar-heading">More</div>
+        <a href="https://eoyc.hahwul.com/background/" class="bp-sidebar-link">Background</a>
+        <a href="https://github.com/hahwul/eoyc" class="bp-sidebar-link" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </nav>
+  </aside>
+  <main class="bp-main bp-main--docs">
+    <div class="bp-doc-header">
+      <h1>Background</h1>
+      
+    </div>
+    <div class="bp-content">
+      <h2 id="about-eoyc">About Eoyc</h2>
+<p>Eoyc (Endless Options, Your Chain) is a command-line tool designed to provide flexible and powerful text encoding and transformation capabilities. Built with Crystal for high performance and ease of use, eoyc enables users to encode specific parts of text using a variety of encoders and hash functions.</p>
+<h2 id="why-eoyc">Why Eoyc?</h2>
+<p>When working with security testing, data processing, or text manipulation, there's often a need to encode or hash specific parts of text while leaving the rest intact. Traditional encoding tools typically work on entire files or streams, but eoyc provides fine-grained control:</p>
+<ul>
+<li><strong>Selective Encoding</strong>: Encode only specific strings or regex patterns</li>
+<li><strong>Chain Operations</strong>: Combine multiple encoders in sequence</li>
+<li><strong>Stream Processing</strong>: Work with STDIN/STDOUT for easy integration in pipelines</li>
+<li><strong>Multiple Encoders</strong>: Support for 20+ different encoders and transformations</li>
+</ul>
+<h2 id="design-philosophy">Design Philosophy</h2>
+<p>Eoyc follows these core principles:</p>
+<ol>
+<li><strong>Simplicity</strong>: Easy to use with intuitive command-line interface</li>
+<li><strong>Flexibility</strong>: Multiple ways to select and transform text</li>
+<li><strong>Composability</strong>: Chain operations together for complex transformations</li>
+<li><strong>Performance</strong>: Built with Crystal for fast execution</li>
+<li><strong>Unix Philosophy</strong>: Read from STDIN, write to STDOUT, do one thing well</li>
+</ol>
+<h2 id="use-cases">Use Cases</h2>
+<h3 id="security-testing">Security Testing</h3>
+<ul>
+<li>Encode payloads for web application testing</li>
+<li>Generate various encodings of test strings</li>
+<li>Obfuscate sensitive data in test scenarios</li>
+</ul>
+<h3 id="data-processing">Data Processing</h3>
+<ul>
+<li>Anonymize log files by hashing sensitive information</li>
+<li>Transform data formats in processing pipelines</li>
+<li>Encode URLs or special characters in bulk</li>
+</ul>
+<h3 id="development">Development</h3>
+<ul>
+<li>Test encoding/decoding implementations</li>
+<li>Generate test data in various formats</li>
+<li>Quick command-line encoding utilities</li>
+</ul>
+<h2 id="architecture">Architecture</h2>
+<p>Eoyc is built with a modular encoder system:</p>
+<pre><code>src/
+├── eoyc.cr           # Main CLI entry point
+├── encoders.cr       # Encoder aggregation
+├── encoders/         # Individual encoder modules
+│   ├── core.cr       # Framework and registry
+│   ├── base64.cr     # Base64 encoders
+│   ├── digests.cr    # Hash functions
+│   ├── hex.cr        # Hex encoders
+│   ├── url_form.cr   # URL encoders
+│   ├── text.cr       # Text transformations
+│   ├── binary.cr     # Binary encoders
+│   ├── octal.cr      # Octal encoders
+│   ├── unicode.cr    # Unicode encoders
+│   └── charcode.cr   # Character code encoders
+└── utils.cr          # Utility functions
+</code></pre>
+<p>Each encoder is registered in a global registry and can be easily extended to support new encoding schemes.</p>
+<h2 id="technology-stack">Technology Stack</h2>
+<ul>
+<li><strong>Language</strong>: Crystal 1.7.3+</li>
+<li><strong>Build System</strong>: Crystal Shards</li>
+<li><strong>Package Management</strong>: Homebrew (macOS)</li>
+<li><strong>Testing</strong>: Crystal Spec</li>
+</ul>
+<h2 id="license">License</h2>
+<p>Eoyc is open source software licensed under the MIT License. See the <a href="https://github.com/hahwul/eoyc/blob/main/LICENSE">LICENSE</a> file for details.</p>
+<h2 id="contributing">Contributing</h2>
+<p>Contributions are welcome! Please see the <a href="https://github.com/hahwul/eoyc">GitHub repository</a> for more information on how to contribute.</p>
+
+    </div>
+
+    <footer class="bp-footer">
+      <div class="bp-footer-grid">
+        <span class="bp-footer-item">Eoyc v0.3.0</span>
+        <span class="bp-footer-item">Powered by <a href="https://github.com/hahwul/hwaro">Hwaro</a></span>
+        <span class="bp-footer-item">MIT License</span>
+      </div>
+    </footer>
+  </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script src="https://eoyc.hahwul.com/js/search.js"></script>
+<script src="https://eoyc.hahwul.com/js/sidebar.js"></script>
+
+</body>
+</html>

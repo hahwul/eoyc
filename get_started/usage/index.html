@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Endless Options, Your Chain - A powerful CLI tool for encoding and hashing strings">
+  <title>Usage - Eoyc</title>
+  <meta property="og:title" content="Usage">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://eoyc.hahwul.com/get_started/usage/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Usage">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://eoyc.hahwul.com/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  
+</head>
+<body>
+<header class="bp-header">
+  <div class="bp-header-inner">
+    <a href="https://eoyc.hahwul.com/" class="bp-logo">
+      <span class="bp-logo-mark">&gt;</span> Eoyc
+    </a>
+    <nav class="bp-nav">
+      <a href="https://eoyc.hahwul.com/get_started/installation/">Docs</a>
+      <a href="https://eoyc.hahwul.com/encoders/">Encoders</a>
+      <a href="https://eoyc.hahwul.com/background/">Background</a>
+      <a href="https://github.com/hahwul/eoyc" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <div class="bp-header-right">
+      
+      <button class="bp-sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      
+      <button class="bp-search-trigger" onclick="openSearch()" title="Search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>Search</span>
+        <kbd>Ctrl+K</kbd>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-modal">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Search documentation..." autocomplete="off">
+      <kbd onclick="closeSearch()">ESC</kbd>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<div class="bp-container bp-container--docs">
+  <aside class="bp-sidebar" id="sidebar">
+    <nav class="bp-sidebar-nav">
+      <div class="bp-sidebar-section">
+        <div class="bp-sidebar-heading">Get Started</div>
+        <a href="https://eoyc.hahwul.com/get_started/installation/" class="bp-sidebar-link">Installation</a>
+        <a href="https://eoyc.hahwul.com/get_started/usage/" class="bp-sidebar-link">Usage</a>
+        <a href="https://eoyc.hahwul.com/get_started/examples/" class="bp-sidebar-link">Examples</a>
+      </div>
+      <div class="bp-sidebar-section">
+        <div class="bp-sidebar-heading">Encoders</div>
+        <a href="https://eoyc.hahwul.com/encoders/base64/" class="bp-sidebar-link">Base64</a>
+        <a href="https://eoyc.hahwul.com/encoders/digests/" class="bp-sidebar-link">Hash & Digests</a>
+        <a href="https://eoyc.hahwul.com/encoders/hex/" class="bp-sidebar-link">Hex</a>
+        <a href="https://eoyc.hahwul.com/encoders/url/" class="bp-sidebar-link">URL</a>
+        <a href="https://eoyc.hahwul.com/encoders/text/" class="bp-sidebar-link">Text</a>
+        <a href="https://eoyc.hahwul.com/encoders/binary/" class="bp-sidebar-link">Binary & Character</a>
+      </div>
+      <div class="bp-sidebar-section">
+        <div class="bp-sidebar-heading">More</div>
+        <a href="https://eoyc.hahwul.com/background/" class="bp-sidebar-link">Background</a>
+        <a href="https://github.com/hahwul/eoyc" class="bp-sidebar-link" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </nav>
+  </aside>
+  <main class="bp-main bp-main--docs">
+    <div class="bp-doc-header">
+      <h1>Usage</h1>
+      
+      <div class="bp-doc-meta">
+        <span class="bp-meta-label">GET_STARTED</span>
+      </div>
+      
+    </div>
+    <div class="bp-content">
+      <p>Eoyc is a command-line tool for encoding and transforming text. It reads from STDIN and applies the specified encoders to your data.</p>
+<h2 id="basic-command-structure">Basic Command Structure</h2>
+<pre><code class="language-bash hljs">eoyc [arguments]
+</code></pre>
+<h2 id="command-line-arguments">Command-Line Arguments</h2>
+<h3 id="s-string-stringstring"><code>-s STRING, --string=STRING</code></h3>
+<p>Your choice string to encode. When specified, only this exact string within each input line will be encoded.</p>
+<pre><code class="language-bash hljs">echo &quot;hello world&quot; | eoyc -s &quot;world&quot; -e &quot;base64&quot;
+# Output: hello d29ybGQ=
+</code></pre>
+<h3 id="r-regex-regexregex"><code>-r REGEX, --regex=REGEX</code></h3>
+<p>Your choice regex pattern. When specified, only the part matching the regex will be encoded.</p>
+<pre><code class="language-bash hljs">echo &quot;email: user@example.com&quot; | eoyc -r &quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}&quot; -e &quot;sha1&quot;
+# Output: email: w18pVtgE4B7y3sOS7zra42KJEj8=
+</code></pre>
+<h3 id="e-encoders-encodersencoders"><code>-e ENCODERS, --encoders=ENCODERS</code></h3>
+<p>Encoders chain. You can use <code>&gt;</code>, <code>|</code>, or <code>,</code> characters to chain multiple encoders together.</p>
+<pre><code class="language-bash hljs"># Single encoder
+echo &quot;test&quot; | eoyc -e &quot;base64&quot;
+# Output: dGVzdA==
+
+# Multiple encoders chained
+echo &quot;test&quot; | eoyc -e &quot;base64&gt;md5&quot;
+# Output: 65682a9301ce243d376d9b26b0b2c3bb
+
+# Alternative chain characters
+echo &quot;test&quot; | eoyc -e &quot;url|upcase|md5&quot;
+echo &quot;test&quot; | eoyc -e &quot;url&gt;upcase,md5&quot;
+</code></pre>
+<h3 id="o-path-outputpath"><code>-o PATH, --output=PATH</code></h3>
+<p>Output file path (currently supported as a flag).</p>
+<h3 id="v-version"><code>-v, --version</code></h3>
+<p>Show version information.</p>
+<pre><code class="language-bash hljs">eoyc --version
+# Output: 0.3.0
+</code></pre>
+<h3 id="h-help"><code>-h, --help</code></h3>
+<p>Show help information including all available encoders.</p>
+<pre><code class="language-bash hljs">eoyc --help
+</code></pre>
+<h2 id="encoding-modes">Encoding Modes</h2>
+<h3 id="1-full-line-encoding-default">1. Full Line Encoding (Default)</h3>
+<p>By default, the entire line is encoded:</p>
+<pre><code class="language-bash hljs">echo &quot;abcdefghijk&quot; | eoyc -e &quot;md5&quot;
+# Output: 06c48e7ea982782c827c8b15fc8c793d
+</code></pre>
+<h3 id="2-string-selection-mode-s">2. String Selection Mode (<code>-s</code>)</h3>
+<p>Encode only a specific substring:</p>
+<pre><code class="language-bash hljs">echo &quot;abcdefghijk&quot; | eoyc -s &quot;bcde&quot; -e &quot;base64&quot;
+# Output: aYmNkZWZnaGlqaw==
+</code></pre>
+<h3 id="3-regex-pattern-mode-r">3. Regex Pattern Mode (<code>-r</code>)</h3>
+<p>Encode only the part that matches a regular expression:</p>
+<pre><code class="language-bash hljs">echo &quot;https://www.example.com&quot; | eoyc -r &quot;https?://[^\s]+&quot; -e &quot;url&quot;
+# Output: https%3A%2F%2Fwww.example.com
+</code></pre>
+<h2 id="chaining-encoders">Chaining Encoders</h2>
+<p>One of the most powerful features of eoyc is the ability to chain multiple encoders together. The encoders are applied in the order specified:</p>
+<pre><code class="language-bash hljs"># Apply base64, then md5, then sha1
+echo &quot;test&quot; | eoyc -e &quot;base64&gt;md5&gt;sha1&quot;
+
+# Apply URL encoding, then convert to uppercase, then MD5
+echo &quot;test data&quot; | eoyc -e &quot;url&gt;upcase&gt;md5&quot;
+</code></pre>
+<p>You can use any of these characters to separate encoders in a chain:</p>
+<ul>
+<li><code>&gt;</code> (greater than)</li>
+<li><code>|</code> (pipe)</li>
+<li><code>,</code> (comma)</li>
+</ul>
+<h2 id="working-with-files">Working with Files</h2>
+<p>Eoyc reads from STDIN, so you can easily process files:</p>
+<pre><code class="language-bash hljs"># Process a file line by line
+cat urls.txt | eoyc -e &quot;sha1&quot;
+
+# Process and save to output file
+cat data.txt | eoyc -e &quot;base64&quot; &gt; encoded.txt
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li>Check out <a href="/get_started/examples/">Examples</a> for more use cases</li>
+<li>Browse the <a href="/encoders/">Encoders Reference</a> for all available encoders</li>
+</ul>
+
+    </div>
+
+    <footer class="bp-footer">
+      <div class="bp-footer-grid">
+        <span class="bp-footer-item">Eoyc v0.3.0</span>
+        <span class="bp-footer-item">Powered by <a href="https://github.com/hahwul/hwaro">Hwaro</a></span>
+        <span class="bp-footer-item">MIT License</span>
+      </div>
+    </footer>
+  </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script src="https://eoyc.hahwul.com/js/search.js"></script>
+<script src="https://eoyc.hahwul.com/js/sidebar.js"></script>
+
+</body>
+</html>
