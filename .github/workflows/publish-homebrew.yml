@@ -23,7 +23,7 @@ jobs:
             system "shards install"
             system "shards build --release --no-debug --production"
             bin.install "bin/eoyc"
-          test: system "{bin}/eoyc", "-v"
+          test: system "#{bin}/eoyc", "-v"
           update_readme_table: true
           skip_commit: false
           skip_checksum: true
