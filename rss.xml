@@ -1,0 +1,992 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Eoyc</title>
+    <link>https://eoyc.hahwul.com</link>
+    <description>Endless Options, Your Chain - A powerful CLI tool for encoding and hashing strings with flexible chain operations</description>
+    <atom:link href="https://eoyc.hahwul.com/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Background</title>
+      <link>https://eoyc.hahwul.com/background/</link>
+      <guid>https://eoyc.hahwul.com/background/</guid>
+      <description>&lt;h2 id=&quot;about-eoyc&quot;&gt;About Eoyc&lt;/h2&gt;
+&lt;p&gt;Eoyc (Endless Options, Your Chain) is a command-line tool designed to provide flexible and powerful text encoding and transformation capabilities. Built with Crystal for high performance and ease of use, eoyc enables users to encode specific parts of text using a variety of encoders and hash functions.&lt;/p&gt;
+&lt;h2 id=&quot;why-eoyc&quot;&gt;Why Eoyc?&lt;/h2&gt;
+&lt;p&gt;When working with security testing, data processing, or text manipulation, there&apos;s often a need to encode or hash specific parts of text while leaving the rest intact. Traditional encoding tools typically work on entire files or streams, but eoyc provides fine-grained control:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Selective Encoding&lt;/strong&gt;: Encode only specific strings or regex patterns&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Chain Operations&lt;/strong&gt;: Combine multiple encoders in sequence&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Stream Processing&lt;/strong&gt;: Work with STDIN/STDOUT for easy integration in pipelines&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Multiple Encoders&lt;/strong&gt;: Support for 20+ different encoders and transformations&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;design-philosophy&quot;&gt;Design Philosophy&lt;/h2&gt;
+&lt;p&gt;Eoyc follows these core principles:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Simplicity&lt;/strong&gt;: Easy to use with intuitive command-line interface&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Flexibility&lt;/strong&gt;: Multiple ways to select and transform text&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Composability&lt;/strong&gt;: Chain operations together for complex transformations&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Performance&lt;/strong&gt;: Built with Crystal for fast execution&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Unix Philosophy&lt;/strong&gt;: Read from STDIN, write to STDOUT, do one thing well&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;use-cases&quot;&gt;Use Cases&lt;/h2&gt;
+&lt;h3 id=&quot;security-testing&quot;&gt;Security Testing&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Encode payloads for web application testing&lt;/li&gt;
+&lt;li&gt;Generate various encodings of test strings&lt;/li&gt;
+&lt;li&gt;Obfuscate sensitive data in test scenarios&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;data-processing&quot;&gt;Data Processing&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Anonymize log files by hashing sensitive information&lt;/li&gt;
+&lt;li&gt;Transform data formats in processing pipelines&lt;/li&gt;
+&lt;li&gt;Encode URLs or special characters in bulk&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;development&quot;&gt;Development&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Test encoding/decoding implementations&lt;/li&gt;
+&lt;li&gt;Generate test data in various formats&lt;/li&gt;
+&lt;li&gt;Quick command-line encoding utilities&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;architecture&quot;&gt;Architecture&lt;/h2&gt;
+&lt;p&gt;Eoyc is built with a modular encoder system:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;src/
+├── eoyc.cr           # Main CLI entry point
+├── encoders.cr       # Encoder aggregation
+├── encoders/         # Individual encoder modules
+│   ├── core.cr       # Framework and registry
+│   ├── base64.cr     # Base64 encoders
+│   ├── digests.cr    # Hash functions
+│   ├── hex.cr        # Hex encoders
+│   ├── url_form.cr   # URL encoders
+│   ├── text.cr       # Text transformations
+│   ├── binary.cr     # Binary encoders
+│   ├── octal.cr      # Octal encoders
+│   ├── unicode.cr    # Unicode encoders
+│   └── charcode.cr   # Character code encoders
+└── utils.cr          # Utility functions
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Each encoder is registered in a global registry and can be easily extended to support new encoding schemes.&lt;/p&gt;
+&lt;h2 id=&quot;technology-stack&quot;&gt;Technology Stack&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Language&lt;/strong&gt;: Crystal 1.7.3+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Build System&lt;/strong&gt;: Crystal Shards&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Package Management&lt;/strong&gt;: Homebrew (macOS)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Testing&lt;/strong&gt;: Crystal Spec&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
+&lt;p&gt;Eoyc is open source software licensed under the MIT License. See the &lt;a href=&quot;https://github.com/hahwul/eoyc/blob/main/LICENSE&quot;&gt;LICENSE&lt;/a&gt; file for details.&lt;/p&gt;
+&lt;h2 id=&quot;contributing&quot;&gt;Contributing&lt;/h2&gt;
+&lt;p&gt;Contributions are welcome! Please see the &lt;a href=&quot;https://github.com/hahwul/eoyc&quot;&gt;GitHub repository&lt;/a&gt; for more information on how to contribute.&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Base64 Encoders</title>
+      <link>https://eoyc.hahwul.com/encoders/base64/</link>
+      <guid>https://eoyc.hahwul.com/encoders/base64/</guid>
+      <description>&lt;p&gt;Base64 encoding is a binary-to-text encoding scheme that represents binary data in an ASCII string format.&lt;/p&gt;
+&lt;h2 id=&quot;base64&quot;&gt;base64&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Aliases:&lt;/strong&gt; &lt;code&gt;base64-encode&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Standard Base64 encoding with padding.&lt;/p&gt;
+&lt;h3 id=&quot;usage&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;base64&amp;quot;
+# Output: aGVsbG8=
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;example&quot;&gt;Example&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test data&amp;quot; | eoyc -e &amp;quot;base64&amp;quot;
+# Output: dGVzdCBkYXRh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;base64-decode&quot;&gt;base64-decode&lt;/h2&gt;
+&lt;p&gt;Decode Base64 encoded strings back to original text.&lt;/p&gt;
+&lt;h3 id=&quot;usage-1&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;aGVsbG8=&amp;quot; | eoyc -e &amp;quot;base64-decode&amp;quot;
+# Output: hello
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;example-1&quot;&gt;Example&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;dGVzdCBkYXRh&amp;quot; | eoyc -e &amp;quot;base64-decode&amp;quot;
+# Output: test data
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;base64-url&quot;&gt;base64-url&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Aliases:&lt;/strong&gt; &lt;code&gt;base64-url-encode&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;URL-safe Base64 encoding without padding. Uses &lt;code&gt;-&lt;/code&gt; and &lt;code&gt;_&lt;/code&gt; instead of &lt;code&gt;+&lt;/code&gt; and &lt;code&gt;/&lt;/code&gt; to be URL-safe.&lt;/p&gt;
+&lt;h3 id=&quot;usage-2&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello world&amp;quot; | eoyc -e &amp;quot;base64-url&amp;quot;
+# Output: aGVsbG8gd29ybGQ
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;use-cases&quot;&gt;Use Cases&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Encoding data for URLs and filenames&lt;/li&gt;
+&lt;li&gt;JWT tokens&lt;/li&gt;
+&lt;li&gt;Web-safe data transmission&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;base64-url-decode&quot;&gt;base64-url-decode&lt;/h2&gt;
+&lt;p&gt;Decode URL-safe Base64 encoded strings.&lt;/p&gt;
+&lt;h3 id=&quot;usage-3&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;aGVsbG8gd29ybGQ&amp;quot; | eoyc -e &amp;quot;base64-url-decode&amp;quot;
+# Output: hello world
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;chaining-with-base64&quot;&gt;Chaining with Base64&lt;/h2&gt;
+&lt;p&gt;Base64 encoders work well in chains:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Encode then hash
+echo &amp;quot;data&amp;quot; | eoyc -e &amp;quot;base64&amp;gt;md5&amp;quot;
+
+# Hash then encode
+echo &amp;quot;data&amp;quot; | eoyc -e &amp;quot;sha256&amp;gt;base64&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>Binary &amp; Character Encoders</title>
+      <link>https://eoyc.hahwul.com/encoders/binary/</link>
+      <guid>https://eoyc.hahwul.com/encoders/binary/</guid>
+      <description>&lt;p&gt;These encoders convert text to various numeric and binary representations.&lt;/p&gt;
+&lt;h2 id=&quot;bin&quot;&gt;bin&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Aliases:&lt;/strong&gt; &lt;code&gt;bin-encode&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Encodes text to 8-bit binary representation with spaces between bytes.&lt;/p&gt;
+&lt;h3 id=&quot;usage&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abc&amp;quot; | eoyc -e &amp;quot;bin&amp;quot;
+# Output: 01100001 01100010 01100011
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;how-it-works&quot;&gt;How It Works&lt;/h3&gt;
+&lt;p&gt;Each character is converted to its 8-bit binary representation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&apos;a&apos; (97) → 01100001&lt;/li&gt;
+&lt;li&gt;&apos;b&apos; (98) → 01100010&lt;/li&gt;
+&lt;li&gt;&apos;c&apos; (99) → 01100011&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;examples&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;A&amp;quot; | eoyc -e &amp;quot;bin&amp;quot;
+# Output: 01000001
+
+echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;bin&amp;quot;
+# Output: 01101000 01100101 01101100 01101100 01101111
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;bin-decode&quot;&gt;bin-decode&lt;/h2&gt;
+&lt;p&gt;Decodes binary strings back to text.&lt;/p&gt;
+&lt;h3 id=&quot;usage-1&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;01100001 01100010 01100011&amp;quot; | eoyc -e &amp;quot;bin-decode&amp;quot;
+# Output: abc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples-1&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;01000001&amp;quot; | eoyc -e &amp;quot;bin-decode&amp;quot;
+# Output: A
+
+echo &amp;quot;01101000 01100101 01101100 01101100 01101111&amp;quot; | eoyc -e &amp;quot;bin-decode&amp;quot;
+# Output: hello
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;oct&quot;&gt;oct&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Aliases:&lt;/strong&gt; &lt;code&gt;oct-encode&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Encodes text to octal (base 8) representation.&lt;/p&gt;
+&lt;h3 id=&quot;usage-2&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abc&amp;quot; | eoyc -e &amp;quot;oct&amp;quot;
+# Output: 141142143
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;how-it-works-1&quot;&gt;How It Works&lt;/h3&gt;
+&lt;p&gt;Each character is converted to its octal ASCII value:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&apos;a&apos; (97) → 141 (octal)&lt;/li&gt;
+&lt;li&gt;&apos;b&apos; (98) → 142 (octal)&lt;/li&gt;
+&lt;li&gt;&apos;c&apos; (99) → 143 (octal)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;examples-2&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;A&amp;quot; | eoyc -e &amp;quot;oct&amp;quot;
+# Output: 101
+
+echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;oct&amp;quot;
+# Output: 150145154154157
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;oct-decode&quot;&gt;oct-decode&lt;/h2&gt;
+&lt;p&gt;Decodes octal strings back to text.&lt;/p&gt;
+&lt;h3 id=&quot;usage-3&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;141142143&amp;quot; | eoyc -e &amp;quot;oct-decode&amp;quot;
+# Output: abc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples-3&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;101&amp;quot; | eoyc -e &amp;quot;oct-decode&amp;quot;
+# Output: A
+
+echo &amp;quot;150145154154157&amp;quot; | eoyc -e &amp;quot;oct-decode&amp;quot;
+# Output: hello
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;unicode&quot;&gt;unicode&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Aliases:&lt;/strong&gt; &lt;code&gt;unicode-encode&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Encodes text to Unicode escape sequences in the format &lt;code&gt;\uXXXX&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;usage-4&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;unicode&amp;quot;
+# Output: \u0068\u0065\u006c\u006c\u006f
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples-4&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;A&amp;quot; | eoyc -e &amp;quot;unicode&amp;quot;
+# Output: \u0041
+
+echo &amp;quot;@&amp;quot; | eoyc -e &amp;quot;unicode&amp;quot;
+# Output: \u0040
+
+echo &amp;quot;abc&amp;quot; | eoyc -e &amp;quot;unicode&amp;quot;
+# Output: \u0061\u0062\u0063
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;use-cases&quot;&gt;Use Cases&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;JavaScript/JSON string escaping&lt;/li&gt;
+&lt;li&gt;Unicode character representation&lt;/li&gt;
+&lt;li&gt;Cross-platform text encoding&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;unicode-decode&quot;&gt;unicode-decode&lt;/h2&gt;
+&lt;p&gt;Decodes Unicode escape sequences back to text.&lt;/p&gt;
+&lt;h3 id=&quot;usage-5&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;\\u0068\\u0065\\u006c\\u006c\\u006f&amp;quot; | eoyc -e &amp;quot;unicode-decode&amp;quot;
+# Output: hello
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note: The backslashes need to be escaped in shell.&lt;/p&gt;
+&lt;h3 id=&quot;examples-5&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;\\u0041&amp;quot; | eoyc -e &amp;quot;unicode-decode&amp;quot;
+# Output: A
+
+echo &amp;quot;\\u0061\\u0062\\u0063&amp;quot; | eoyc -e &amp;quot;unicode-decode&amp;quot;
+# Output: abc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;charcode&quot;&gt;charcode&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Aliases:&lt;/strong&gt; &lt;code&gt;charcode-encode&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Encodes text to decimal ASCII/character code values separated by spaces.&lt;/p&gt;
+&lt;h3 id=&quot;usage-6&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abc&amp;quot; | eoyc -e &amp;quot;charcode&amp;quot;
+# Output: 97 98 99
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;how-it-works-2&quot;&gt;How It Works&lt;/h3&gt;
+&lt;p&gt;Each character is converted to its decimal ASCII value:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&apos;a&apos; → 97&lt;/li&gt;
+&lt;li&gt;&apos;b&apos; → 98&lt;/li&gt;
+&lt;li&gt;&apos;c&apos; → 99&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;examples-6&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;A&amp;quot; | eoyc -e &amp;quot;charcode&amp;quot;
+# Output: 65
+
+echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;charcode&amp;quot;
+# Output: 104 101 108 108 111
+
+echo &amp;quot;123&amp;quot; | eoyc -e &amp;quot;charcode&amp;quot;
+# Output: 49 50 51
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;charcode-decode&quot;&gt;charcode-decode&lt;/h2&gt;
+&lt;p&gt;Decodes character code values back to text.&lt;/p&gt;
+&lt;h3 id=&quot;usage-7&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;97 98 99&amp;quot; | eoyc -e &amp;quot;charcode-decode&amp;quot;
+# Output: abc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples-7&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;65&amp;quot; | eoyc -e &amp;quot;charcode-decode&amp;quot;
+# Output: A
+
+echo &amp;quot;104 101 108 108 111&amp;quot; | eoyc -e &amp;quot;charcode-decode&amp;quot;
+# Output: hello
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;round-trip-examples&quot;&gt;Round-Trip Examples&lt;/h2&gt;
+&lt;p&gt;All encoding/decoding pairs support round-trip conversion:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Binary
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;bin&amp;quot; | eoyc -e &amp;quot;bin-decode&amp;quot;
+# Output: test
+
+# Octal
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;oct&amp;quot; | eoyc -e &amp;quot;oct-decode&amp;quot;
+# Output: test
+
+# Unicode
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;unicode&amp;quot; | eoyc -e &amp;quot;unicode-decode&amp;quot;
+# Output: test
+
+# Character codes
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;charcode&amp;quot; | eoyc -e &amp;quot;charcode-decode&amp;quot;
+# Output: test
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;use-cases-1&quot;&gt;Use Cases&lt;/h2&gt;
+&lt;h3 id=&quot;binary-encoding&quot;&gt;Binary Encoding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Low-level data inspection&lt;/li&gt;
+&lt;li&gt;Educational purposes&lt;/li&gt;
+&lt;li&gt;Binary data visualization&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;octal-encoding&quot;&gt;Octal Encoding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Unix file permissions representation&lt;/li&gt;
+&lt;li&gt;Legacy system compatibility&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;unicode-encoding&quot;&gt;Unicode Encoding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;JavaScript string escaping&lt;/li&gt;
+&lt;li&gt;JSON data encoding&lt;/li&gt;
+&lt;li&gt;Cross-platform character handling&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;character-code-encoding&quot;&gt;Character Code Encoding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;ASCII value inspection&lt;/li&gt;
+&lt;li&gt;Protocol development&lt;/li&gt;
+&lt;li&gt;Data analysis&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;chaining-examples&quot;&gt;Chaining Examples&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Character codes to hex
+echo &amp;quot;abc&amp;quot; | eoyc -e &amp;quot;charcode&amp;gt;hex&amp;quot;
+
+# Binary to base64
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;bin&amp;gt;base64&amp;quot;
+
+# Octal to MD5
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;oct&amp;gt;md5&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>Hash &amp; Digest Encoders</title>
+      <link>https://eoyc.hahwul.com/encoders/digests/</link>
+      <guid>https://eoyc.hahwul.com/encoders/digests/</guid>
+      <description>&lt;p&gt;Hash functions create fixed-size outputs (digests) from variable-size inputs. They are one-way functions - you cannot decode them back to the original.&lt;/p&gt;
+&lt;h2 id=&quot;md5&quot;&gt;MD5&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Algorithm:&lt;/strong&gt; MD5 (Message Digest Algorithm 5)&lt;/p&gt;
+&lt;p&gt;Produces a 128-bit (32 hexadecimal characters) hash value. Note: MD5 is not cryptographically secure and should not be used for security purposes.&lt;/p&gt;
+&lt;h3 id=&quot;usage&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;password&amp;quot; | eoyc -e &amp;quot;md5&amp;quot;
+# Output: 5f4dcc3b5aa765d61d8327deb882cf99
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;output-format&quot;&gt;Output Format&lt;/h3&gt;
+&lt;p&gt;Hexadecimal string (32 characters)&lt;/p&gt;
+&lt;h2 id=&quot;sha1&quot;&gt;SHA1&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Algorithm:&lt;/strong&gt; SHA-1 (Secure Hash Algorithm 1)&lt;/p&gt;
+&lt;p&gt;Produces a 160-bit hash value, typically rendered as Base64 for compact representation.&lt;/p&gt;
+&lt;h3 id=&quot;usage-1&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;sha1&amp;quot;
+# Output: qUqP5cyxm6YcTAhz05Hph5gvu9M=
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;output-format-1&quot;&gt;Output Format&lt;/h3&gt;
+&lt;p&gt;Base64 encoded string&lt;/p&gt;
+&lt;h2 id=&quot;sha1-hex&quot;&gt;sha1-hex&lt;/h2&gt;
+&lt;p&gt;Same as SHA1 but outputs in hexadecimal format.&lt;/p&gt;
+&lt;h3 id=&quot;usage-2&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;sha1-hex&amp;quot;
+# Output: a94a8fe5ccb19ba61c4c0873d391e987982fbbd3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;output-format-2&quot;&gt;Output Format&lt;/h3&gt;
+&lt;p&gt;Hexadecimal string (40 characters)&lt;/p&gt;
+&lt;h2 id=&quot;sha256&quot;&gt;SHA256&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Algorithm:&lt;/strong&gt; SHA-256 (Secure Hash Algorithm 256-bit)&lt;/p&gt;
+&lt;p&gt;Produces a 256-bit hash value, rendered as Base64.&lt;/p&gt;
+&lt;h3 id=&quot;usage-3&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;sha256&amp;quot;
+# Output: n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;output-format-3&quot;&gt;Output Format&lt;/h3&gt;
+&lt;p&gt;Base64 encoded string&lt;/p&gt;
+&lt;h3 id=&quot;use-cases&quot;&gt;Use Cases&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Password hashing (with salt)&lt;/li&gt;
+&lt;li&gt;Data integrity verification&lt;/li&gt;
+&lt;li&gt;Digital signatures&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;sha256-hex&quot;&gt;sha256-hex&lt;/h2&gt;
+&lt;p&gt;Same as SHA256 but outputs in hexadecimal format.&lt;/p&gt;
+&lt;h3 id=&quot;usage-4&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;sha256-hex&amp;quot;
+# Output: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;output-format-4&quot;&gt;Output Format&lt;/h3&gt;
+&lt;p&gt;Hexadecimal string (64 characters)&lt;/p&gt;
+&lt;h2 id=&quot;sha512&quot;&gt;SHA512&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Algorithm:&lt;/strong&gt; SHA-512 (Secure Hash Algorithm 512-bit)&lt;/p&gt;
+&lt;p&gt;Produces a 512-bit hash value, rendered as Base64.&lt;/p&gt;
+&lt;h3 id=&quot;usage-5&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;sha512&amp;quot;
+# Output: 7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;output-format-5&quot;&gt;Output Format&lt;/h3&gt;
+&lt;p&gt;Base64 encoded string&lt;/p&gt;
+&lt;h2 id=&quot;sha512-hex&quot;&gt;sha512-hex&lt;/h2&gt;
+&lt;p&gt;Same as SHA512 but outputs in hexadecimal format.&lt;/p&gt;
+&lt;h3 id=&quot;usage-6&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;sha512-hex&amp;quot;
+# Output: ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fff5b143712c026c914a1acd0c1d0e7c5e5b48e
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;output-format-6&quot;&gt;Output Format&lt;/h3&gt;
+&lt;p&gt;Hexadecimal string (128 characters)&lt;/p&gt;
+&lt;h2 id=&quot;combining-hashes-in-chains&quot;&gt;Combining Hashes in Chains&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# MD5 then SHA256
+echo &amp;quot;data&amp;quot; | eoyc -e &amp;quot;md5&amp;gt;sha256&amp;quot;
+
+# Base64 encode before hashing
+echo &amp;quot;data&amp;quot; | eoyc -e &amp;quot;base64&amp;gt;sha512&amp;quot;
+
+# Multiple hash transformations
+echo &amp;quot;data&amp;quot; | eoyc -e &amp;quot;md5&amp;gt;base64&amp;gt;sha1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;security-considerations&quot;&gt;Security Considerations&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;MD5&lt;/strong&gt;: Not secure for cryptographic purposes, use SHA-256 or higher&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SHA-1&lt;/strong&gt;: Deprecated for security-critical applications, use SHA-256 or higher&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SHA-256/SHA-512&lt;/strong&gt;: Recommended for security applications&lt;/li&gt;
+&lt;li&gt;Always use salts when hashing passwords&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    <item>
+      <title>Hex Encoders</title>
+      <link>https://eoyc.hahwul.com/encoders/hex/</link>
+      <guid>https://eoyc.hahwul.com/encoders/hex/</guid>
+      <description>&lt;p&gt;Hexadecimal encoding converts each byte to its two-digit hexadecimal representation.&lt;/p&gt;
+&lt;h2 id=&quot;hex&quot;&gt;hex&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Aliases:&lt;/strong&gt; &lt;code&gt;hex-encode&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Encodes text to lowercase hexadecimal representation.&lt;/p&gt;
+&lt;h3 id=&quot;usage&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;hex&amp;quot;
+# Output: 68656c6c6f
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;how-it-works&quot;&gt;How It Works&lt;/h3&gt;
+&lt;p&gt;Each character is converted to its hexadecimal ASCII value:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&apos;h&apos; (104) → 68&lt;/li&gt;
+&lt;li&gt;&apos;e&apos; (101) → 65&lt;/li&gt;
+&lt;li&gt;&apos;l&apos; (108) → 6c&lt;/li&gt;
+&lt;li&gt;&apos;l&apos; (108) → 6c&lt;/li&gt;
+&lt;li&gt;&apos;o&apos; (111) → 6f&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;examples&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;ABC&amp;quot; | eoyc -e &amp;quot;hex&amp;quot;
+# Output: 414243
+
+echo &amp;quot;test123&amp;quot; | eoyc -e &amp;quot;hex&amp;quot;
+# Output: 74657374313233
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;hex-decode&quot;&gt;hex-decode&lt;/h2&gt;
+&lt;p&gt;Decodes hexadecimal strings back to original text.&lt;/p&gt;
+&lt;h3 id=&quot;usage-1&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;68656c6c6f&amp;quot; | eoyc -e &amp;quot;hex-decode&amp;quot;
+# Output: hello
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples-1&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;414243&amp;quot; | eoyc -e &amp;quot;hex-decode&amp;quot;
+# Output: ABC
+
+echo &amp;quot;74657374313233&amp;quot; | eoyc -e &amp;quot;hex-decode&amp;quot;
+# Output: test123
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;round-trip-example&quot;&gt;Round-Trip Example&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Encode then decode
+original=&amp;quot;Hello World&amp;quot;
+encoded=$(echo &amp;quot;$original&amp;quot; | eoyc -e &amp;quot;hex&amp;quot;)
+decoded=$(echo &amp;quot;$encoded&amp;quot; | eoyc -e &amp;quot;hex-decode&amp;quot;)
+
+echo &amp;quot;Original: $original&amp;quot;
+echo &amp;quot;Encoded: $encoded&amp;quot;
+echo &amp;quot;Decoded: $decoded&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;use-cases&quot;&gt;Use Cases&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Representing binary data in text format&lt;/li&gt;
+&lt;li&gt;Debugging and inspecting byte values&lt;/li&gt;
+&lt;li&gt;Color codes and data serialization&lt;/li&gt;
+&lt;li&gt;Low-level data manipulation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;chaining-with-hex&quot;&gt;Chaining with Hex&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Hex encode then Base64
+echo &amp;quot;data&amp;quot; | eoyc -e &amp;quot;hex&amp;gt;base64&amp;quot;
+
+# Hash then hex encode (redundant since most hashes already output hex)
+echo &amp;quot;data&amp;quot; | eoyc -e &amp;quot;sha256&amp;gt;hex&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>Text Transformations</title>
+      <link>https://eoyc.hahwul.com/encoders/text/</link>
+      <guid>https://eoyc.hahwul.com/encoders/text/</guid>
+      <description>&lt;p&gt;Text transformation encoders modify text in various ways without encoding to different formats.&lt;/p&gt;
+&lt;h2 id=&quot;rot13&quot;&gt;rot13&lt;/h2&gt;
+&lt;p&gt;ROT13 (Rotate by 13 places) is a simple letter substitution cipher that replaces each letter with the letter 13 positions after it in the alphabet.&lt;/p&gt;
+&lt;h3 id=&quot;usage&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;rot13&amp;quot;
+# Output: uryyb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;how-it-works&quot;&gt;How It Works&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;A-Z → N-ZA-M&lt;/li&gt;
+&lt;li&gt;a-z → n-za-m&lt;/li&gt;
+&lt;li&gt;Numbers and special characters remain unchanged&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;decoding&quot;&gt;Decoding&lt;/h3&gt;
+&lt;p&gt;Apply ROT13 twice to get back the original:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;uryyb&amp;quot; | eoyc -e &amp;quot;rot13&amp;quot;
+# Output: hello
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;secret message&amp;quot; | eoyc -e &amp;quot;rot13&amp;quot;
+# Output: frperg zrffntr
+
+echo &amp;quot;ROT13 Example&amp;quot; | eoyc -e &amp;quot;rot13&amp;quot;
+# Output: EBG13 Rknzcyr
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;upcase&quot;&gt;upcase&lt;/h2&gt;
+&lt;p&gt;Converts all text to uppercase.&lt;/p&gt;
+&lt;h3 id=&quot;usage-1&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello world&amp;quot; | eoyc -e &amp;quot;upcase&amp;quot;
+# Output: HELLO WORLD
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples-1&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test123&amp;quot; | eoyc -e &amp;quot;upcase&amp;quot;
+# Output: TEST123
+
+echo &amp;quot;Mixed Case Text&amp;quot; | eoyc -e &amp;quot;upcase&amp;quot;
+# Output: MIXED CASE TEXT
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;downcase&quot;&gt;downcase&lt;/h2&gt;
+&lt;p&gt;Converts all text to lowercase.&lt;/p&gt;
+&lt;h3 id=&quot;usage-2&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;HELLO WORLD&amp;quot; | eoyc -e &amp;quot;downcase&amp;quot;
+# Output: hello world
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples-2&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;TEST123&amp;quot; | eoyc -e &amp;quot;downcase&amp;quot;
+# Output: test123
+
+echo &amp;quot;Mixed Case Text&amp;quot; | eoyc -e &amp;quot;downcase&amp;quot;
+# Output: mixed case text
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;reverse&quot;&gt;reverse&lt;/h2&gt;
+&lt;p&gt;Reverses the order of characters in the text.&lt;/p&gt;
+&lt;h3 id=&quot;usage-3&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;reverse&amp;quot;
+# Output: olleh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples-3&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;Hello World&amp;quot; | eoyc -e &amp;quot;reverse&amp;quot;
+# Output: dlroW olleH
+
+echo &amp;quot;12345&amp;quot; | eoyc -e &amp;quot;reverse&amp;quot;
+# Output: 54321
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;double-reverse&quot;&gt;Double Reverse&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;reverse&amp;gt;reverse&amp;quot;
+# Output: test (back to original)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;redacted&quot;&gt;redacted&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Aliases:&lt;/strong&gt; &lt;code&gt;redaction&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Replaces all characters with block characters to redact sensitive information.&lt;/p&gt;
+&lt;h3 id=&quot;usage-4&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;sensitive data&amp;quot; | eoyc -e &amp;quot;redacted&amp;quot;
+# Output: ◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples-4&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;password123&amp;quot; | eoyc -e &amp;quot;redacted&amp;quot;
+# Output: ◼◼◼◼◼◼◼◼◼◼◼
+
+echo &amp;quot;credit card: 1234-5678-9012-3456&amp;quot; | eoyc -s &amp;quot;1234-5678-9012-3456&amp;quot; -e &amp;quot;redacted&amp;quot;
+# Output: credit card: ◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;use-cases&quot;&gt;Use Cases&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Log sanitization&lt;/li&gt;
+&lt;li&gt;Data anonymization&lt;/li&gt;
+&lt;li&gt;Privacy compliance&lt;/li&gt;
+&lt;li&gt;Demo/screenshot preparation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;combining-text-transformations&quot;&gt;Combining Text Transformations&lt;/h2&gt;
+&lt;p&gt;Text transformations work great in chains:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Uppercase then reverse
+echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;upcase&amp;gt;reverse&amp;quot;
+# Output: OLLEH
+
+# ROT13 then uppercase
+echo &amp;quot;secret&amp;quot; | eoyc -e &amp;quot;rot13&amp;gt;upcase&amp;quot;
+# Output: FRPERG
+
+# Reverse then ROT13
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;reverse&amp;gt;rot13&amp;quot;
+# Output: gfxr
+
+# URL encode then uppercase
+echo &amp;quot;test data&amp;quot; | eoyc -e &amp;quot;url&amp;gt;upcase&amp;quot;
+# Output: TEST%20DATA
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;practical-examples&quot;&gt;Practical Examples&lt;/h2&gt;
+&lt;h3 id=&quot;case-normalization&quot;&gt;Case Normalization&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Normalize emails to lowercase
+cat emails.txt | eoyc -e &amp;quot;downcase&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;obfuscation&quot;&gt;Obfuscation&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Simple obfuscation using ROT13
+echo &amp;quot;hint&amp;quot; | eoyc -e &amp;quot;rot13&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;data-sanitization&quot;&gt;Data Sanitization&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Redact sensitive patterns
+cat logs.txt | eoyc -r &apos;\d{3}-\d{2}-\d{4}&apos; -e &amp;quot;redacted&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    <item>
+      <title>URL Encoders</title>
+      <link>https://eoyc.hahwul.com/encoders/url/</link>
+      <guid>https://eoyc.hahwul.com/encoders/url/</guid>
+      <description>&lt;p&gt;URL encoding (also called percent-encoding) converts characters into a format that can be transmitted over the Internet.&lt;/p&gt;
+&lt;h2 id=&quot;url&quot;&gt;url&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Aliases:&lt;/strong&gt; &lt;code&gt;url-encode&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Encodes text using application/x-www-form-urlencoded format. Special characters are converted to &lt;code&gt;%XX&lt;/code&gt; format where XX is the hexadecimal value.&lt;/p&gt;
+&lt;h3 id=&quot;usage&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello world&amp;quot; | eoyc -e &amp;quot;url&amp;quot;
+# Output: hello%20world
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;characters-that-are-encoded&quot;&gt;Characters That Are Encoded&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Space → &lt;code&gt;%20&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;!&lt;/code&gt; → &lt;code&gt;%21&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;#&lt;/code&gt; → &lt;code&gt;%23&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$&lt;/code&gt; → &lt;code&gt;%24&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;amp;&lt;/code&gt; → &lt;code&gt;%26&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&apos;&lt;/code&gt; → &lt;code&gt;%27&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;(&lt;/code&gt; → &lt;code&gt;%28&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;)&lt;/code&gt; → &lt;code&gt;%29&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;*&lt;/code&gt; → &lt;code&gt;%2A&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;+&lt;/code&gt; → &lt;code&gt;%2B&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;,&lt;/code&gt; → &lt;code&gt;%2C&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/&lt;/code&gt; → &lt;code&gt;%2F&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:&lt;/code&gt; → &lt;code&gt;%3A&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;;&lt;/code&gt; → &lt;code&gt;%3B&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;=&lt;/code&gt; → &lt;code&gt;%3D&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;?&lt;/code&gt; → &lt;code&gt;%3F&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@&lt;/code&gt; → &lt;code&gt;%40&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[&lt;/code&gt; → &lt;code&gt;%5B&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;]&lt;/code&gt; → &lt;code&gt;%5D&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;examples&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;https://example.com/path?name=value&amp;quot; | eoyc -e &amp;quot;url&amp;quot;
+# Output: https%3A%2F%2Fexample.com%2Fpath%3Fname%3Dvalue
+
+echo &amp;quot;user@example.com&amp;quot; | eoyc -e &amp;quot;url&amp;quot;
+# Output: user%40example.com
+
+echo &amp;quot;hello world &amp;amp; goodbye&amp;quot; | eoyc -e &amp;quot;url&amp;quot;
+# Output: hello%20world%20%26%20goodbye
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;url-decode&quot;&gt;url-decode&lt;/h2&gt;
+&lt;p&gt;Decodes URL-encoded strings back to original text.&lt;/p&gt;
+&lt;h3 id=&quot;usage-1&quot;&gt;Usage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello%20world&amp;quot; | eoyc -e &amp;quot;url-decode&amp;quot;
+# Output: hello world
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;examples-1&quot;&gt;Examples&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;https%3A%2F%2Fexample.com&amp;quot; | eoyc -e &amp;quot;url-decode&amp;quot;
+# Output: https://example.com
+
+echo &amp;quot;user%40example.com&amp;quot; | eoyc -e &amp;quot;url-decode&amp;quot;
+# Output: user@example.com
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;round-trip-example&quot;&gt;Round-Trip Example&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;Special chars: !@#$%^&amp;amp;*()&amp;quot; | eoyc -e &amp;quot;url&amp;quot; | eoyc -e &amp;quot;url-decode&amp;quot;
+# Output: Special chars: !@#$%^&amp;amp;*()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;use-cases&quot;&gt;Use Cases&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Preparing data for HTTP GET parameters&lt;/li&gt;
+&lt;li&gt;Encoding email addresses and special characters in URLs&lt;/li&gt;
+&lt;li&gt;Form data submission&lt;/li&gt;
+&lt;li&gt;API query parameters&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;practical-example-url-processing&quot;&gt;Practical Example: URL Processing&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Encode URLs from a file
+cat urls.txt | eoyc -e &amp;quot;url&amp;quot;
+
+# Encode only the URL part in a line
+echo &amp;quot;Visit https://www.example.com for info&amp;quot; | eoyc -r &amp;quot;https?://[^\s]+&amp;quot; -e &amp;quot;url&amp;quot;
+# Output: Visit https%3A%2F%2Fwww.example.com for info
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;chaining-with-url-encoding&quot;&gt;Chaining with URL Encoding&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# URL encode then Base64
+echo &amp;quot;special@chars.com&amp;quot; | eoyc -e &amp;quot;url&amp;gt;base64&amp;quot;
+
+# URL encode then uppercase
+echo &amp;quot;test data&amp;quot; | eoyc -e &amp;quot;url&amp;gt;upcase&amp;quot;
+# Output: TEST%20DATA
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;note-on-line-feeds&quot;&gt;Note on Line Feeds&lt;/h2&gt;
+&lt;p&gt;URL encoding will also encode newlines (&lt;code&gt;\n&lt;/code&gt;) as &lt;code&gt;%0A&lt;/code&gt; if present in the input.&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Examples</title>
+      <link>https://eoyc.hahwul.com/get_started/examples/</link>
+      <guid>https://eoyc.hahwul.com/get_started/examples/</guid>
+      <description>&lt;p&gt;Here are practical examples of using eoyc in various scenarios.&lt;/p&gt;
+&lt;h2 id=&quot;basic-encoding&quot;&gt;Basic Encoding&lt;/h2&gt;
+&lt;h3 id=&quot;single-encoder&quot;&gt;Single Encoder&lt;/h3&gt;
+&lt;p&gt;Encode a simple string with Base64:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;base64&amp;quot;
+# Output: dGVzdA==
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Hash a string with SHA1:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;password123&amp;quot; | eoyc -e &amp;quot;sha1&amp;quot;
+# Output: c29tZS1oYXNoLXZhbHVl
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;url-encoding&quot;&gt;URL Encoding&lt;/h3&gt;
+&lt;p&gt;Encode URLs for safe transmission:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;cat urls.txt | eoyc -e &amp;quot;url&amp;quot;
+# Input:
+# https://www.hahwul.com
+# https://github.com
+# https://google.com
+
+# Output:
+# https%3A%2F%2Fwww.hahwul.com
+# https%3A%2F%2Fgithub.com
+# https%3A%2F%2Fgoogle.com
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;chain-encoding&quot;&gt;Chain Encoding&lt;/h2&gt;
+&lt;h3 id=&quot;base64-and-md5-chain&quot;&gt;Base64 and MD5 Chain&lt;/h3&gt;
+&lt;p&gt;Apply multiple encodings in sequence:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abcdefghijk&amp;quot; | eoyc -e &amp;quot;base64&amp;gt;md5&amp;quot;
+# First applies base64, then MD5 to the result
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;complex-chain-with-string-selection&quot;&gt;Complex Chain with String Selection&lt;/h3&gt;
+&lt;p&gt;Encode a specific substring through multiple transformations:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abcdefghijk&amp;quot; | eoyc -s bcde -e &amp;quot;md5&amp;gt;base64&amp;gt;sha1&amp;quot;
+# Output: aCFV4rFRO+h/0cCngUl1Ccahz040=fghijk
+# Only &amp;quot;bcde&amp;quot; is encoded through the chain
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;full-line-chain-encoding&quot;&gt;Full Line Chain Encoding&lt;/h3&gt;
+&lt;p&gt;Process the entire line through a chain:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abcdefghijk&amp;quot; | eoyc -e &amp;quot;md5&amp;gt;base64&amp;gt;sha1&amp;quot;
+# Output: 9EG0tX9wWhKDghHJECSS8E+XZ3U=
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;pattern-matching-with-regex&quot;&gt;Pattern Matching with Regex&lt;/h2&gt;
+&lt;h3 id=&quot;email-obfuscation&quot;&gt;Email Obfuscation&lt;/h3&gt;
+&lt;p&gt;Hash email addresses in text:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;Contact: user@example.com for info&amp;quot; | eoyc -r &amp;quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}&amp;quot; -e &amp;quot;sha1&amp;quot;
+# Output: Contact: w18pVtgE4B7y3sOS7zra42KJEj8= for info
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;url-pattern-matching&quot;&gt;URL Pattern Matching&lt;/h3&gt;
+&lt;p&gt;Encode only URLs in a line:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;Visit https://www.example.com for details&amp;quot; | eoyc -r &amp;quot;https?://[^\s]+&amp;quot; -e &amp;quot;url&amp;quot;
+# Output: Visit https%3A%2F%2Fwww.example.com for details
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;text-transformations&quot;&gt;Text Transformations&lt;/h2&gt;
+&lt;h3 id=&quot;case-transformations&quot;&gt;Case Transformations&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;Hello World&amp;quot; | eoyc -e &amp;quot;upcase&amp;quot;
+# Output: HELLO WORLD
+
+echo &amp;quot;Hello World&amp;quot; | eoyc -e &amp;quot;downcase&amp;quot;
+# Output: hello world
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;rot13-cipher&quot;&gt;ROT13 Cipher&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;secret message&amp;quot; | eoyc -e &amp;quot;rot13&amp;quot;
+# Output: frperg zrffntr
+
+# Decode by applying ROT13 again
+echo &amp;quot;frperg zrffntr&amp;quot; | eoyc -e &amp;quot;rot13&amp;quot;
+# Output: secret message
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;text-reversal&quot;&gt;Text Reversal&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;Hello World&amp;quot; | eoyc -e &amp;quot;reverse&amp;quot;
+# Output: dlroW olleH
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;redaction&quot;&gt;Redaction&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;sensitive data&amp;quot; | eoyc -e &amp;quot;redacted&amp;quot;
+# Output: ◼◼◼◼◼◼◼◼◼◼◼◼◼◼
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;binary-and-character-encodings&quot;&gt;Binary and Character Encodings&lt;/h2&gt;
+&lt;h3 id=&quot;binary-encoding&quot;&gt;Binary Encoding&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abc&amp;quot; | eoyc -e &amp;quot;bin&amp;quot;
+# Output: 01100001 01100010 01100011
+
+# Decode
+echo &amp;quot;01100001 01100010 01100011&amp;quot; | eoyc -e &amp;quot;bin-decode&amp;quot;
+# Output: abc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;octal-encoding&quot;&gt;Octal Encoding&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abc&amp;quot; | eoyc -e &amp;quot;oct&amp;quot;
+# Output: 141142143
+
+# Decode
+echo &amp;quot;141142143&amp;quot; | eoyc -e &amp;quot;oct-decode&amp;quot;
+# Output: abc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;unicode-encoding&quot;&gt;Unicode Encoding&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;unicode&amp;quot;
+# Output: \u0068\u0065\u006c\u006c\u006f
+
+# Decode
+echo &amp;quot;\\u0068\\u0065\\u006c\\u006c\\u006f&amp;quot; | eoyc -e &amp;quot;unicode-decode&amp;quot;
+# Output: hello
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;character-code-ascii-values&quot;&gt;Character Code (ASCII Values)&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abc&amp;quot; | eoyc -e &amp;quot;charcode&amp;quot;
+# Output: 97 98 99
+
+# Decode
+echo &amp;quot;97 98 99&amp;quot; | eoyc -e &amp;quot;charcode-decode&amp;quot;
+# Output: abc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;hex-encoding&quot;&gt;Hex Encoding&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello&amp;quot; | eoyc -e &amp;quot;hex&amp;quot;
+# Output: 68656c6c6f
+
+# Decode
+echo &amp;quot;68656c6c6f&amp;quot; | eoyc -e &amp;quot;hex-decode&amp;quot;
+# Output: hello
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;batch-processing&quot;&gt;Batch Processing&lt;/h2&gt;
+&lt;h3 id=&quot;processing-multiple-files&quot;&gt;Processing Multiple Files&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;for file in *.txt; do
+    cat &amp;quot;$file&amp;quot; | eoyc -e &amp;quot;sha256&amp;quot; &amp;gt; &amp;quot;${file}.encoded&amp;quot;
+done
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;pipeline-integration&quot;&gt;Pipeline Integration&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Extract URLs from HTML and encode them
+cat page.html | grep -oP &apos;https?://[^\s&amp;lt;&amp;gt;&amp;quot;]+&apos; | eoyc -e &amp;quot;url&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;combining-with-other-tools&quot;&gt;Combining with Other Tools&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Find unique encoded values
+cat data.txt | eoyc -e &amp;quot;sha1&amp;quot; | sort | uniq
+
+# Count encoded values
+cat urls.txt | eoyc -e &amp;quot;md5&amp;quot; | wc -l
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;advanced-use-cases&quot;&gt;Advanced Use Cases&lt;/h2&gt;
+&lt;h3 id=&quot;security-testing&quot;&gt;Security Testing&lt;/h3&gt;
+&lt;p&gt;Prepare payloads with various encodings:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;&amp;lt;script&amp;gt;alert(&apos;xss&apos;)&amp;lt;/script&amp;gt;&amp;quot; | eoyc -e &amp;quot;url&amp;gt;base64&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;data-anonymization&quot;&gt;Data Anonymization&lt;/h3&gt;
+&lt;p&gt;Hash sensitive information in logs:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;cat access.log | eoyc -r &apos;\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}&apos; -e &amp;quot;sha256&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;configuration-obfuscation&quot;&gt;Configuration Obfuscation&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;api_key=secret123&amp;quot; | eoyc -s &amp;quot;secret123&amp;quot; -e &amp;quot;base64&amp;gt;rot13&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;next-steps&quot;&gt;Next Steps&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Explore all available &lt;a href=&quot;/encoders/&quot;&gt;Encoders&lt;/a&gt; and their options&lt;/li&gt;
+&lt;li&gt;Check the &lt;a href=&quot;/get_started/usage/&quot;&gt;Usage&lt;/a&gt; guide for detailed parameter descriptions&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    <item>
+      <title>Installation</title>
+      <link>https://eoyc.hahwul.com/get_started/installation/</link>
+      <guid>https://eoyc.hahwul.com/get_started/installation/</guid>
+      <description>&lt;p&gt;Eoyc can be installed in several ways, depending on your preference and environment.&lt;/p&gt;
+&lt;h2 id=&quot;from-homebrew&quot;&gt;From Homebrew&lt;/h2&gt;
+&lt;p&gt;For macOS users, Eoyc is available via Homebrew:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;brew tap hahwul/eoyc
+brew install eoyc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;from-source&quot;&gt;From Source&lt;/h2&gt;
+&lt;p&gt;To build Eoyc from source, you&apos;ll need to have Crystal installed (version 1.7.3 or higher).&lt;/p&gt;
+&lt;h3 id=&quot;clone-the-repository&quot;&gt;Clone the repository&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;git clone https://github.com/hahwul/eoyc
+cd eoyc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;build-the-application&quot;&gt;Build the application&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;shards install
+shards build
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The compiled binary will be located at &lt;code&gt;bin/eoyc&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;run&quot;&gt;Run&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;./bin/eoyc -h
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;verify-installation&quot;&gt;Verify Installation&lt;/h2&gt;
+&lt;p&gt;After installation, verify that eoyc is working correctly:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;eoyc --version
+# Output: 0.3.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;base64&amp;quot;
+# Output: dGVzdA==
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;next-steps&quot;&gt;Next Steps&lt;/h2&gt;
+&lt;p&gt;Now that you have eoyc installed, check out the &lt;a href=&quot;/get_started/usage/&quot;&gt;Usage&lt;/a&gt; guide to learn how to use it effectively.&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Usage</title>
+      <link>https://eoyc.hahwul.com/get_started/usage/</link>
+      <guid>https://eoyc.hahwul.com/get_started/usage/</guid>
+      <description>&lt;p&gt;Eoyc is a command-line tool for encoding and transforming text. It reads from STDIN and applies the specified encoders to your data.&lt;/p&gt;
+&lt;h2 id=&quot;basic-command-structure&quot;&gt;Basic Command Structure&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;eoyc [arguments]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;command-line-arguments&quot;&gt;Command-Line Arguments&lt;/h2&gt;
+&lt;h3 id=&quot;s-string-stringstring&quot;&gt;&lt;code&gt;-s STRING, --string=STRING&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Your choice string to encode. When specified, only this exact string within each input line will be encoded.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;hello world&amp;quot; | eoyc -s &amp;quot;world&amp;quot; -e &amp;quot;base64&amp;quot;
+# Output: hello d29ybGQ=
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;r-regex-regexregex&quot;&gt;&lt;code&gt;-r REGEX, --regex=REGEX&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Your choice regex pattern. When specified, only the part matching the regex will be encoded.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;email: user@example.com&amp;quot; | eoyc -r &amp;quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}&amp;quot; -e &amp;quot;sha1&amp;quot;
+# Output: email: w18pVtgE4B7y3sOS7zra42KJEj8=
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;e-encoders-encodersencoders&quot;&gt;&lt;code&gt;-e ENCODERS, --encoders=ENCODERS&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Encoders chain. You can use &lt;code&gt;&amp;gt;&lt;/code&gt;, &lt;code&gt;|&lt;/code&gt;, or &lt;code&gt;,&lt;/code&gt; characters to chain multiple encoders together.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Single encoder
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;base64&amp;quot;
+# Output: dGVzdA==
+
+# Multiple encoders chained
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;base64&amp;gt;md5&amp;quot;
+# Output: 65682a9301ce243d376d9b26b0b2c3bb
+
+# Alternative chain characters
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;url|upcase|md5&amp;quot;
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;url&amp;gt;upcase,md5&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;o-path-outputpath&quot;&gt;&lt;code&gt;-o PATH, --output=PATH&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Output file path (currently supported as a flag).&lt;/p&gt;
+&lt;h3 id=&quot;v-version&quot;&gt;&lt;code&gt;-v, --version&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Show version information.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;eoyc --version
+# Output: 0.3.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;h-help&quot;&gt;&lt;code&gt;-h, --help&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;Show help information including all available encoders.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;eoyc --help
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;encoding-modes&quot;&gt;Encoding Modes&lt;/h2&gt;
+&lt;h3 id=&quot;1-full-line-encoding-default&quot;&gt;1. Full Line Encoding (Default)&lt;/h3&gt;
+&lt;p&gt;By default, the entire line is encoded:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abcdefghijk&amp;quot; | eoyc -e &amp;quot;md5&amp;quot;
+# Output: 06c48e7ea982782c827c8b15fc8c793d
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;2-string-selection-mode-s&quot;&gt;2. String Selection Mode (&lt;code&gt;-s&lt;/code&gt;)&lt;/h3&gt;
+&lt;p&gt;Encode only a specific substring:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;abcdefghijk&amp;quot; | eoyc -s &amp;quot;bcde&amp;quot; -e &amp;quot;base64&amp;quot;
+# Output: aYmNkZWZnaGlqaw==
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;3-regex-pattern-mode-r&quot;&gt;3. Regex Pattern Mode (&lt;code&gt;-r&lt;/code&gt;)&lt;/h3&gt;
+&lt;p&gt;Encode only the part that matches a regular expression:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;echo &amp;quot;https://www.example.com&amp;quot; | eoyc -r &amp;quot;https?://[^\s]+&amp;quot; -e &amp;quot;url&amp;quot;
+# Output: https%3A%2F%2Fwww.example.com
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;chaining-encoders&quot;&gt;Chaining Encoders&lt;/h2&gt;
+&lt;p&gt;One of the most powerful features of eoyc is the ability to chain multiple encoders together. The encoders are applied in the order specified:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Apply base64, then md5, then sha1
+echo &amp;quot;test&amp;quot; | eoyc -e &amp;quot;base64&amp;gt;md5&amp;gt;sha1&amp;quot;
+
+# Apply URL encoding, then convert to uppercase, then MD5
+echo &amp;quot;test data&amp;quot; | eoyc -e &amp;quot;url&amp;gt;upcase&amp;gt;md5&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can use any of these characters to separate encoders in a chain:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt;&lt;/code&gt; (greater than)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;|&lt;/code&gt; (pipe)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;,&lt;/code&gt; (comma)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;working-with-files&quot;&gt;Working with Files&lt;/h2&gt;
+&lt;p&gt;Eoyc reads from STDIN, so you can easily process files:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash hljs&quot;&gt;# Process a file line by line
+cat urls.txt | eoyc -e &amp;quot;sha1&amp;quot;
+
+# Process and save to output file
+cat data.txt | eoyc -e &amp;quot;base64&amp;quot; &amp;gt; encoded.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;next-steps&quot;&gt;Next Steps&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Check out &lt;a href=&quot;/get_started/examples/&quot;&gt;Examples&lt;/a&gt; for more use cases&lt;/li&gt;
+&lt;li&gt;Browse the &lt;a href=&quot;/encoders/&quot;&gt;Encoders Reference&lt;/a&gt; for all available encoders&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+  </channel>
+</rss>
