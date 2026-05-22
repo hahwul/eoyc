@@ -691,6 +691,14 @@ module Encoders
     @@name_to_spec[name.downcase]?
   end
 
+  # Return chain names that do not resolve to a registered encoder.
+  def unknown_names(names : Array(String)) : Array(String)
+    names.map(&.strip)
+      .reject(&.empty?)
+      .uniq!
+      .reject { |name| find(name) }
+  end
+
   # Produce lines suited for help output.
   def help_lines : Array(String)
     specs.map do |spec|
@@ -728,7 +736,7 @@ module Encoders
   # JSON: describe a single encoder by name.
   def describe_json(name : String) : String?
     spec = find(name)
-    return nil unless spec
+    return unless spec
     JSON.build do |json|
       spec.to_json(json)
     end
