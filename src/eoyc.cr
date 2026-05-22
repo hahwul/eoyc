@@ -47,7 +47,7 @@ OptionParser.parse do |parser|
   parser.on "-s STRING", "--string=STRING", "Your choice string" { |var| choice = var }
   parser.on "-r REGEX", "--regex=REGEX", "Your choice regex pattern" { |var| regex = var }
   parser.on "-e ENCODERS", "--encoders=ENCODERS", "Encoders chain [char: >|,]" do |var|
-    origin = var.split(/>|\||,/)
+    origin = var.split(/>|\||,/).map(&.strip).reject(&.empty?)
     encoders = origin.reverse
   end
   parser.on "-o PATH", "--output=PATH", "Output file" { |var| output = var }
@@ -89,7 +89,7 @@ end
 
 # Handle AI-friendly discovery commands (no stdin needed)
 if show_capabilities
-  puts(JSON.build { |json|
+  puts(JSON.build do |json|
     json.object do
       json.field "tool", "eoyc"
       json.field "version", Eoyc::VERSION
@@ -133,7 +133,7 @@ if show_capabilities
         end
       end
     end
-  })
+  end)
   exit
 end
 
@@ -155,7 +155,7 @@ end
 
 if search_keyword != ""
   results = Encoders.search(search_keyword)
-  puts(JSON.build { |json|
+  puts(JSON.build do |json|
     json.object do
       json.field "query", search_keyword
       json.field "count", results.size
@@ -165,7 +165,7 @@ if search_keyword != ""
         end
       end
     end
-  })
+  end)
   exit
 end
 
@@ -174,16 +174,37 @@ if show_categories
   exit
 end
 
-# Main processing loop
-io = output != "" ? File.open(output, "w") : STDOUT
-begin
-  compiled_regex = regex.empty? ? "" : Regex.new(regex)
+unknown_encoders = Encoders.unknown_names(encoders)
+unless unknown_encoders.empty?
+  STDERR.puts "ERROR: unknown encoder#{unknown_encoders.size == 1 ? "" : "s"}: #{unknown_encoders.join(", ")}"
+  STDERR.puts "Run `eoyc --list` to see available encoders."
+  exit(1)
+end
 
+compiled_regex = begin
+  regex.empty? ? "" : Regex.new(regex)
+rescue ex : ArgumentError
+  STDERR.puts "ERROR: invalid regex '#{regex}': #{ex.message}"
+  exit(1)
+end
+
+# Main processing loop
+io = if output != ""
+       begin
+         File.open(output, "w")
+       rescue ex
+         STDERR.puts "ERROR: cannot open output file '#{output}': #{ex.message}"
+         exit(1)
+       end
+     else
+       STDOUT
+     end
+begin
   if json_mode
     lines = [] of String
     STDIN.each_line { |line| lines << line }
 
-    puts(JSON.build { |json|
+    io.puts(JSON.build do |json|
       json.object do
         json.field "input", lines
         json.field "encoders", encoders.reverse
@@ -227,7 +248,7 @@ begin
           end
         end
       end
-    })
+    end)
   else
     STDIN.each_line do |line|
       io.puts Eoyc.process_line(line, choice, compiled_regex, encoders)

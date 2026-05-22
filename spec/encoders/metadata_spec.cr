@@ -139,6 +139,20 @@ describe "Encoders.describe_json" do
   end
 end
 
+describe "Encoders.unknown_names" do
+  it "returns unknown encoder names" do
+    Encoders.unknown_names(["base64", "missing", "md5"]).should eq(["missing"])
+  end
+
+  it "normalizes whitespace and ignores empty names" do
+    Encoders.unknown_names([" base64 ", "", "  "]).should be_empty
+  end
+
+  it "deduplicates unknown names" do
+    Encoders.unknown_names(["missing", "missing"]).should eq(["missing"])
+  end
+end
+
 describe "Encoders.categories_json" do
   it "returns valid JSON grouped by category" do
     json_str = Encoders.categories_json
