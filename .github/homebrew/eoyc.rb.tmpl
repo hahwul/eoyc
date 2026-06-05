@@ -1,0 +1,46 @@
+# typed: strict
+# frozen_string_literal: true
+
+# This file is rendered by eoyc's release pipeline (.github/workflows/publish-homebrew.yml).
+# DO NOT EDIT by hand.
+class Eoyc < Formula
+  desc "Chainable string encoding/decoding CLI (Endless Options, Your Chain)"
+  homepage "https://github.com/hahwul/eoyc"
+  version "__VERSION__"
+  license "MIT"
+
+  on_macos do
+    # macOS binaries are dynamically linked; openssl@3 is the only non-system
+    # dependency (enforced by an otool guard in release-binary.yml).
+    depends_on "openssl@3"
+
+    on_arm do
+      url "https://github.com/hahwul/eoyc/releases/download/v__VERSION__/eoyc-v__VERSION__-osx-arm64"
+      sha256 "__SHA_OSX_ARM64__"
+    end
+    on_intel do
+      url "https://github.com/hahwul/eoyc/releases/download/v__VERSION__/eoyc-v__VERSION__-osx-x86_64"
+      sha256 "__SHA_OSX_X86_64__"
+    end
+  end
+
+  on_linux do
+    # Linux release binaries are statically linked, so they are self-contained.
+    on_arm do
+      url "https://github.com/hahwul/eoyc/releases/download/v__VERSION__/eoyc-v__VERSION__-linux-arm64"
+      sha256 "__SHA_LINUX_ARM64__"
+    end
+    on_intel do
+      url "https://github.com/hahwul/eoyc/releases/download/v__VERSION__/eoyc-v__VERSION__-linux-x86_64"
+      sha256 "__SHA_LINUX_X86_64__"
+    end
+  end
+
+  def install
+    bin.install Dir["eoyc-v__VERSION__-*"].first => "eoyc"
+  end
+
+  test do
+    system "#{bin}/eoyc", "-v"
+  end
+end
