@@ -1,0 +1,24 @@
+# Eoyc
+
+> Endless Options, Your Chain - A powerful CLI tool for encoding and hashing strings with flexible chain operations
+
+## Pages
+
+- [Eoyc](https://eoyc.hahwul.com/)
+- [Background](https://eoyc.hahwul.com/background/)
+
+## Encoders Reference
+
+- [Base64 Encoders](https://eoyc.hahwul.com/encoders/base64/)
+- [Binary & Character Encoders](https://eoyc.hahwul.com/encoders/binary/)
+- [Hash & Digest Encoders](https://eoyc.hahwul.com/encoders/digests/)
+- [Hex Encoders](https://eoyc.hahwul.com/encoders/hex/)
+- [Text Transformations](https://eoyc.hahwul.com/encoders/text/)
+- [URL Encoders](https://eoyc.hahwul.com/encoders/url/)
+
+## Get Started
+
+- [Examples](https://eoyc.hahwul.com/get_started/examples/)
+- [Installation](https://eoyc.hahwul.com/get_started/installation/)
+- [Usage](https://eoyc.hahwul.com/get_started/usage/)
+
