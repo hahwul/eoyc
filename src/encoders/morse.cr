@@ -3,8 +3,8 @@ require "./core"
 # Morse Code Encode
 Encoders.register(
   EncoderSpec.new(
-    "morse-encode",
-    %w[morse-encode morse],
+    "morse",
+    %w[morse morse-encode],
     "Morse code encode",
     category: "cipher",
     flags: %w[encode reversible]

@@ -5,8 +5,8 @@ require "compress/gzip"
 # Zlib Encode (compress + base64)
 Encoders.register(
   EncoderSpec.new(
-    "zlib-encode",
-    %w[zlib-encode zlib],
+    "zlib",
+    %w[zlib zlib-encode],
     "Zlib compress then Base64 encode",
     category: "compression",
     flags: %w[encode reversible compression]
@@ -47,8 +47,8 @@ Encoders.register(
 # Gzip Encode (compress + base64)
 Encoders.register(
   EncoderSpec.new(
-    "gzip-encode",
-    %w[gzip-encode gzip],
+    "gzip",
+    %w[gzip gzip-encode],
     "Gzip compress then Base64 encode",
     category: "compression",
     flags: %w[encode reversible compression]

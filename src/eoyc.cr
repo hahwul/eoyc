@@ -4,7 +4,7 @@ require "./utils.cr"
 require "./encoders.cr"
 
 module Eoyc
-  VERSION = "0.3.0"
+  VERSION = "0.4.0"
 
   # Process a single line with the given choice, regex, and encoders
   def self.process_line(line : String, choice : String, regex : Regex | String, encoders : Array(String)) : String
@@ -41,50 +41,59 @@ search_keyword = ""
 show_categories = false
 chain_info = false
 show_capabilities = false
+trim_input = false
 
-OptionParser.parse do |parser|
-  parser.banner = "Usage: eoyc [arguments]"
-  parser.on "-s STRING", "--string=STRING", "Your choice string" { |var| choice = var }
-  parser.on "-r REGEX", "--regex=REGEX", "Your choice regex pattern" { |var| regex = var }
-  parser.on "-e ENCODERS", "--encoders=ENCODERS", "Encoders chain [char: >|,]" do |var|
-    origin = var.split(/>|\||,/).map(&.strip).reject(&.empty?)
-    encoders = origin.reverse
-  end
-  parser.on "-o PATH", "--output=PATH", "Output file" { |var| output = var }
-  parser.on "-v", "--version", "Show version" do
-    puts Eoyc::VERSION
-    exit
-  end
-  parser.on "-l", "--list", "List encoders" do
-    encoder_help_lines.each do |line|
-      puts line
+begin
+  OptionParser.parse do |parser|
+    parser.banner = "Usage: eoyc [arguments]"
+    parser.on "-s STRING", "--string=STRING", "Your choice string" { |var| choice = var }
+    parser.on "-r REGEX", "--regex=REGEX", "Your choice regex pattern" { |var| regex = var }
+    parser.on "-e ENCODERS", "--encoders=ENCODERS", "Encoders chain [char: >|,]" do |var|
+      origin = var.split(/>|\||,/).map(&.strip).reject(&.empty?)
+      encoders = origin.reverse
     end
-    exit
-  end
-
-  # AI-friendly flags
-  parser.on "--json", "JSON output mode" { json_mode = true }
-  parser.on "--list-json", "List all encoders as JSON" { list_json = true }
-  parser.on "--describe=NAME", "Describe an encoder (JSON)" { |var| describe_encoder = var }
-  parser.on "--search=KEYWORD", "Search encoders by keyword (JSON)" { |var| search_keyword = var }
-  parser.on "--categories", "List encoder categories (JSON)" { show_categories = true }
-  parser.on "--chain-info", "Show step-by-step chain results (JSON)" { chain_info = true }
-  parser.on "--capabilities", "Show tool capabilities (JSON)" { show_capabilities = true }
-
-  parser.on "-h", "--help", "Show help" do
-    puts parser
-    puts
-    puts "Encoders:"
-    encoder_help_lines.each do |line|
-      puts "  #{line}"
+    parser.on "-o PATH", "--output=PATH", "Output file" { |var| output = var }
+    parser.on "-v", "--version", "Show version" do
+      puts Eoyc::VERSION
+      exit
     end
-    exit
+    parser.on "-l", "--list", "List encoders" do
+      puts "Encoders (#{encoder_help_lines.size}):"
+      encoder_help_lines.each do |line|
+        puts "  #{line}"
+      end
+      exit
+    end
+
+    # AI-friendly flags
+    parser.on "--json", "JSON output mode" { json_mode = true }
+    parser.on "--list-json", "List all encoders as JSON" { list_json = true }
+    parser.on "--describe=NAME", "Describe an encoder (JSON)" { |var| describe_encoder = var }
+    parser.on "--search=KEYWORD", "Search encoders by keyword (JSON)" { |var| search_keyword = var }
+    parser.on "--categories", "List encoder categories (JSON)" { show_categories = true }
+    parser.on "--chain-info", "Show step-by-step chain results (JSON)" { chain_info = true }
+    parser.on "--capabilities", "Show tool capabilities (JSON)" { show_capabilities = true }
+    parser.on "--trim", "Trim trailing whitespace/newlines from each input line" { trim_input = true }
+
+    parser.on "-h", "--help", "Show help" do
+      puts parser
+      puts
+      puts "Encoders: #{encoder_help_lines.size} available. Use -l/--list to list all, or --list-json for machine-readable."
+      puts "Categories: #{Encoders.categories.join(", ")}"
+      puts "Chain with > | or ,   (e.g. base64>hex  or  url|upcase|md5)"
+      puts "Add --trim to strip trailing newlines (useful with echo)."
+      exit
+    end
+    parser.invalid_option do |flag|
+      STDERR.puts "ERROR: #{flag} is not a valid option."
+      STDERR.puts parser
+      exit(1)
+    end
   end
-  parser.invalid_option do |flag|
-    STDERR.puts "ERROR: #{flag} is not a valid option."
-    STDERR.puts parser
-    exit(1)
-  end
+rescue ex : OptionParser::Exception
+  STDERR.puts "ERROR: #{ex.message}"
+  STDERR.puts "Run `eoyc -h` for usage."
+  exit(1)
 end
 
 # Handle AI-friendly discovery commands (no stdin needed)
@@ -110,25 +119,30 @@ if show_capabilities
           json.field "--search", "Search encoders by keyword"
           json.field "--categories", "List encoder categories"
           json.field "--chain-info", "Show step-by-step chain results"
+          json.field "--trim", "Trim trailing whitespace from input lines"
         end
       end
       json.field "usage_examples" do
         json.array do
           json.object do
-            json.field "description", "Encode string to base64"
-            json.field "command", "echo 'hello' | eoyc -e base64"
+            json.field "description", "Encode string to base64 (direct arg)"
+            json.field "command", "eoyc -e base64 hello"
           end
           json.object do
-            json.field "description", "Chain multiple encoders"
-            json.field "command", "echo 'hello' | eoyc -e 'base64>url'"
+            json.field "description", "Chain multiple encoders (pipe or args)"
+            json.field "command", "eoyc -e 'base64>hex' hello"
           end
           json.object do
-            json.field "description", "Encode only matched part"
+            json.field "description", "Encode only matched part via regex"
             json.field "command", "echo 'key=value' | eoyc -r 'value' -e base64"
           end
           json.object do
-            json.field "description", "JSON output with chain steps"
-            json.field "command", "echo 'hello' | eoyc -e 'base64>hex' --json --chain-info"
+            json.field "description", "JSON output with per-step results"
+            json.field "command", "eoyc -e 'base64>hex' hello --json --chain-info"
+          end
+          json.object do
+            json.field "description", "Trim newlines from echo before hashing"
+            json.field "command", "echo 'hello' | eoyc --trim -e sha256-hex"
           end
         end
       end
@@ -188,6 +202,17 @@ rescue ex : ArgumentError
   exit(1)
 end
 
+# Collect input lines: positional args (if any) take precedence over stdin (enables `eoyc -e base64 hello`)
+input_lines = ARGV.dup
+if input_lines.empty?
+  # No positional args; read from stdin (filter mode)
+  STDIN.each_line { |line| input_lines << line }
+end
+
+if trim_input
+  input_lines = input_lines.map(&.rstrip)
+end
+
 # Main processing loop
 io = if output != ""
        begin
@@ -201,8 +226,7 @@ io = if output != ""
      end
 begin
   if json_mode
-    lines = [] of String
-    STDIN.each_line { |line| lines << line }
+    lines = input_lines
 
     io.puts(JSON.build do |json|
       json.object do
@@ -250,7 +274,7 @@ begin
       end
     end)
   else
-    STDIN.each_line do |line|
+    input_lines.each do |line|
       io.puts Eoyc.process_line(line, choice, compiled_regex, encoders)
     end
   end

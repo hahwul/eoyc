@@ -3,8 +3,8 @@ require "./core"
 # Punycode Encode
 Encoders.register(
   EncoderSpec.new(
-    "punycode-encode",
-    %w[punycode-encode punycode],
+    "punycode",
+    %w[punycode punycode-encode],
     "Punycode encode (IDN)",
     category: "encoding",
     flags: %w[encode reversible web]

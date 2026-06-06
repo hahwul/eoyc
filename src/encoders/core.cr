@@ -40,6 +40,7 @@
 require "mutex"
 require "base64"
 require "json"
+require "big"
 
 # Single specification for an encoder / transformer.
 struct EncoderSpec
@@ -660,6 +661,74 @@ module EncoderUtils
     v.to_s(16).rjust(8, '0')
   rescue
     "00000000"
+  end
+
+  BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+
+  def base58_encode(str : String) : String
+    return "" if str.empty?
+    bytes = str.to_slice
+
+    # Count leading zero bytes -> will become leading '1's
+    leading_zeros = 0
+    while leading_zeros < bytes.size && bytes[leading_zeros] == 0
+      leading_zeros += 1
+    end
+
+    # All zeros short-circuit
+    if leading_zeros == bytes.size
+      return "1" * leading_zeros
+    end
+
+    # Big-endian bytes -> integer
+    n = bytes.reduce(0.to_big_i) { |acc, byte| acc * 256 + byte }
+
+    # Convert to base58 digits (least significant first)
+    digits = [] of Int32
+    while n > 0
+      digits << (n % 58).to_i32
+      n //= 58
+    end
+
+    encoded = digits.reverse.map { |digit| BASE58_ALPHABET[digit] }.join
+    ("1" * leading_zeros) + encoded
+  rescue
+    str
+  end
+
+  def base58_decode(str : String) : String
+    return "" if str.empty?
+
+    # Count leading '1' -> leading zero bytes
+    leading_ones = 0
+    while leading_ones < str.size && str[leading_ones] == '1'
+      leading_ones += 1
+    end
+
+    # Decode the rest
+    n = 0.to_big_i
+    str.each_char_with_index do |chr, idx|
+      next if idx < leading_ones
+      char_idx = BASE58_ALPHABET.index(chr)
+      return str if char_idx.nil? # invalid -> pass through original
+      n = n * 58 + char_idx
+    end
+
+    # BigInt -> big-endian bytes
+    byte_array = [] of UInt8
+    if n == 0
+      # only leading ones
+    else
+      while n > 0
+        byte_array << (n % 256).to_u8
+        n //= 256
+      end
+      byte_array.reverse!
+    end
+
+    (Bytes.new(leading_ones, 0_u8) + Bytes.new(byte_array.to_unsafe, byte_array.size)).to_a.map(&.chr).join
+  rescue
+    str
   end
 end
 

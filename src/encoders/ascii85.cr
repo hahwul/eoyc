@@ -3,8 +3,8 @@ require "./core"
 # ASCII85/Base85 Encode
 Encoders.register(
   EncoderSpec.new(
-    "ascii85-encode",
-    %w[ascii85-encode ascii85],
+    "ascii85",
+    %w[ascii85 ascii85-encode],
     "ASCII85/Base85 encode",
     category: "encoding",
     flags: %w[encode reversible]

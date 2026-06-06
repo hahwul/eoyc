@@ -37,7 +37,7 @@ shards build
 
 ### 3. Verify Installation
 ```bash
-./bin/eoyc --version  # Should show 0.3.0
+./bin/eoyc --version  # Should show 0.4.0+ (current development)
 ./bin/eoyc --help
 ```
 

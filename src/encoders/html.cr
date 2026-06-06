@@ -3,8 +3,8 @@ require "./core"
 # HTML Entity Encode
 Encoders.register(
   EncoderSpec.new(
-    "html-encode",
-    %w[html-encode html],
+    "html",
+    %w[html html-encode],
     "HTML entity encode",
     category: "encoding",
     flags: %w[encode reversible web]
