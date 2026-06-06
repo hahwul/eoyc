@@ -52,3 +52,12 @@ jobs:
         run: shards install
       - name: Run tests
         run: crystal spec
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: crystal-lang/install-crystal@v1
+      - name: Check version consistency
+        # Fails the build if shard.yml, src/eoyc.cr, snap and aur/PKGBUILD
+        # ever drift apart (the drift this PR was created to fix).
+        run: crystal run scripts/version_check.cr
