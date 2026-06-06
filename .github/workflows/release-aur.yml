@@ -1,0 +1,64 @@
+---
+name: Publish AUR Package
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g., 0.4.0)"
+        required: true
+        type: string
+  workflow_run:
+    workflows: ["Build and Release Binaries"]
+    types: [completed]
+permissions:
+  contents: read
+jobs:
+  publish-aur:
+    # Run after a release-triggered binary build succeeds, or on manual
+    # dispatch. The PKGBUILD points at the release binary, so it must exist.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'release')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', github.event.inputs.version) || github.event.workflow_run.head_branch }}
+
+      - name: Get Version
+        id: get_version
+        # Pass event data via env (never interpolate ${{ }} straight into the
+        # script body) so a crafted tag/branch name can't inject shell.
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_VERSION: ${{ github.event.inputs.version }}
+          RUN_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            RAW="$DISPATCH_VERSION"
+          else
+            RAW="$RUN_BRANCH"
+          fi
+          # Strip leading 'v' if present
+          VERSION="${RAW#v}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "Resolved version: $VERSION"
+
+      - name: Update PKGBUILD version
+        env:
+          V: ${{ env.VERSION }}
+        run: |
+          sed -i "s/^pkgver=.*/pkgver=${V}/" aur/PKGBUILD
+          sed -i "s/^pkgrel=.*/pkgrel=1/" aur/PKGBUILD
+          cat aur/PKGBUILD
+
+      - name: Publish to AUR
+        uses: KSXGitHub/github-actions-deploy-aur@v4.1.2
+        with:
+          pkgname: eoyc
+          pkgbuild: aur/PKGBUILD
+          commit_username: hahwul
+          commit_email: hahwul@gmail.com
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}

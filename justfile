@@ -1,42 +1,59 @@
-# Alias
+# Aliases
 alias b := build
 alias ds := docs-serve
 alias db := docs-build
+alias vc := version-check
+alias vu := version-update
 
-# Default task, lists all available tasks.
+# List available tasks.
 default:
-    @echo "Listing available tasks..."
-    @echo "Aliases: b (build), ds (docs-serve), db (docs-build)"
     @just --list
 
-# Build the application using Crystal Shards.
+# Build the eoyc binary.
+[group('build')]
 build:
-    @echo "Building the application..."
+    shards install
     shards build
 
-# Automatically format code and fix linting issues.
+# Clean build artifacts and dependencies.
+[group('build')]
+clean:
+    rm -rf bin/
+    rm -rf lib/
+
+# Auto-format code and fix lint issues.
+[group('development')]
 fix:
-    @echo "Formatting code and fixing linting issues..."
     crystal tool format
-    ameba --fix
+    crystal run lib/ameba/bin/ameba.cr -- --fix
 
-# Check code formatting and run linter without making changes.
+# Check code format and lint without changes.
+[group('development')]
 check:
-    @echo "Checking code format and running linter..."
     crystal tool format --check
-    ameba
+    crystal run lib/ameba/bin/ameba.cr
 
-# Run all Crystal spec tests.
+# Run all tests.
+[group('development')]
 test:
-    @echo "Running tests..."
     crystal spec
 
-# Serve documentation site locally with Zola.
-docs-serve:
-    @echo "Serving documentation site..."
-    @cd docs && zola serve
+# Check version consistency across all files.
+[group('development')]
+version-check:
+    crystal run scripts/version_check.cr
 
-# Build documentation site with Zola.
+# Update version across all files.
+[group('development')]
+version-update:
+    crystal run scripts/version_update.cr
+
+# Serve the docs site locally (requires hwaro: https://github.com/hahwul/hwaro).
+[group('documents')]
+docs-serve:
+    @cd docs && hwaro serve
+
+# Build the docs site (requires hwaro: https://github.com/hahwul/hwaro).
+[group('documents')]
 docs-build:
-    @echo "Building documentation site..."
-    @cd docs && zola build
+    @cd docs && hwaro build

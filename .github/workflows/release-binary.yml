@@ -12,13 +12,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, macos-15-intel]
+        include:
+          - os: ubuntu-latest
+            platform: linux
+          - os: ubuntu-24.04-arm
+            platform: linux
+          - os: macos-latest
+            platform: macos
+          - os: macos-15-intel
+            platform: macos
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
       - name: Checkout source code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Install dependencies
         run: shards install
       - name: Inject slug/short variables
@@ -32,18 +40,19 @@ jobs:
           else
             echo "ARCH=unknown" >> $GITHUB_ENV
           fi
-      - if: startsWith(matrix.os, 'ubuntu')
+      - if: matrix.platform == 'linux'
         name: Build binary (Linux)
         run: |
           mkdir -p build
-          # Use Crystal container to build static binary
+          # Build inside the Crystal container and link statically. eoyc does no
+          # networking, so a glibc static binary is safe (no getaddrinfo/NSS path).
           docker run --rm -v $(pwd):/eoyc -w /eoyc --entrypoint="" crystallang/crystal:1.20 sh -c "
             apt-get update && apt-get install -y libyaml-dev ca-certificates git curl &&
             shards install --production &&
             mkdir -p build &&
             /usr/bin/crystal build src/eoyc.cr -o build/eoyc-${GITHUB_REF_SLUG}-linux-${ARCH} --release --no-debug --static
           "
-      - if: startsWith(matrix.os, 'macos')
+      - if: matrix.platform == 'macos'
         name: Build binary (macOS)
         run: |
           mkdir -p build
@@ -72,7 +81,7 @@ jobs:
             echo "$EXTRA"; exit 1
           fi
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build-${{ matrix.os }}-${{ env.ARCH }}
           path: build

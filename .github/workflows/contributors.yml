@@ -21,7 +21,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           round: false
-          includeBots: true
+          includeBots: false
           noCommit: true
       - uses: peter-evans/create-pull-request@v8.1.1
         with:

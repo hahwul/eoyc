@@ -4,8 +4,14 @@ name: Hwaro CI/CD
 on:
   push:
     branches: [main]
+    paths:
+      - "docs/**"
+      - ".github/workflows/hwaro.yml"
   pull_request:
     branches: [main]
+    paths:
+      - "docs/**"
+      - ".github/workflows/hwaro.yml"
   workflow_dispatch:
 
 permissions:

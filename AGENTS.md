@@ -126,9 +126,12 @@ crystal tool format --check
 crystal tool format
 ```
 
-### Linting (if ameba is available)
+### Linting
 ```bash
-ameba
+# Uses the project-local ameba installed by `shards install`
+crystal run lib/ameba/bin/ameba.cr
+# or simply:
+just check
 ```
 
 ## Project Structure
@@ -168,7 +171,7 @@ Use `>`, `|`, or `,` to chain encoders:
 The project includes GitHub Actions workflows:
 - `crystal.yml` - Crystal CI pipeline
 - `contributors.yml` - Contributors update
-- `release-*.yml` - Release automation (binary, deb, sbom)
+- `release-*.yml` - Release automation (binary, deb, sbom, aur)
 - `publish-*.yml` - Package publishing (homebrew, snapcraft)
 
 ## Development Workflow
@@ -183,10 +186,12 @@ The project includes GitHub Actions workflows:
 ### Quick Development Commands
 ```bash
 # Using justfile
-just build    # Build the application
-just test     # Run tests
-just check    # Check formatting and linting
-just fix      # Auto-format and fix issues
+just build          # Build the application
+just test           # Run tests
+just check          # Check formatting and linting
+just fix            # Auto-format and fix issues
+just version-check  # Verify version is consistent across files
+just version-update # Bump version across shard.yml, src, snap, aur
 ```
 
 ## Known Limitations
@@ -199,13 +204,13 @@ just fix      # Auto-format and fix issues
 ### Crystal Not Found
 Ensure Crystal is in PATH after installation:
 ```bash
-export PATH=$PWD/crystal-1.17.1-1/bin:$PATH
+export PATH=$PWD/crystal-1.20.0-1/bin:$PATH
 ```
 
 ### Build Failures
 Check Crystal version compatibility:
 ```bash
-crystal --version  # Should be 1.7.3+
+crystal --version  # Should be 1.19+ (shard.yml requires `~> 1.19`)
 ```
 
 ### Test Failures

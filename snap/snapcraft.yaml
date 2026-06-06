@@ -1,6 +1,6 @@
 name: eoyc
 base: core24
-version: 0.3.0
+version: 0.4.0
 summary: Endless Options, Your Chain
 description: |
   Endless Options, Your Chain
@@ -34,6 +34,6 @@ parts:
       - libevent-dev
       - libgmp-dev
     stage-packages:
-      - libssl1.1
+      - libssl3
       - libxml2
       - libevent-2.1-7
