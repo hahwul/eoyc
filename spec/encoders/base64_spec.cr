@@ -75,6 +75,6 @@ describe "base64" do
   it "multiple encoder chain case" do
     encoders = ["base64", "url"]
     result = encode("abcd", encoders.reverse)
-    result.should eq("YWJjZA%3D%3D%0A")
+    result.should eq("YWJjZA%3D%3D")
   end
 end

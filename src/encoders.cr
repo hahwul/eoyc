@@ -47,6 +47,7 @@ require "./encoders/ascii85"
 require "./encoders/compression"
 require "./encoders/punycode"
 require "./encoders/leet"
+require "./encoders/base58"
 #
 # Optionally force a no-op reference to ensure the module is linked
 # (useful in some build optimization scenarios)

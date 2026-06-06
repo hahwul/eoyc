@@ -45,10 +45,10 @@ describe "EncoderSpec metadata" do
   end
 
   it "compression encoders have compression category" do
-    if found = Encoders.find("zlib-encode")
+    if found = Encoders.find("zlib")
       found.category.should eq("compression")
     else
-      fail "zlib-encode encoder not found"
+      fail "zlib encoder not found"
     end
   end
 end

@@ -27,41 +27,17 @@ Usage: eoyc [arguments]
     -v, --version                    Show version
     -l, --list                       List encoders
     -h, --help                       Show help
+```
 
-Encoders:
-  base64            - Base64 encode (aliases: base64-encode)
-  base64-decode     - Base64 decode
-  base64-url        - URL-safe Base64 encode (no padding) (aliases: base64-url-encode)
-  base64-url-decode - URL-safe Base64 decode
-  base64-url-pad    - URL-safe Base64 encode (with padding) (aliases: base64-url-encode-pad)
-  base64-url-pad-decode - URL-safe Base64 decode (accepts padding)
-  base32            - Base32 encode (RFC 4648, with padding) (aliases: base32-encode)
-  base32-decode     - Base32 decode (RFC 4648)
-  crc32             - CRC32 hex digest (IEEE 802.3) (aliases: crc32-hex)
-  md5               - MD5 hex digest
-  sha1              - SHA1 Base64 digest
-  sha1-hex          - SHA1 hex digest
-  sha256            - SHA256 Base64 digest
-  sha256-hex        - SHA256 hex digest
-  sha512            - SHA512 Base64 digest
-  sha512-hex        - SHA512 hex digest
-  hex               - Hex (lowercase) encode (aliases: hex-encode)
-  hex-decode        - Hex decode
-  url               - application/x-www-form-urlencoded encode (aliases: url-encode)
-  url-decode        - application/x-www-form-urlencoded decode
-  rot13             - ROT13 substitution cipher
-  upcase            - Uppercase transform
-  downcase          - Lowercase transform
-  reverse           - Reverse text
-  redacted          - Replace all characters with blocks (aliases: redaction)
-  bin               - Binary (8-bit) encode with spaces (aliases: bin-encode)
-  bin-decode        - Binary decode
-  oct               - Octal (base 8) encode (aliases: oct-encode)
-  oct-decode        - Octal decode
-  unicode           - Unicode encode (aliases: unicode-encode)
-  unicode-decode    - Unicode decode
-  charcode          - Character code encode (decimal ASCII values with spaces) (aliases: charcode-encode)
-  charcode-decode   - Character code decode
+Run `eoyc -l` (or `--list`) to see all available encoders (57+).  
+Use `--list-json`, `--describe=NAME`, `--search=KEYWORD`, `--categories`, or `--capabilities` for discovery.
+
+Direct invocation (no pipe required):
+
+```
+eoyc -e base64 hello
+eoyc -e 'sha256-hex' "some text"
+eoyc -e 'base64>hex' foo bar
 ```
 
 First, choose the range that you want to encode:
@@ -73,12 +49,15 @@ First, choose the range that you want to encode:
 Second, choose the type of encoder you wish to run via `-e`. The encoder can consist of multiple chains.
 
 ```bash
-# Encoder chanins
-# You can use '>' and '|' and ',' characters for chain.
+# Encoder chains
+# You can use '>' , '|' or ',' characters for chaining (left to right application).
 -e "base64"
 -e "base64>md5"
 -e "url|upcase|md5"
 -e "url>upcase,md5"
+
+# Direct (no stdin pipe)
+eoyc -e "base64>hex" hello
 ```
 
 ## Examples

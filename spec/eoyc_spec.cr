@@ -58,7 +58,7 @@ describe "Eoyc.process_line" do
 
   it "applies chain encoding" do
     result = Eoyc.process_line("hello", "", "", ["url", "base64"])
-    result.should eq("aGVsbG8%3D%0A")
+    result.should eq("aGVsbG8%3D")
   end
 
   it "does not mutate the encoders array" do
