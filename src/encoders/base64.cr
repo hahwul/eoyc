@@ -2,7 +2,7 @@
 require "./core"
 require "base64"
 
-# Standard Base64 encode
+# Standard Base64 encode (compact, no newlines - uses strict variant)
 Encoders.register(
   EncoderSpec.new(
     "base64",
@@ -10,7 +10,7 @@ Encoders.register(
     "Base64 encode",
     category: "encoding",
     flags: %w[encode reversible]
-  ) { |str| Base64.encode(str) }
+  ) { |str| Base64.strict_encode(str) }
 )
 
 # Standard Base64 decode
@@ -93,7 +93,7 @@ Encoders.register(
     "URL-safe Base64 encode (with padding)",
     category: "encoding",
     flags: %w[encode reversible url-safe]
-  ) { |str| Base64.encode(str).gsub('+', '-').gsub('/', '_') }
+  ) { |str| Base64.strict_encode(str).gsub('+', '-').gsub('/', '_') }
 )
 
 # URL-safe Base64 decode (accepts padded or unpadded)

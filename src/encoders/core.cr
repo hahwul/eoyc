@@ -95,7 +95,7 @@ module EncoderUtils
 
   # URL-safe Base64 (no padding)
   def base64_url_encode(str : String) : String
-    Base64.encode(str).gsub('+', '-').gsub('/', '_').gsub(/=+$/, "")
+    Base64.strict_encode(str).gsub('+', '-').gsub('/', '_').gsub(/=+$/, "")
   end
 
   def base64_url_decode(str : String) : String
@@ -699,26 +699,24 @@ module EncoderUtils
   def base58_decode(str : String) : String
     return "" if str.empty?
 
-    # Count leading '1' -> leading zero bytes
+    # Count leading '1's -> leading zero bytes
     leading_ones = 0
     while leading_ones < str.size && str[leading_ones] == '1'
       leading_ones += 1
     end
 
-    # Decode the rest
+    # Decode the rest to BigInt
     n = 0.to_big_i
     str.each_char_with_index do |chr, idx|
       next if idx < leading_ones
       char_idx = BASE58_ALPHABET.index(chr)
-      return str if char_idx.nil? # invalid -> pass through original
+      return str if char_idx.nil? # invalid char -> pass through original (resilient like other decoders)
       n = n * 58 + char_idx
     end
 
-    # BigInt -> big-endian bytes
+    # BigInt -> big-endian bytes (significant part)
     byte_array = [] of UInt8
-    if n == 0
-      # only leading ones
-    else
+    if n > 0
       while n > 0
         byte_array << (n % 256).to_u8
         n //= 256
@@ -726,7 +724,10 @@ module EncoderUtils
       byte_array.reverse!
     end
 
-    (Bytes.new(leading_ones, 0_u8) + Bytes.new(byte_array.to_unsafe, byte_array.size)).to_a.map(&.chr).join
+    # Prepend leading zero bytes and convert using shared helper (preserves raw bytes, including >= 0x80)
+    full_bytes = Array(UInt8).new(leading_ones, 0_u8)
+    full_bytes.concat(byte_array)
+    bytes_to_string(full_bytes)
   rescue
     str
   end
@@ -828,9 +829,10 @@ module Encoders
   end
 
   # Apply a chain of encoders (processes from last to first).
+  # NOTE: Output is returned faithfully (no automatic stripping). Use --trim for input normalization.
   def encode_chain(str, encoders : Array(String)) : String
     current = str.to_s
-    return current.strip if current.empty? || encoders.empty?
+    return current if current.empty? || encoders.empty?
 
     (encoders.size - 1).downto(0) do |i|
       name = encoders[i].strip.downcase
@@ -843,10 +845,11 @@ module Encoders
         end
       end
     end
-    current.to_s.strip
+    current.to_s
   end
 
   # Apply a chain and return step-by-step results (for --chain-info).
+  # Outputs in steps are faithful (no stripping of whitespace from encoder results).
   def encode_chain_steps(str, encoders : Array(String)) : Array(NamedTuple(encoder: String, output: String))
     current = str.to_s
     steps = [] of NamedTuple(encoder: String, output: String)
@@ -858,9 +861,9 @@ module Encoders
       if spec
         begin
           current = spec.apply(current)
-          steps << {encoder: spec.primary, output: current.strip}
+          steps << {encoder: spec.primary, output: current.to_s}
         rescue
-          steps << {encoder: name, output: current.strip}
+          steps << {encoder: name, output: current.to_s}
         end
       end
     end
