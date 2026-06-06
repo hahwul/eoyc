@@ -2,35 +2,67 @@
 name: Build and Release .deb Package
 on:
   workflow_dispatch:
-  release:
-    types: [published]
+    inputs:
+      version:
+        description: "Version to build (e.g., 0.4.0)"
+        required: true
+        type: string
+      upload_to_release:
+        description: "Upload .deb to GitHub Release (requires existing tag)"
+        required: false
+        type: boolean
+        default: false
+  workflow_run:
+    workflows: ["Build and Release Binaries"]
+    types: [completed]
 permissions:
   contents: write
 jobs:
   build-deb:
+    # Run after a release-triggered binary build succeeds, or on manual
+    # dispatch. The .deb wraps a prebuilt binary, so the release assets
+    # must already exist.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'release')
     strategy:
+      fail-fast: false
       matrix:
         arch: [amd64, arm64]
     runs-on: ubuntu-latest
     steps:
-      - name: Install Crystal
-        uses: crystal-lang/install-crystal@v1
       - name: Checkout source code
-        uses: actions/checkout@v5
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', github.event.inputs.version) || github.event.workflow_run.head_branch }}
       - name: Get Version
         id: get_version
+        # Pass event data via env (never interpolate ${{ }} straight into the
+        # script body) so a crafted tag/branch name can't inject shell.
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_VERSION: ${{ github.event.inputs.version }}
+          RUN_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-      - name: Build eoyc Binary
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            RAW="$DISPATCH_VERSION"
+          else
+            RAW="$RUN_BRANCH"
+          fi
+          # Strip leading 'v' if present
+          VERSION="${RAW#v}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "Resolved version: $VERSION"
+      - name: Download prebuilt binary
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          docker run --rm --platform linux/${{ matrix.arch }} -v $(pwd):/eoyc -w /eoyc --entrypoint="" crystallang/crystal:1.20 sh -c "
-            apt-get update && apt-get install -y libyaml-dev ca-certificates git curl &&
-            shards install --production &&
-            /usr/bin/crystal build src/eoyc.cr -o eoyc --release --no-debug --static
-          "
+          ARCH_NAME=${{ matrix.arch == 'amd64' && 'x86_64' || 'arm64' }}
+          gh release download "v${{ env.VERSION }}" --repo hahwul/eoyc \
+            --pattern "eoyc-v${{ env.VERSION }}-linux-${ARCH_NAME}" \
+            --output eoyc
+          chmod +x eoyc
       - name: Create Debian Package Structure
         run: |
           mkdir -p eoyc_${{ env.VERSION }}_${{ matrix.arch }}/DEBIAN
@@ -45,16 +77,23 @@ jobs:
           Package: eoyc
           Version: ${{ env.VERSION }}
           Architecture: ${{ matrix.arch }}
-          maintainer: HAHWUL <hahwul@gmail.com>, KSG <ksg97031@gmail.com>
-          Description: Attack surface detector that identifies endpoints by static analysis
+          Maintainer: HAHWUL <hahwul@gmail.com>, KSG <ksg97031@gmail.com>
+          Description: Endless Options, Your Chain - encode and hash strings with flexible chain operations.
           Depends: libc6 (>= 2.17)
           EOF
       - name: Build .deb Package
         run: |
           dpkg-deb --build eoyc_${{ env.VERSION }}_${{ matrix.arch }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: eoyc_${{ env.VERSION }}_${{ matrix.arch }}.deb
+          path: eoyc_${{ env.VERSION }}_${{ matrix.arch }}.deb
       - name: Upload .deb to Release
+        if: github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && inputs.upload_to_release)
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ env.VERSION }}
           files: |
             eoyc_${{ env.VERSION }}_${{ matrix.arch }}.deb
         env:

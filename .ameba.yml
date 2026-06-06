@@ -1,0 +1,12 @@
+# Ameba configuration for eoyc.
+# Run `just check` (or `crystal run lib/ameba/bin/ameba.cr`) to lint locally.
+
+# Public API docs are covered by the docs site, not inline doc comments.
+Documentation:
+  Enabled: false
+
+# Specs use `.not_nil!` as a test-time assertion; a nil there fails the test
+# loudly, which is the intent.
+Lint/NotNil:
+  Excluded:
+    - spec/**/*.cr

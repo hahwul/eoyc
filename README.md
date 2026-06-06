@@ -5,10 +5,10 @@ Endless Options, Your Chain
 
 For comprehensive documentation, visit: [https://eoyc.hahwul.com](https://eoyc.hahwul.com)
 
-Or view the documentation locally:
+Or view the documentation locally (the docs site is built with [hwaro](https://github.com/hahwul/hwaro)):
 ```bash
 cd docs
-zola serve
+hwaro serve
 ```
 
 ## Installation
