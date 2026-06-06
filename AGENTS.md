@@ -171,7 +171,7 @@ Use `>`, `|`, or `,` to chain encoders:
 The project includes GitHub Actions workflows:
 - `crystal.yml` - Crystal CI pipeline
 - `contributors.yml` - Contributors update
-- `release-*.yml` - Release automation (binary, deb, sbom)
+- `release-*.yml` - Release automation (binary, deb, sbom, aur)
 - `publish-*.yml` - Package publishing (homebrew, snapcraft)
 
 ## Development Workflow
@@ -191,7 +191,7 @@ just test           # Run tests
 just check          # Check formatting and linting
 just fix            # Auto-format and fix issues
 just version-check  # Verify version is consistent across files
-just version-update # Bump version across shard.yml, src, snap
+just version-update # Bump version across shard.yml, src, snap, aur
 ```
 
 ## Known Limitations

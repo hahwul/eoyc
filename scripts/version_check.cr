@@ -29,15 +29,26 @@ rescue
   nil
 end
 
+# Extract pkgver from aur/PKGBUILD
+def get_pkgbuild_version : String?
+  content = File.read("aur/PKGBUILD")
+  match = content.match(/^pkgver=([\d.]+)/m)
+  match ? match[1] : nil
+rescue
+  nil
+end
+
 shard_v = get_shard_version
 eoyc_v = get_eoyc_version
 snapcraft_v = get_snapcraft_version
+pkgbuild_v = get_pkgbuild_version
 
 puts "Shard version:     #{shard_v || "Not found"}"
 puts "Eoyc version:      #{eoyc_v || "Not found"}"
 puts "Snapcraft version: #{snapcraft_v || "Not found"}"
+puts "PKGBUILD version:  #{pkgbuild_v || "Not found"}"
 
-versions = [shard_v, eoyc_v, snapcraft_v].compact
+versions = [shard_v, eoyc_v, snapcraft_v, pkgbuild_v].compact
 
 if versions.empty?
   puts "No versions found!"
