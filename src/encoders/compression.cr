@@ -11,15 +11,13 @@ Encoders.register(
     category: "compression",
     flags: %w[encode reversible compression]
   ) do |str|
-    begin
-      compressed = IO::Memory.new
-      Compress::Zlib::Writer.open(compressed) do |zlib|
-        zlib.print(str)
-      end
-      Base64.strict_encode(compressed.to_slice)
-    rescue
-      str
+    compressed = IO::Memory.new
+    Compress::Zlib::Writer.open(compressed) do |zlib|
+      zlib.print(str)
     end
+    Base64.strict_encode(compressed.to_slice)
+  rescue
+    str
   end
 )
 
@@ -32,15 +30,13 @@ Encoders.register(
     category: "compression",
     flags: %w[decode reversible compression]
   ) do |str|
-    begin
-      decoded = Base64.decode(str)
-      input = IO::Memory.new(decoded)
-      Compress::Zlib::Reader.open(input) do |zlib|
-        zlib.gets_to_end
-      end
-    rescue
-      str
+    decoded = Base64.decode(str)
+    input = IO::Memory.new(decoded)
+    Compress::Zlib::Reader.open(input) do |zlib|
+      zlib.gets_to_end
     end
+  rescue
+    str
   end
 )
 
@@ -53,15 +49,13 @@ Encoders.register(
     category: "compression",
     flags: %w[encode reversible compression]
   ) do |str|
-    begin
-      compressed = IO::Memory.new
-      Compress::Gzip::Writer.open(compressed) do |gzip|
-        gzip.print(str)
-      end
-      Base64.strict_encode(compressed.to_slice)
-    rescue
-      str
+    compressed = IO::Memory.new
+    Compress::Gzip::Writer.open(compressed) do |gzip|
+      gzip.print(str)
     end
+    Base64.strict_encode(compressed.to_slice)
+  rescue
+    str
   end
 )
 
@@ -74,14 +68,12 @@ Encoders.register(
     category: "compression",
     flags: %w[decode reversible compression]
   ) do |str|
-    begin
-      decoded = Base64.decode(str)
-      input = IO::Memory.new(decoded)
-      Compress::Gzip::Reader.open(input) do |gzip|
-        gzip.gets_to_end
-      end
-    rescue
-      str
+    decoded = Base64.decode(str)
+    input = IO::Memory.new(decoded)
+    Compress::Gzip::Reader.open(input) do |gzip|
+      gzip.gets_to_end
     end
+  rescue
+    str
   end
 )
