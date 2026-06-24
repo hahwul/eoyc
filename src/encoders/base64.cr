@@ -22,11 +22,9 @@ Encoders.register(
     category: "encoding",
     flags: %w[decode reversible]
   ) do |str|
-    begin
-      Base64.decode_string(str)
-    rescue
-      str
-    end
+    Base64.decode_string(str)
+  rescue
+    str
   end
 )
 

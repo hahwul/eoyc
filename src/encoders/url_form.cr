@@ -10,11 +10,9 @@ Encoders.register(
     category: "encoding",
     flags: %w[encode reversible web]
   ) do |str|
-    begin
-      URI.encode_www_form(str)
-    rescue
-      str
-    end
+    URI.encode_www_form(str)
+  rescue
+    str
   end
 )
 
@@ -27,10 +25,8 @@ Encoders.register(
     category: "encoding",
     flags: %w[decode reversible web]
   ) do |str|
-    begin
-      URI.decode_www_form(str)
-    rescue
-      str
-    end
+    URI.decode_www_form(str)
+  rescue
+    str
   end
 )
