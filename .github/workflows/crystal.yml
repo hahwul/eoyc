@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         # Matches `crystal: ~> 1.19` in shard.yml.
-        crystal-version: [1.19.0, 1.20.0]
+        crystal-version: [1.19.0, 1.20.0, 1.21.0]
     steps:
       - uses: actions/checkout@v6
       - uses: crystal-lang/install-crystal@v1
@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        crystal-version: [1.19.0, 1.20.0]
+        crystal-version: [1.19.0, 1.20.0, 1.21.0]
     steps:
       - uses: actions/checkout@v6
       - uses: crystal-lang/install-crystal@v1
