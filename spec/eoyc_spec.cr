@@ -30,6 +30,21 @@ describe "Eoyc.process_line" do
     result.should eq("hello d29ybGQ=")
   end
 
+  it "only encodes the selected regex match within the line" do
+    result = Eoyc.process_line("한 a=same b=same b=same", "", /b=(same)/, ["upcase"])
+    result.should eq("한 a=same b=SAME b=same")
+  end
+
+  it "uses the entire match when an optional first capture does not participate" do
+    result = Eoyc.process_line("a=same b=same", "", /(?<=b=)(x)?same/, ["upcase"])
+    result.should eq("a=same b=SAME")
+  end
+
+  it "encodes all literal substring occurrences" do
+    result = Eoyc.process_line("a=same b=same", "same", "", ["upcase"])
+    result.should eq("a=SAME b=SAME")
+  end
+
   it "applies chain encoding" do
     result = Eoyc.process_line("hello", "", "", ["url", "base64"])
     result.should eq("aGVsbG8%3D")

@@ -22,7 +22,7 @@ echo "hello world" | eoyc -s "world" -e "base64"
 ```
 
 ### `-r REGEX, --regex=REGEX`
-Your choice regex pattern. When specified, only the part matching the regex will be encoded.
+Encode the first match on each line. If the first capture group participates in that match, encode only that group's text.
 
 ```bash
 echo "email: user@example.com" | eoyc -r "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" -e "sha1"

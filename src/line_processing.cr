@@ -4,24 +4,17 @@ require "./encoders"
 module Eoyc
   # Process a single line with the given choice, regex, and encoders
   def self.process_line(line : String, choice : String, regex : Regex | String, encoders : Array(String)) : String
-    if choice != ""
-      target = choice
+    if !choice.empty?
+      replace(line, choice, encode(choice, encoders))
     elsif regex.is_a?(Regex) || !regex.empty?
-      m = find(line, regex)
-      if m
-        if g = m[1]?
-          target = g
-        else
-          target = m[0]
-        end
-      else
-        return line
-      end
-    else
-      target = line
-    end
+      return line unless match = find(line, regex)
 
-    replacement = encode(target, encoders)
-    replace(line, target, replacement)
+      group = match[1]? ? 1 : 0
+      start = match.byte_begin(group)
+      finish = match.byte_end(group)
+      line.byte_slice(0, start) + encode(match[group], encoders) + line.byte_slice(finish)
+    else
+      encode(line, encoders)
+    end
   end
 end
