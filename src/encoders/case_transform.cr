@@ -9,7 +9,7 @@ Encoders.register(
     category: "transform",
     flags: %w[transform text]
   ) do |str|
-    str.split(/(\s+)/).map do |word|
+    str.split(/(\s+)/, remove_empty: true).map do |word|
       if word =~ /^\s+$/
         word
       else
@@ -28,7 +28,7 @@ Encoders.register(
     category: "transform",
     flags: %w[transform text]
   ) do |str|
-    words = str.split(/[\s_\-]+/)
+    words = str.split(/[\s_\-]+/, remove_empty: true)
     next "" if words.empty?
     words[0].downcase + words[1..].map do |word|
       word[0].upcase.to_s + (word.size > 1 ? word[1..].downcase : "")
@@ -75,7 +75,7 @@ Encoders.register(
     category: "transform",
     flags: %w[transform text]
   ) do |str|
-    str.split(/[\s_\-]+/).map do |word|
+    str.split(/[\s_\-]+/, remove_empty: true).map do |word|
       word[0].upcase.to_s + (word.size > 1 ? word[1..].downcase : "")
     end.join
   end
