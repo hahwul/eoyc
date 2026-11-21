@@ -12,8 +12,8 @@ output = ""
 encoders = [] of String
 json_mode = false
 list_json = false
-describe_encoder = ""
-search_keyword = ""
+describe_encoder = nil
+search_keyword = nil
 show_categories = false
 chain_info = false
 show_capabilities = false
@@ -81,7 +81,7 @@ if show_capabilities
       json.field "description", "Chainable encoding/decoding CLI tool"
       json.field "encoder_count", Encoders.specs.size
       json.field "categories", Encoders.categories
-      json.field "input", "stdin (line-by-line)"
+      json.field "input", "positional arguments (one input per argument), otherwise stdin (line-by-line)"
       json.field "chain_separators", [">", "|", ","]
       json.field "flags" do
         json.object do
@@ -95,6 +95,7 @@ if show_capabilities
           json.field "--search", "Search encoders by keyword"
           json.field "--categories", "List encoder categories"
           json.field "--chain-info", "Show step-by-step chain results"
+          json.field "--capabilities", "Show tool capabilities"
           json.field "--trim", "Trim trailing whitespace from input lines"
         end
       end
@@ -132,22 +133,22 @@ if list_json
   exit
 end
 
-if describe_encoder != ""
-  result = Encoders.describe_json(describe_encoder)
+if name = describe_encoder
+  result = Encoders.describe_json(name)
   if result
     puts result
   else
-    STDERR.puts(JSON.build { |j| j.object { j.field "error", "encoder '#{describe_encoder}' not found" } })
+    STDERR.puts(JSON.build { |j| j.object { j.field "error", "encoder '#{name}' not found" } })
     exit(1)
   end
   exit
 end
 
-if search_keyword != ""
-  results = Encoders.search(search_keyword)
+if keyword = search_keyword
+  results = Encoders.search(keyword)
   puts(JSON.build do |json|
     json.object do
-      json.field "query", search_keyword
+      json.field "query", keyword
       json.field "count", results.size
       json.field "results" do
         json.array do

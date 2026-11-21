@@ -1,4 +1,5 @@
 require "spec"
+require "json"
 
 private def run_cli(args : Array(String), input : String = "")
   stdout = IO::Memory.new
@@ -15,6 +16,35 @@ private def run_cli(args : Array(String), input : String = "")
 end
 
 describe "eoyc CLI" do
+  it "describes positional input and capabilities in the capability report" do
+    result = run_cli(["--capabilities"])
+
+    result[:status].should eq(0)
+    capabilities = JSON.parse(result[:stdout])
+    capabilities["input"].as_s.should contain("positional arguments")
+    capabilities["input"].as_s.should contain("stdin")
+    capabilities["flags"].as_h.has_key?("--capabilities").should be_true
+  end
+
+  it "searches all encoders for an explicitly empty query" do
+    result = run_cli(["--search="], "hello\n")
+
+    result[:status].should eq(0)
+    search = JSON.parse(result[:stdout])
+    all_encoders = JSON.parse(run_cli(["--list-json"])[:stdout])
+    search["query"].as_s.should eq("")
+    search["count"].as_i.should eq(all_encoders.as_a.size)
+    search["results"].should eq(all_encoders)
+  end
+
+  it "reports an empty describe name as not found" do
+    result = run_cli(["--describe="], "hello\n")
+
+    result[:status].should eq(1)
+    result[:stdout].should eq("")
+    JSON.parse(result[:stderr])["error"].as_s.should eq("encoder '' not found")
+  end
+
   it "fails for unknown encoders" do
     result = run_cli(["-e", "missing"], "hello\n")
 
