@@ -1,31 +1,5 @@
 require "spec"
-require "./spec_helper"
-
-# Define the Eoyc module here since requiring src/eoyc.cr would trigger CLI parsing.
-# This mirrors the process_line method from src/eoyc.cr.
-module Eoyc
-  def self.process_line(line : String, choice : String, regex : Regex | String, encoders : Array(String)) : String
-    if choice != ""
-      target = choice
-    elsif regex.is_a?(Regex) || !regex.empty?
-      m = find(line, regex)
-      if m
-        if g = m[1]?
-          target = g
-        else
-          target = m[0]
-        end
-      else
-        return line
-      end
-    else
-      target = line
-    end
-
-    replacement = encode(target, encoders)
-    replace(line, target, replacement)
-  end
-end
+require "../src/line_processing"
 
 describe "Eoyc.process_line" do
   it "encodes full line when no choice or regex given" do
