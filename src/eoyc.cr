@@ -209,40 +209,29 @@ begin
         json.field "encoders", encoders.reverse
 
         if chain_info && !encoders.empty?
+          outputs = [] of String
           json.field "steps" do
             json.array do
               lines.each do |line|
-                target = if choice != ""
-                           choice
-                         elsif compiled_regex.is_a?(Regex)
-                           m = find(line, compiled_regex)
-                           m ? (m[1]? || m[0]) : line
-                         else
-                           line
-                         end
-                steps = Encoders.encode_chain_steps(target.to_s, encoders)
+                steps = [] of NamedTuple(encoder: String, output: String)
+                outputs << Eoyc.process_line(line, choice, compiled_regex) do |target|
+                  steps = Encoders.encode_chain_steps(target, encoders)
+                  steps.last?.try { |step| step[:output] } || target
+                end
                 json.object do
                   json.field "input", line
-                  json.field "chain" do
-                    json.array do
-                      steps.each do |step|
-                        json.object do
-                          json.field "encoder", step[:encoder]
-                          json.field "output", step[:output]
-                        end
-                      end
-                    end
-                  end
+                  json.field "chain", steps
                 end
               end
             end
           end
-        end
-
-        json.field "output" do
-          json.array do
-            lines.each do |line|
-              json.string Eoyc.process_line(line, choice, compiled_regex, encoders)
+          json.field "output", outputs
+        else
+          json.field "output" do
+            json.array do
+              lines.each do |line|
+                json.string Eoyc.process_line(line, choice, compiled_regex, encoders)
+              end
             end
           end
         end

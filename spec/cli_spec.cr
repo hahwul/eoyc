@@ -1,4 +1,5 @@
 require "spec"
+require "json"
 
 private def run_cli(args : Array(String), input : String = "")
   stdout = IO::Memory.new
@@ -124,5 +125,26 @@ describe "eoyc CLI" do
 
     result[:status].should eq(0)
     result[:stdout].should eq("  ba\n")
+  end
+
+  it "reports only the transformation applied to the regex-selected text" do
+    result = run_cli(["--json", "--chain-info", "-r", "b=(same)", "-e", "upcase>reverse", "a=same b=same", "a=same"])
+    data = JSON.parse(result[:stdout])
+
+    result[:status].should eq(0)
+    data["output"].should eq(JSON.parse(%(["a=same b=EMAS","a=same"])))
+    data["steps"].should eq(JSON.parse(%([
+      {"input":"a=same b=same","chain":[{"encoder":"upcase","output":"SAME"},{"encoder":"reverse","output":"EMAS"}]},
+      {"input":"a=same","chain":[]}
+    ])))
+  end
+
+  it "reports no chain steps for a missing literal substring" do
+    result = run_cli(["--json", "--chain-info", "-s", "missing", "-e", "base64", "hello"])
+    data = JSON.parse(result[:stdout])
+
+    result[:status].should eq(0)
+    data["output"].should eq(JSON.parse(%(["hello"])))
+    data["steps"].should eq(JSON.parse(%([{"input":"hello","chain":[]}])))
   end
 end
