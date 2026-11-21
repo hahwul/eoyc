@@ -610,13 +610,19 @@ module EncoderUtils
 
   # Base32 (RFC 4648) decode
   def base32_decode(str : String) : String
-    cleaned = str.upcase.gsub(/[^A-Z2-7=]/, "")
+    cleaned = str.upcase(:ascii).gsub(/\s+/, "")
+    data = cleaned.rstrip('=')
+    remainder = data.bytesize % 8
+    return str unless {0, 2, 4, 5, 7}.includes?(remainder)
+
+    padding = cleaned.bytesize - data.bytesize
+    return str unless padding == 0 || padding == (8 - remainder) % 8
+
     bits = 0_u32
     bits_left = 0
     bytes = [] of UInt8
 
-    cleaned.each_char do |char|
-      next if char == '='
+    data.each_char do |char|
       val = case char
             when 'A'..'Z' then char.ord - 'A'.ord
             when '2'..'7' then char.ord - '2'.ord + 26
@@ -631,6 +637,9 @@ module EncoderUtils
         bits_left -= 8
       end
     end
+
+    # The unused bits in the last symbol must be zero.
+    return str unless (bits & ((1_u32 << bits_left) - 1)) == 0
 
     bytes_to_string(bytes)
   rescue

@@ -24,6 +24,22 @@ describe "base64" do
     decoded.should eq(original)
   end
 
+  it "base32 decodes lowercase, unpadded, and whitespace-delimited input" do
+    encode("m y\n", ["base32-decode"]).should eq("f")
+  end
+
+  it "base32 decodes every valid padding length" do
+    {"MZXQ====" => "fo", "MZXW6===" => "foo", "MZXW6YQ=" => "foob", "MZXW6YTB" => "fooba"}.each do |input, expected|
+      encode(input, ["base32-decode"]).should eq(expected)
+    end
+  end
+
+  it "base32 preserves invalid input" do
+    ["MY!======", "M=Y======", "MY=", "M", "MZ======", "====", "ſa"].each do |input|
+      encode(input, ["base32-decode"]).should eq(input)
+    end
+  end
+
   it "crc32 standard test vector" do
     result = encode("123456789", ["crc32"])
     result.should eq("cbf43926")
