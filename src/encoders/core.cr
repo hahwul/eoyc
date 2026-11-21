@@ -445,9 +445,9 @@ module EncoderUtils
     h = basic_chars.size
     b = basic_chars.size
 
-    output << '-' if b > 0 && non_basic.size > 0
+    output << '-' if b > 0
 
-    return str if non_basic.empty?
+    return output.join if non_basic.empty?
 
     all_codepoints = str.each_char.map(&.ord).to_a
 
