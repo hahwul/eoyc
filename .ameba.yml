@@ -1,5 +1,5 @@
 # Ameba configuration for eoyc.
-# Run `just check` (or `crystal run lib/ameba/bin/ameba.cr`) to lint locally.
+# Run `just check` (or `crystal run lib/ameba/src/cli.cr`) to lint locally.
 
 # Public API docs are covered by the docs site, not inline doc comments.
 Documentation:
