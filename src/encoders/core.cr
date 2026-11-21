@@ -288,16 +288,13 @@ module EncoderUtils
   end
 
   def json_unescape(str : String) : String
-    result = str.gsub("\\\"", "\"")
-      .gsub("\\\\", "\\")
-      .gsub("\\n", "\n")
-      .gsub("\\r", "\r")
-      .gsub("\\t", "\t")
-      .gsub("\\b", "\b")
-      .gsub("\\f", "\f")
-    result.gsub(/\\u([0-9a-fA-F]{4})/) { $1.to_i(16).chr.to_s }
-  rescue
-    str
+    str.gsub(/\\ (?:
+      ["\\\/bfnrt]
+      | u[dD][89a-bA-B][0-9a-fA-F]{2}\\u[dD][c-fC-F][0-9a-fA-F]{2}
+      | u(?![dD][89a-fA-F])[0-9a-fA-F]{4} # Standalone code unit outside the surrogate range.
+    )/x) do |escape|
+      String.from_json(%("#{escape}"))
+    end
   end
 
   MORSE_TABLE = {
