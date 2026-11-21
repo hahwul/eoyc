@@ -29,6 +29,22 @@ describe "unicode" do
     decoded.should eq(original)
   end
 
+  it "round trips supplementary characters as surrogate pairs" do
+    original = "한😀\u{10000}\u{10ffff}"
+    encoded = encode(original, ["unicode"])
+    encoded.should eq("\\ud55c\\ud83d\\ude00\\ud800\\udc00\\udbff\\udfff")
+    encode(encoded, ["unicode-decode"]).should eq(original)
+  end
+
+  it "decodes uppercase hex in a surrogate pair within text" do
+    encode("Hi \\uD83D\\uDE00!", ["unicode-decode"]).should eq("Hi 😀!")
+  end
+
+  it "preserves input with an unpaired surrogate" do
+    original = "\\u0061\\ud83d"
+    encode(original, ["unicode-decode"]).should eq(original)
+  end
+
   it "unicode decode invalid input" do
     result = encode("invalid", ["unicode-decode"])
     result.should eq("invalid")

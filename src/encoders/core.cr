@@ -184,16 +184,30 @@ module EncoderUtils
   end
 
   def unicode_encode(str : String) : String
-    str.each_char.map { |char| "\\u" + char.ord.to_s(16).rjust(4, '0') }.join
+    String.build do |io|
+      str.each_char do |char|
+        code_point = char.ord
+        if code_point < 0x10000
+          io << "\\u" << code_point.to_s(16).rjust(4, '0')
+        else
+          offset = code_point - 0x10000
+          io << "\\u" << (0xd800 + (offset >> 10)).to_s(16)
+          io << "\\u" << (0xdc00 + (offset & 0x3ff)).to_s(16)
+        end
+      end
+    end
   end
 
   def unicode_decode(str : String) : String
-    # Match \uXXXX patterns and convert back to characters
-    decoded = str.gsub(/\\u([0-9a-fA-F]{4})/) do |_|
-      code_point = $1.to_i(16)
-      code_point.chr.to_s
+    str.gsub(/\\u([dD][89aAbB][0-9a-fA-F]{2})\\u([dD][c-fC-F][0-9a-fA-F]{2})|\\u([0-9a-fA-F]{4})/) do |_, match|
+      if high = match[1]?
+        high_offset = high.to_i(16) - 0xd800
+        low_offset = match[2].to_i(16) - 0xdc00
+        (0x10000 + (high_offset << 10) + low_offset).chr
+      else
+        match[3].to_i(16).chr
+      end
     end
-    decoded
   rescue
     str
   end
