@@ -40,6 +40,7 @@
 require "mutex"
 require "base64"
 require "json"
+require "html"
 require "big"
 
 # Single specification for an encoder / transformer.
@@ -258,11 +259,7 @@ module EncoderUtils
   end
 
   def html_decode(str : String) : String
-    str.gsub("&#39;", "'")
-      .gsub("&quot;", "\"")
-      .gsub("&gt;", ">")
-      .gsub("&lt;", "<")
-      .gsub("&amp;", "&")
+    HTML.unescape(str)
   end
 
   def json_escape(str : String) : String
