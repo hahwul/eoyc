@@ -386,14 +386,19 @@ module EncoderUtils
         i += 1
       else
         group_size = Math.min(5, work.size - i)
+        return str if group_size == 1
+
         chunk = work[i, group_size]
         # Pad with 'u' (84 + 33 = 117 = 'u') to make 5 chars
         padded = chunk + "u" * (5 - chunk.size)
 
         val = 0_u64
         padded.each_char do |char|
+          return str unless '!' <= char <= 'u'
+
           val = val * 85 + (char.ord - 33).to_u64
         end
+        return str if val > UInt32::MAX
 
         out_bytes = group_size - 1
         out_bytes.times do |j|
