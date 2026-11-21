@@ -1,12 +1,12 @@
 require "spec"
 require "json"
 
-private def run_cli(args : Array(String), input : String = "")
+private def run_cli(cli_path : String, args : Array(String), input : String = "")
   stdout = IO::Memory.new
   stderr = IO::Memory.new
   status = Process.run(
-    "crystal",
-    ["run", "src/eoyc.cr", "--"] + args,
+    cli_path,
+    args,
     input: IO::Memory.new(input),
     output: stdout,
     error: stderr
@@ -16,8 +16,28 @@ private def run_cli(args : Array(String), input : String = "")
 end
 
 describe "eoyc CLI" do
+  cli_path = ""
+
+  around_all do |group|
+    binary = File.tempfile("eoyc-cli", ".exe")
+    cli_path = binary.path
+    begin
+      binary.close
+      status = Process.run(
+        "crystal",
+        ["build", "src/eoyc.cr", "--no-debug", "-o", cli_path],
+        error: Process::Redirect::Inherit
+      )
+      raise "Could not build eoyc for CLI specs (exit #{status.exit_code})" unless status.success?
+
+      group.run
+    ensure
+      File.delete?(cli_path)
+    end
+  end
+
   it "describes positional input and capabilities in the capability report" do
-    result = run_cli(["--capabilities"])
+    result = run_cli(cli_path, ["--capabilities"])
 
     result[:status].should eq(0)
     capabilities = JSON.parse(result[:stdout])
@@ -27,18 +47,18 @@ describe "eoyc CLI" do
   end
 
   it "searches all encoders for an explicitly empty query" do
-    result = run_cli(["--search="], "hello\n")
+    result = run_cli(cli_path, ["--search="], "hello\n")
 
     result[:status].should eq(0)
     search = JSON.parse(result[:stdout])
-    all_encoders = JSON.parse(run_cli(["--list-json"])[:stdout])
+    all_encoders = JSON.parse(run_cli(cli_path, ["--list-json"])[:stdout])
     search["query"].as_s.should eq("")
     search["count"].as_i.should eq(all_encoders.as_a.size)
     search["results"].should eq(all_encoders)
   end
 
   it "reports an empty describe name as not found" do
-    result = run_cli(["--describe="], "hello\n")
+    result = run_cli(cli_path, ["--describe="], "hello\n")
 
     result[:status].should eq(1)
     result[:stdout].should eq("")
@@ -46,7 +66,7 @@ describe "eoyc CLI" do
   end
 
   it "fails for unknown encoders" do
-    result = run_cli(["-e", "missing"], "hello\n")
+    result = run_cli(cli_path, ["-e", "missing"], "hello\n")
 
     result[:status].should eq(1)
     result[:stdout].should eq("")
@@ -54,7 +74,7 @@ describe "eoyc CLI" do
   end
 
   it "fails cleanly for invalid regex patterns" do
-    result = run_cli(["-r", "[", "-e", "base64"], "hello\n")
+    result = run_cli(cli_path, ["-r", "[", "-e", "base64"], "hello\n")
 
     result[:status].should eq(1)
     result[:stdout].should eq("")
@@ -65,7 +85,7 @@ describe "eoyc CLI" do
     path = File.join(Dir.tempdir, "eoyc-invalid-regex-#{Process.pid}.txt")
 
     begin
-      result = run_cli(["-r", "[", "-e", "base64", "-o", path], "hello\n")
+      result = run_cli(cli_path, ["-r", "[", "-e", "base64", "-o", path], "hello\n")
 
       result[:status].should eq(1)
       File.exists?(path).should be_false
@@ -78,7 +98,7 @@ describe "eoyc CLI" do
     path = File.join(Dir.tempdir, "eoyc-json-#{Process.pid}.json")
 
     begin
-      result = run_cli(["-e", "base64", "--json", "-o", path], "hello\n")
+      result = run_cli(cli_path, ["-e", "base64", "--json", "-o", path], "hello\n")
 
       result[:status].should eq(0)
       result[:stdout].should eq("")
@@ -90,15 +110,15 @@ describe "eoyc CLI" do
 
   it "writes each stdin line before waiting for more input" do
     process = Process.new(
-      "crystal",
-      ["run", "src/eoyc.cr", "--", "--trim", "-e", "upcase"],
+      cli_path,
+      ["--trim", "-e", "upcase"],
       input: Process::Redirect::Pipe,
       output: Process::Redirect::Pipe,
       error: Process::Redirect::Inherit
     )
 
     begin
-      process.output.read_timeout = 30.seconds
+      process.output.read_timeout = 10.seconds
       process.input.puts "hello  "
       process.input.flush
       process.output.gets.should eq("HELLO")
@@ -111,21 +131,21 @@ describe "eoyc CLI" do
   end
 
   it "supports positional arguments as direct input (no pipe)" do
-    result = run_cli(["-e", "base64", "hello"])
+    result = run_cli(cli_path, ["-e", "base64", "hello"])
 
     result[:status].should eq(0)
     result[:stdout].should eq("aGVsbG8=\n")
   end
 
   it "supports multiple positional arguments as separate lines" do
-    result = run_cli(["-e", "upcase", "foo", "bar"])
+    result = run_cli(cli_path, ["-e", "upcase", "foo", "bar"])
 
     result[:status].should eq(0)
     result[:stdout].should eq("FOO\nBAR\n")
   end
 
   it "positional arguments take precedence over stdin" do
-    result = run_cli(["-e", "base64", "from-arg"], "from-stdin\n")
+    result = run_cli(cli_path, ["-e", "base64", "from-arg"], "from-stdin\n")
 
     result[:status].should eq(0)
     result[:stdout].should eq("ZnJvbS1hcmc=\n")
@@ -133,7 +153,7 @@ describe "eoyc CLI" do
 
   it "supports --trim to remove trailing whitespace from inputs (echo without -n case)" do
     # Simulate echo "hello" which adds a newline
-    result = run_cli(["--trim", "-e", "sha256-hex"], "hello\n")
+    result = run_cli(cli_path, ["--trim", "-e", "sha256-hex"], "hello\n")
 
     # sha256 of "hello" (no trailing newline)
     expected = "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824\n"
@@ -142,7 +162,7 @@ describe "eoyc CLI" do
   end
 
   it "combines --trim with positional args and chains" do
-    result = run_cli(["--trim", "-e", "base64>base64-decode", "hello  \n"])
+    result = run_cli(cli_path, ["--trim", "-e", "base64>base64-decode", "hello  \n"])
 
     result[:status].should eq(0)
     result[:stdout].should eq("hello\n")
@@ -150,14 +170,14 @@ describe "eoyc CLI" do
 
   it "preserves whitespace in reversible transforms (no hidden strip in chain)" do
     # reverse on a string with trailing spaces should keep them
-    result = run_cli(["-e", "reverse"], "ab  \n")
+    result = run_cli(cli_path, ["-e", "reverse"], "ab  \n")
 
     result[:status].should eq(0)
     result[:stdout].should eq("  ba\n")
   end
 
   it "reports only the transformation applied to the regex-selected text" do
-    result = run_cli(["--json", "--chain-info", "-r", "b=(same)", "-e", "upcase>reverse", "a=same b=same", "a=same"])
+    result = run_cli(cli_path, ["--json", "--chain-info", "-r", "b=(same)", "-e", "upcase>reverse", "a=same b=same", "a=same"])
     data = JSON.parse(result[:stdout])
 
     result[:status].should eq(0)
@@ -172,7 +192,7 @@ describe "eoyc CLI" do
   end
 
   it "reports no chain steps for a missing literal substring" do
-    result = run_cli(["--json", "--chain-info", "-s", "missing", "-e", "base64", "hello"])
+    result = run_cli(cli_path, ["--json", "--chain-info", "-s", "missing", "-e", "base64", "hello"])
     data = JSON.parse(result[:stdout])
 
     result[:status].should eq(0)
