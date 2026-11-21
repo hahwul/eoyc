@@ -133,10 +133,13 @@ describe "eoyc CLI" do
 
     result[:status].should eq(0)
     data["output"].should eq(JSON.parse(%(["a=same b=EMAS","a=same"])))
-    data["steps"].should eq(JSON.parse(%([
-      {"input":"a=same b=same","chain":[{"encoder":"upcase","output":"SAME"},{"encoder":"reverse","output":"EMAS"}]},
-      {"input":"a=same","chain":[]}
-    ])))
+    expected_steps = JSON.parse(<<-JSON)
+      [
+        {"input":"a=same b=same","chain":[{"encoder":"upcase","output":"SAME"},{"encoder":"reverse","output":"EMAS"}]},
+        {"input":"a=same","chain":[]}
+      ]
+      JSON
+    data["steps"].should eq(expected_steps)
   end
 
   it "reports no chain steps for a missing literal substring" do
