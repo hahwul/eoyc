@@ -58,6 +58,28 @@ describe "eoyc CLI" do
     end
   end
 
+  it "writes each stdin line before waiting for more input" do
+    process = Process.new(
+      "crystal",
+      ["run", "src/eoyc.cr", "--", "--trim", "-e", "upcase"],
+      input: Process::Redirect::Pipe,
+      output: Process::Redirect::Pipe,
+      error: Process::Redirect::Inherit
+    )
+
+    begin
+      process.output.read_timeout = 30.seconds
+      process.input.puts "hello  "
+      process.input.flush
+      process.output.gets.should eq("HELLO")
+    ensure
+      process.input.close
+      status = process.wait
+    end
+
+    status.exit_code.should eq(0)
+  end
+
   it "supports positional arguments as direct input (no pipe)" do
     result = run_cli(["-e", "base64", "hello"])
 

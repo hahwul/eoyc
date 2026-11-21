@@ -202,16 +202,14 @@ rescue ex : ArgumentError
   exit(1)
 end
 
-# Collect input lines: positional args (if any) take precedence over stdin (enables `eoyc -e base64 hello`)
-input_lines = ARGV.dup
-if input_lines.empty?
-  # No positional args; read from stdin (filter mode)
-  STDIN.each_line { |line| input_lines << line }
-end
-
-if trim_input
-  input_lines = input_lines.map(&.rstrip)
-end
+input_lines = if !ARGV.empty?
+                ARGV
+              elsif json_mode || !output.empty?
+                # JSON needs the full input, and the output file may also be stdin's source.
+                STDIN.each_line.to_a
+              else
+                STDIN.each_line
+              end
 
 # Main processing loop
 io = if output != ""
@@ -226,7 +224,8 @@ io = if output != ""
      end
 begin
   if json_mode
-    lines = input_lines
+    lines = input_lines.to_a
+    lines = lines.map(&.rstrip) if trim_input
 
     io.puts(JSON.build do |json|
       json.object do
@@ -275,6 +274,7 @@ begin
     end)
   else
     input_lines.each do |line|
+      line = line.rstrip if trim_input
       io.puts Eoyc.process_line(line, choice, compiled_regex, encoders)
     end
   end
