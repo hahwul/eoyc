@@ -1,0 +1,1002 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Eoyc</title>
+    <link>https://eoyc.hahwul.com/</link>
+    <description>Endless Options, Your Chain - A powerful CLI tool for encoding and hashing strings with flexible chain operations</description>
+    <atom:link href="https://eoyc.hahwul.com/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Background</title>
+      <link>https://eoyc.hahwul.com/background/</link>
+      <guid>https://eoyc.hahwul.com/background/</guid>
+      <description>Eoyc (Endless Options, Your Chain) is a command-line tool designed to provide flexible and powerful text encoding and transformation capabilities. Built with Crystal for high performance and ease of use, eoyc enables users to encode specific parts of text using a variety of encoders and hash functio...</description>
+      <content:encoded><![CDATA[<h2 id="about-eoyc">About Eoyc</h2>
+<p>Eoyc (Endless Options, Your Chain) is a command-line tool designed to provide flexible and powerful text encoding and transformation capabilities. Built with Crystal for high performance and ease of use, eoyc enables users to encode specific parts of text using a variety of encoders and hash functions.</p>
+<h2 id="why-eoyc">Why Eoyc?</h2>
+<p>When working with security testing, data processing, or text manipulation, there's often a need to encode or hash specific parts of text while leaving the rest intact. Traditional encoding tools typically work on entire files or streams, but eoyc provides fine-grained control:</p>
+<ul>
+<li><strong>Selective Encoding</strong>: Encode only specific strings or regex patterns</li>
+<li><strong>Chain Operations</strong>: Combine multiple encoders in sequence</li>
+<li><strong>Stream Processing</strong>: Work with STDIN/STDOUT for easy integration in pipelines</li>
+<li><strong>Multiple Encoders</strong>: Support for 20+ different encoders and transformations</li>
+</ul>
+<h2 id="design-philosophy">Design Philosophy</h2>
+<p>Eoyc follows these core principles:</p>
+<ol>
+<li><strong>Simplicity</strong>: Easy to use with intuitive command-line interface</li>
+<li><strong>Flexibility</strong>: Multiple ways to select and transform text</li>
+<li><strong>Composability</strong>: Chain operations together for complex transformations</li>
+<li><strong>Performance</strong>: Built with Crystal for fast execution</li>
+<li><strong>Unix Philosophy</strong>: Read from STDIN, write to STDOUT, do one thing well</li>
+</ol>
+<h2 id="use-cases">Use Cases</h2>
+<h3 id="security-testing">Security Testing</h3>
+<ul>
+<li>Encode payloads for web application testing</li>
+<li>Generate various encodings of test strings</li>
+<li>Obfuscate sensitive data in test scenarios</li>
+</ul>
+<h3 id="data-processing">Data Processing</h3>
+<ul>
+<li>Anonymize log files by hashing sensitive information</li>
+<li>Transform data formats in processing pipelines</li>
+<li>Encode URLs or special characters in bulk</li>
+</ul>
+<h3 id="development">Development</h3>
+<ul>
+<li>Test encoding/decoding implementations</li>
+<li>Generate test data in various formats</li>
+<li>Quick command-line encoding utilities</li>
+</ul>
+<h2 id="architecture">Architecture</h2>
+<p>Eoyc is built with a modular encoder system:</p>
+<pre><code>src/
+├── eoyc.cr           # Main CLI entry point
+├── encoders.cr       # Encoder aggregation
+├── encoders/         # Individual encoder modules
+│   ├── core.cr       # Framework and registry
+│   ├── base64.cr     # Base64 encoders
+│   ├── digests.cr    # Hash functions
+│   ├── hex.cr        # Hex encoders
+│   ├── url_form.cr   # URL encoders
+│   ├── text.cr       # Text transformations
+│   ├── binary.cr     # Binary encoders
+│   ├── octal.cr      # Octal encoders
+│   ├── unicode.cr    # Unicode encoders
+│   └── charcode.cr   # Character code encoders
+└── utils.cr          # Utility functions
+</code></pre>
+<p>Each encoder is registered in a global registry and can be easily extended to support new encoding schemes.</p>
+<h2 id="technology-stack">Technology Stack</h2>
+<ul>
+<li><strong>Language</strong>: Crystal 1.7.3+</li>
+<li><strong>Build System</strong>: Crystal Shards</li>
+<li><strong>Package Management</strong>: Homebrew (macOS)</li>
+<li><strong>Testing</strong>: Crystal Spec</li>
+</ul>
+<h2 id="license">License</h2>
+<p>Eoyc is open source software licensed under the MIT License. See the <a href="https://github.com/hahwul/eoyc/blob/main/LICENSE">LICENSE</a> file for details.</p>
+<h2 id="contributing">Contributing</h2>
+<p>Contributions are welcome! Please see the <a href="https://github.com/hahwul/eoyc">GitHub repository</a> for more information on how to contribute.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Base64 Encoders</title>
+      <link>https://eoyc.hahwul.com/encoders/base64/</link>
+      <guid>https://eoyc.hahwul.com/encoders/base64/</guid>
+      <description>Base64 encoding is a binary-to-text encoding scheme that represents binary data in an ASCII string format. Aliases: base64-encode Standard Base64 encoding with padding. Decode Base64 encoded strings back to original text. Aliases: base64-url-encode URL-safe Base64 encoding without padding. Uses - an...</description>
+      <content:encoded><![CDATA[<p>Base64 encoding is a binary-to-text encoding scheme that represents binary data in an ASCII string format.</p>
+<h2 id="base64">base64</h2>
+<p><strong>Aliases:</strong> <code>base64-encode</code></p>
+<p>Standard Base64 encoding with padding.</p>
+<h3 id="usage">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&quot;</span>
+<span class="hljs-comment"># Output: aGVsbG8=</span>
+</code></pre>
+<h3 id="example">Example</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&quot;</span>
+<span class="hljs-comment"># Output: dGVzdCBkYXRh</span>
+</code></pre>
+<h2 id="base64-decode">base64-decode</h2>
+<p>Decode Base64 encoded strings back to original text.</p>
+<h3 id="usage-1">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;aGVsbG8=&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64-decode&quot;</span>
+<span class="hljs-comment"># Output: hello</span>
+</code></pre>
+<h3 id="example-1">Example</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;dGVzdCBkYXRh&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64-decode&quot;</span>
+<span class="hljs-comment"># Output: test data</span>
+</code></pre>
+<h2 id="base64-url">base64-url</h2>
+<p><strong>Aliases:</strong> <code>base64-url-encode</code></p>
+<p>URL-safe Base64 encoding without padding. Uses <code>-</code> and <code>_</code> instead of <code>+</code> and <code>/</code> to be URL-safe.</p>
+<h3 id="usage-2">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello world&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64-url&quot;</span>
+<span class="hljs-comment"># Output: aGVsbG8gd29ybGQ</span>
+</code></pre>
+<h3 id="use-cases">Use Cases</h3>
+<ul>
+<li>Encoding data for URLs and filenames</li>
+<li>JWT tokens</li>
+<li>Web-safe data transmission</li>
+</ul>
+<h2 id="base64-url-decode">base64-url-decode</h2>
+<p>Decode URL-safe Base64 encoded strings.</p>
+<h3 id="usage-3">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;aGVsbG8gd29ybGQ&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64-url-decode&quot;</span>
+<span class="hljs-comment"># Output: hello world</span>
+</code></pre>
+<h2 id="chaining-with-base64">Chaining with Base64</h2>
+<p>Base64 encoders work well in chains:</p>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Encode then hash</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&gt;md5&quot;</span>
+
+<span class="hljs-comment"># Hash then encode</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha256&gt;base64&quot;</span>
+</code></pre>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Binary &amp; Character Encoders</title>
+      <link>https://eoyc.hahwul.com/encoders/binary/</link>
+      <guid>https://eoyc.hahwul.com/encoders/binary/</guid>
+      <description>These encoders convert text to various numeric and binary representations. Aliases: bin-encode Encodes text to 8-bit binary representation with spaces between bytes. Each character is converted to its 8-bit binary representation: &apos;a&apos; (97) → 01100001 &apos;b&apos; (98) → 01100010 &apos;c&apos; (99) → 01100011 Decodes bi...</description>
+      <content:encoded><![CDATA[<p>These encoders convert text to various numeric and binary representations.</p>
+<h2 id="bin">bin</h2>
+<p><strong>Aliases:</strong> <code>bin-encode</code></p>
+<p>Encodes text to 8-bit binary representation with spaces between bytes.</p>
+<h3 id="usage">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abc&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin&quot;</span>
+<span class="hljs-comment"># Output: 01100001 01100010 01100011</span>
+</code></pre>
+<h3 id="how-it-works">How It Works</h3>
+<p>Each character is converted to its 8-bit binary representation:</p>
+<ul>
+<li>'a' (97) → 01100001</li>
+<li>'b' (98) → 01100010</li>
+<li>'c' (99) → 01100011</li>
+</ul>
+<h3 id="examples">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;A&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin&quot;</span>
+<span class="hljs-comment"># Output: 01000001</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin&quot;</span>
+<span class="hljs-comment"># Output: 01101000 01100101 01101100 01101100 01101111</span>
+</code></pre>
+<h2 id="bin-decode">bin-decode</h2>
+<p>Decodes binary strings back to text.</p>
+<h3 id="usage-1">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;01100001 01100010 01100011&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin-decode&quot;</span>
+<span class="hljs-comment"># Output: abc</span>
+</code></pre>
+<h3 id="examples-1">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;01000001&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin-decode&quot;</span>
+<span class="hljs-comment"># Output: A</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;01101000 01100101 01101100 01101100 01101111&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin-decode&quot;</span>
+<span class="hljs-comment"># Output: hello</span>
+</code></pre>
+<h2 id="oct">oct</h2>
+<p><strong>Aliases:</strong> <code>oct-encode</code></p>
+<p>Encodes text to octal (base 8) representation.</p>
+<h3 id="usage-2">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abc&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct&quot;</span>
+<span class="hljs-comment"># Output: 141142143</span>
+</code></pre>
+<h3 id="how-it-works-1">How It Works</h3>
+<p>Each character is converted to its octal ASCII value:</p>
+<ul>
+<li>'a' (97) → 141 (octal)</li>
+<li>'b' (98) → 142 (octal)</li>
+<li>'c' (99) → 143 (octal)</li>
+</ul>
+<h3 id="examples-2">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;A&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct&quot;</span>
+<span class="hljs-comment"># Output: 101</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct&quot;</span>
+<span class="hljs-comment"># Output: 150145154154157</span>
+</code></pre>
+<h2 id="oct-decode">oct-decode</h2>
+<p>Decodes octal strings back to text.</p>
+<h3 id="usage-3">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;141142143&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct-decode&quot;</span>
+<span class="hljs-comment"># Output: abc</span>
+</code></pre>
+<h3 id="examples-3">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;101&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct-decode&quot;</span>
+<span class="hljs-comment"># Output: A</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;150145154154157&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct-decode&quot;</span>
+<span class="hljs-comment"># Output: hello</span>
+</code></pre>
+<h2 id="unicode">unicode</h2>
+<p><strong>Aliases:</strong> <code>unicode-encode</code></p>
+<p>Encodes text to Unicode escape sequences in the format <code>\uXXXX</code>.</p>
+<h3 id="usage-4">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode&quot;</span>
+<span class="hljs-comment"># Output: \u0068\u0065\u006c\u006c\u006f</span>
+</code></pre>
+<h3 id="examples-4">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;A&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode&quot;</span>
+<span class="hljs-comment"># Output: \u0041</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;@&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode&quot;</span>
+<span class="hljs-comment"># Output: \u0040</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abc&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode&quot;</span>
+<span class="hljs-comment"># Output: \u0061\u0062\u0063</span>
+</code></pre>
+<h3 id="use-cases">Use Cases</h3>
+<ul>
+<li>JavaScript/JSON string escaping</li>
+<li>Unicode character representation</li>
+<li>Cross-platform text encoding</li>
+</ul>
+<h2 id="unicode-decode">unicode-decode</h2>
+<p>Decodes Unicode escape sequences back to text.</p>
+<h3 id="usage-5">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;\\u0068\\u0065\\u006c\\u006c\\u006f&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode-decode&quot;</span>
+<span class="hljs-comment"># Output: hello</span>
+</code></pre>
+<p>Note: The backslashes need to be escaped in shell.</p>
+<h3 id="examples-5">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;\\u0041&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode-decode&quot;</span>
+<span class="hljs-comment"># Output: A</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;\\u0061\\u0062\\u0063&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode-decode&quot;</span>
+<span class="hljs-comment"># Output: abc</span>
+</code></pre>
+<h2 id="charcode">charcode</h2>
+<p><strong>Aliases:</strong> <code>charcode-encode</code></p>
+<p>Encodes text to decimal ASCII/character code values separated by spaces.</p>
+<h3 id="usage-6">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abc&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode&quot;</span>
+<span class="hljs-comment"># Output: 97 98 99</span>
+</code></pre>
+<h3 id="how-it-works-2">How It Works</h3>
+<p>Each character is converted to its decimal ASCII value:</p>
+<ul>
+<li>'a' → 97</li>
+<li>'b' → 98</li>
+<li>'c' → 99</li>
+</ul>
+<h3 id="examples-6">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;A&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode&quot;</span>
+<span class="hljs-comment"># Output: 65</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode&quot;</span>
+<span class="hljs-comment"># Output: 104 101 108 108 111</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;123&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode&quot;</span>
+<span class="hljs-comment"># Output: 49 50 51</span>
+</code></pre>
+<h2 id="charcode-decode">charcode-decode</h2>
+<p>Decodes character code values back to text.</p>
+<h3 id="usage-7">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;97 98 99&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode-decode&quot;</span>
+<span class="hljs-comment"># Output: abc</span>
+</code></pre>
+<h3 id="examples-7">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;65&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode-decode&quot;</span>
+<span class="hljs-comment"># Output: A</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;104 101 108 108 111&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode-decode&quot;</span>
+<span class="hljs-comment"># Output: hello</span>
+</code></pre>
+<h2 id="round-trip-examples">Round-Trip Examples</h2>
+<p>All encoding/decoding pairs support round-trip conversion:</p>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Binary</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin-decode&quot;</span>
+<span class="hljs-comment"># Output: test</span>
+
+<span class="hljs-comment"># Octal</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct-decode&quot;</span>
+<span class="hljs-comment"># Output: test</span>
+
+<span class="hljs-comment"># Unicode</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode-decode&quot;</span>
+<span class="hljs-comment"># Output: test</span>
+
+<span class="hljs-comment"># Character codes</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode-decode&quot;</span>
+<span class="hljs-comment"># Output: test</span>
+</code></pre>
+<h2 id="use-cases-1">Use Cases</h2>
+<h3 id="binary-encoding">Binary Encoding</h3>
+<ul>
+<li>Low-level data inspection</li>
+<li>Educational purposes</li>
+<li>Binary data visualization</li>
+</ul>
+<h3 id="octal-encoding">Octal Encoding</h3>
+<ul>
+<li>Unix file permissions representation</li>
+<li>Legacy system compatibility</li>
+</ul>
+<h3 id="unicode-encoding">Unicode Encoding</h3>
+<ul>
+<li>JavaScript string escaping</li>
+<li>JSON data encoding</li>
+<li>Cross-platform character handling</li>
+</ul>
+<h3 id="character-code-encoding">Character Code Encoding</h3>
+<ul>
+<li>ASCII value inspection</li>
+<li>Protocol development</li>
+<li>Data analysis</li>
+</ul>
+<h2 id="chaining-examples">Chaining Examples</h2>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Character codes to hex</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abc&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode&gt;hex&quot;</span>
+
+<span class="hljs-comment"># Binary to base64</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin&gt;base64&quot;</span>
+
+<span class="hljs-comment"># Octal to MD5</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct&gt;md5&quot;</span>
+</code></pre>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Hash &amp; Digest Encoders</title>
+      <link>https://eoyc.hahwul.com/encoders/digests/</link>
+      <guid>https://eoyc.hahwul.com/encoders/digests/</guid>
+      <description>Hash functions create fixed-size outputs (digests) from variable-size inputs. They are one-way functions - you cannot decode them back to the original. Algorithm: MD5 (Message Digest Algorithm 5) Produces a 128-bit (32 hexadecimal characters) hash value. Note: MD5 is not cryptographically secure and...</description>
+      <content:encoded><![CDATA[<p>Hash functions create fixed-size outputs (digests) from variable-size inputs. They are one-way functions - you cannot decode them back to the original.</p>
+<h2 id="md5">MD5</h2>
+<p><strong>Algorithm:</strong> MD5 (Message Digest Algorithm 5)</p>
+<p>Produces a 128-bit (32 hexadecimal characters) hash value. Note: MD5 is not cryptographically secure and should not be used for security purposes.</p>
+<h3 id="usage">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;password&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;md5&quot;</span>
+<span class="hljs-comment"># Output: 5f4dcc3b5aa765d61d8327deb882cf99</span>
+</code></pre>
+<h3 id="output-format">Output Format</h3>
+<p>Hexadecimal string (32 characters)</p>
+<h2 id="sha1">SHA1</h2>
+<p><strong>Algorithm:</strong> SHA-1 (Secure Hash Algorithm 1)</p>
+<p>Produces a 160-bit hash value, typically rendered as Base64 for compact representation.</p>
+<h3 id="usage-1">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha1&quot;</span>
+<span class="hljs-comment"># Output: qUqP5cyxm6YcTAhz05Hph5gvu9M=</span>
+</code></pre>
+<h3 id="output-format-1">Output Format</h3>
+<p>Base64 encoded string</p>
+<h2 id="sha1-hex">sha1-hex</h2>
+<p>Same as SHA1 but outputs in hexadecimal format.</p>
+<h3 id="usage-2">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha1-hex&quot;</span>
+<span class="hljs-comment"># Output: a94a8fe5ccb19ba61c4c0873d391e987982fbbd3</span>
+</code></pre>
+<h3 id="output-format-2">Output Format</h3>
+<p>Hexadecimal string (40 characters)</p>
+<h2 id="sha256">SHA256</h2>
+<p><strong>Algorithm:</strong> SHA-256 (Secure Hash Algorithm 256-bit)</p>
+<p>Produces a 256-bit hash value, rendered as Base64.</p>
+<h3 id="usage-3">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha256&quot;</span>
+<span class="hljs-comment"># Output: n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=</span>
+</code></pre>
+<h3 id="output-format-3">Output Format</h3>
+<p>Base64 encoded string</p>
+<h3 id="use-cases">Use Cases</h3>
+<ul>
+<li>Password hashing (with salt)</li>
+<li>Data integrity verification</li>
+<li>Digital signatures</li>
+</ul>
+<h2 id="sha256-hex">sha256-hex</h2>
+<p>Same as SHA256 but outputs in hexadecimal format.</p>
+<h3 id="usage-4">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha256-hex&quot;</span>
+<span class="hljs-comment"># Output: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</span>
+</code></pre>
+<h3 id="output-format-4">Output Format</h3>
+<p>Hexadecimal string (64 characters)</p>
+<h2 id="sha512">SHA512</h2>
+<p><strong>Algorithm:</strong> SHA-512 (Secure Hash Algorithm 512-bit)</p>
+<p>Produces a 512-bit hash value, rendered as Base64.</p>
+<h3 id="usage-5">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha512&quot;</span>
+<span class="hljs-comment"># Output: 7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==</span>
+</code></pre>
+<h3 id="output-format-5">Output Format</h3>
+<p>Base64 encoded string</p>
+<h2 id="sha512-hex">sha512-hex</h2>
+<p>Same as SHA512 but outputs in hexadecimal format.</p>
+<h3 id="usage-6">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha512-hex&quot;</span>
+<span class="hljs-comment"># Output: ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fff5b143712c026c914a1acd0c1d0e7c5e5b48e</span>
+</code></pre>
+<h3 id="output-format-6">Output Format</h3>
+<p>Hexadecimal string (128 characters)</p>
+<h2 id="combining-hashes-in-chains">Combining Hashes in Chains</h2>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># MD5 then SHA256</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;md5&gt;sha256&quot;</span>
+
+<span class="hljs-comment"># Base64 encode before hashing</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&gt;sha512&quot;</span>
+
+<span class="hljs-comment"># Multiple hash transformations</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;md5&gt;base64&gt;sha1&quot;</span>
+</code></pre>
+<h2 id="security-considerations">Security Considerations</h2>
+<ul>
+<li><strong>MD5</strong>: Not secure for cryptographic purposes, use SHA-256 or higher</li>
+<li><strong>SHA-1</strong>: Deprecated for security-critical applications, use SHA-256 or higher</li>
+<li><strong>SHA-256/SHA-512</strong>: Recommended for security applications</li>
+<li>Always use salts when hashing passwords</li>
+</ul>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Hex Encoders</title>
+      <link>https://eoyc.hahwul.com/encoders/hex/</link>
+      <guid>https://eoyc.hahwul.com/encoders/hex/</guid>
+      <description>Hexadecimal encoding converts each byte to its two-digit hexadecimal representation. Aliases: hex-encode Encodes text to lowercase hexadecimal representation. Each character is converted to its hexadecimal ASCII value: &apos;h&apos; (104) → 68 &apos;e&apos; (101) → 65 &apos;l&apos; (108) → 6c &apos;l&apos; (108) → 6c &apos;o&apos; (111) → 6f Decode...</description>
+      <content:encoded><![CDATA[<p>Hexadecimal encoding converts each byte to its two-digit hexadecimal representation.</p>
+<h2 id="hex">hex</h2>
+<p><strong>Aliases:</strong> <code>hex-encode</code></p>
+<p>Encodes text to lowercase hexadecimal representation.</p>
+<h3 id="usage">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex&quot;</span>
+<span class="hljs-comment"># Output: 68656c6c6f</span>
+</code></pre>
+<h3 id="how-it-works">How It Works</h3>
+<p>Each character is converted to its hexadecimal ASCII value:</p>
+<ul>
+<li>'h' (104) → 68</li>
+<li>'e' (101) → 65</li>
+<li>'l' (108) → 6c</li>
+<li>'l' (108) → 6c</li>
+<li>'o' (111) → 6f</li>
+</ul>
+<h3 id="examples">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;ABC&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex&quot;</span>
+<span class="hljs-comment"># Output: 414243</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test123&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex&quot;</span>
+<span class="hljs-comment"># Output: 74657374313233</span>
+</code></pre>
+<h2 id="hex-decode">hex-decode</h2>
+<p>Decodes hexadecimal strings back to original text.</p>
+<h3 id="usage-1">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;68656c6c6f&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex-decode&quot;</span>
+<span class="hljs-comment"># Output: hello</span>
+</code></pre>
+<h3 id="examples-1">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;414243&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex-decode&quot;</span>
+<span class="hljs-comment"># Output: ABC</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;74657374313233&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex-decode&quot;</span>
+<span class="hljs-comment"># Output: test123</span>
+</code></pre>
+<h2 id="round-trip-example">Round-Trip Example</h2>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Encode then decode</span>
+<span class="hljs-variable">original</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;Hello World&quot;</span>
+<span class="hljs-variable">encoded</span><span class="hljs-operator">=</span><span class="hljs-keyword">$(</span><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;</span><span class="hljs-variable">$original</span><span class="hljs-string">&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex&quot;</span><span class="hljs-keyword">)</span>
+<span class="hljs-variable">decoded</span><span class="hljs-operator">=</span><span class="hljs-keyword">$(</span><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;</span><span class="hljs-variable">$encoded</span><span class="hljs-string">&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex-decode&quot;</span><span class="hljs-keyword">)</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Original: </span><span class="hljs-variable">$original</span><span class="hljs-string">&quot;</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Encoded: </span><span class="hljs-variable">$encoded</span><span class="hljs-string">&quot;</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Decoded: </span><span class="hljs-variable">$decoded</span><span class="hljs-string">&quot;</span>
+</code></pre>
+<h2 id="use-cases">Use Cases</h2>
+<ul>
+<li>Representing binary data in text format</li>
+<li>Debugging and inspecting byte values</li>
+<li>Color codes and data serialization</li>
+<li>Low-level data manipulation</li>
+</ul>
+<h2 id="chaining-with-hex">Chaining with Hex</h2>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Hex encode then Base64</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex&gt;base64&quot;</span>
+
+<span class="hljs-comment"># Hash then hex encode (redundant since most hashes already output hex)</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha256&gt;hex&quot;</span>
+</code></pre>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Text Transformations</title>
+      <link>https://eoyc.hahwul.com/encoders/text/</link>
+      <guid>https://eoyc.hahwul.com/encoders/text/</guid>
+      <description>Text transformation encoders modify text in various ways without encoding to different formats. ROT13 (Rotate by 13 places) is a simple letter substitution cipher that replaces each letter with the letter 13 positions after it in the alphabet. A-Z → N-ZA-M a-z → n-za-m Numbers and special characters...</description>
+      <content:encoded><![CDATA[<p>Text transformation encoders modify text in various ways without encoding to different formats.</p>
+<h2 id="rot13">rot13</h2>
+<p>ROT13 (Rotate by 13 places) is a simple letter substitution cipher that replaces each letter with the letter 13 positions after it in the alphabet.</p>
+<h3 id="usage">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;rot13&quot;</span>
+<span class="hljs-comment"># Output: uryyb</span>
+</code></pre>
+<h3 id="how-it-works">How It Works</h3>
+<ul>
+<li>A-Z → N-ZA-M</li>
+<li>a-z → n-za-m</li>
+<li>Numbers and special characters remain unchanged</li>
+</ul>
+<h3 id="decoding">Decoding</h3>
+<p>Apply ROT13 twice to get back the original:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;uryyb&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;rot13&quot;</span>
+<span class="hljs-comment"># Output: hello</span>
+</code></pre>
+<h3 id="examples">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;secret message&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;rot13&quot;</span>
+<span class="hljs-comment"># Output: frperg zrffntr</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;ROT13 Example&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;rot13&quot;</span>
+<span class="hljs-comment"># Output: EBG13 Rknzcyr</span>
+</code></pre>
+<h2 id="upcase">upcase</h2>
+<p>Converts all text to uppercase.</p>
+<h3 id="usage-1">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello world&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;upcase&quot;</span>
+<span class="hljs-comment"># Output: HELLO WORLD</span>
+</code></pre>
+<h3 id="examples-1">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test123&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;upcase&quot;</span>
+<span class="hljs-comment"># Output: TEST123</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Mixed Case Text&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;upcase&quot;</span>
+<span class="hljs-comment"># Output: MIXED CASE TEXT</span>
+</code></pre>
+<h2 id="downcase">downcase</h2>
+<p>Converts all text to lowercase.</p>
+<h3 id="usage-2">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;HELLO WORLD&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;downcase&quot;</span>
+<span class="hljs-comment"># Output: hello world</span>
+</code></pre>
+<h3 id="examples-2">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;TEST123&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;downcase&quot;</span>
+<span class="hljs-comment"># Output: test123</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Mixed Case Text&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;downcase&quot;</span>
+<span class="hljs-comment"># Output: mixed case text</span>
+</code></pre>
+<h2 id="reverse">reverse</h2>
+<p>Reverses the order of characters in the text.</p>
+<h3 id="usage-3">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;reverse&quot;</span>
+<span class="hljs-comment"># Output: olleh</span>
+</code></pre>
+<h3 id="examples-3">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hello World&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;reverse&quot;</span>
+<span class="hljs-comment"># Output: dlroW olleH</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;12345&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;reverse&quot;</span>
+<span class="hljs-comment"># Output: 54321</span>
+</code></pre>
+<h3 id="double-reverse">Double Reverse</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;reverse&gt;reverse&quot;</span>
+<span class="hljs-comment"># Output: test (back to original)</span>
+</code></pre>
+<h2 id="redacted">redacted</h2>
+<p><strong>Aliases:</strong> <code>redaction</code></p>
+<p>Replaces all characters with block characters to redact sensitive information.</p>
+<h3 id="usage-4">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;sensitive data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;redacted&quot;</span>
+<span class="hljs-comment"># Output: ◼◼◼◼◼◼◼◼◼◼◼◼◼◼</span>
+</code></pre>
+<h3 id="examples-4">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;password123&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;redacted&quot;</span>
+<span class="hljs-comment"># Output: ◼◼◼◼◼◼◼◼◼◼◼</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;credit card: 1234-5678-9012-3456&quot;</span> <span class="hljs-punctuation">|</span> eoyc -s <span class="hljs-string">&quot;1234-5678-9012-3456&quot;</span> -e <span class="hljs-string">&quot;redacted&quot;</span>
+<span class="hljs-comment"># Output: credit card: ◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼◼</span>
+</code></pre>
+<h3 id="use-cases">Use Cases</h3>
+<ul>
+<li>Log sanitization</li>
+<li>Data anonymization</li>
+<li>Privacy compliance</li>
+<li>Demo/screenshot preparation</li>
+</ul>
+<h2 id="combining-text-transformations">Combining Text Transformations</h2>
+<p>Text transformations work great in chains:</p>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Uppercase then reverse</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;upcase&gt;reverse&quot;</span>
+<span class="hljs-comment"># Output: OLLEH</span>
+
+<span class="hljs-comment"># ROT13 then uppercase</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;secret&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;rot13&gt;upcase&quot;</span>
+<span class="hljs-comment"># Output: FRPERG</span>
+
+<span class="hljs-comment"># Reverse then ROT13</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;reverse&gt;rot13&quot;</span>
+<span class="hljs-comment"># Output: gfxr</span>
+
+<span class="hljs-comment"># URL encode then uppercase</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&gt;upcase&quot;</span>
+<span class="hljs-comment"># Output: TEST%20DATA</span>
+</code></pre>
+<h2 id="practical-examples">Practical Examples</h2>
+<h3 id="case-normalization">Case Normalization</h3>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Normalize emails to lowercase</span>
+cat emails.txt <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;downcase&quot;</span>
+</code></pre>
+<h3 id="obfuscation">Obfuscation</h3>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Simple obfuscation using ROT13</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hint&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;rot13&quot;</span>
+</code></pre>
+<h3 id="data-sanitization">Data Sanitization</h3>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Redact sensitive patterns</span>
+cat logs.txt <span class="hljs-punctuation">|</span> eoyc -r <span class="hljs-string">&#39;\d{3}-\d{2}-\d{4}&#39;</span> -e <span class="hljs-string">&quot;redacted&quot;</span>
+</code></pre>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>URL Encoders</title>
+      <link>https://eoyc.hahwul.com/encoders/url/</link>
+      <guid>https://eoyc.hahwul.com/encoders/url/</guid>
+      <description>URL encoding (also called percent-encoding) converts characters into a format that can be transmitted over the Internet. Aliases: url-encode Encodes text using application/x-www-form-urlencoded format. Special characters are converted to %XX format where XX is the hexadecimal value. Space → %20 ! → ...</description>
+      <content:encoded><![CDATA[<p>URL encoding (also called percent-encoding) converts characters into a format that can be transmitted over the Internet.</p>
+<h2 id="url">url</h2>
+<p><strong>Aliases:</strong> <code>url-encode</code></p>
+<p>Encodes text using application/x-www-form-urlencoded format. Special characters are converted to <code>%XX</code> format where XX is the hexadecimal value.</p>
+<h3 id="usage">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello world&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&quot;</span>
+<span class="hljs-comment"># Output: hello%20world</span>
+</code></pre>
+<h3 id="characters-that-are-encoded">Characters That Are Encoded</h3>
+<ul>
+<li>Space → <code>%20</code></li>
+<li><code>!</code> → <code>%21</code></li>
+<li><code>#</code> → <code>%23</code></li>
+<li><code>$</code> → <code>%24</code></li>
+<li><code>&amp;</code> → <code>%26</code></li>
+<li><code>'</code> → <code>%27</code></li>
+<li><code>(</code> → <code>%28</code></li>
+<li><code>)</code> → <code>%29</code></li>
+<li><code>*</code> → <code>%2A</code></li>
+<li><code>+</code> → <code>%2B</code></li>
+<li><code>,</code> → <code>%2C</code></li>
+<li><code>/</code> → <code>%2F</code></li>
+<li><code>:</code> → <code>%3A</code></li>
+<li><code>;</code> → <code>%3B</code></li>
+<li><code>=</code> → <code>%3D</code></li>
+<li><code>?</code> → <code>%3F</code></li>
+<li><code>@</code> → <code>%40</code></li>
+<li><code>[</code> → <code>%5B</code></li>
+<li><code>]</code> → <code>%5D</code></li>
+</ul>
+<h3 id="examples">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;https://example.com/path?name=value&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&quot;</span>
+<span class="hljs-comment"># Output: https%3A%2F%2Fexample.com%2Fpath%3Fname%3Dvalue</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;user@example.com&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&quot;</span>
+<span class="hljs-comment"># Output: user%40example.com</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello world &amp; goodbye&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&quot;</span>
+<span class="hljs-comment"># Output: hello%20world%20%26%20goodbye</span>
+</code></pre>
+<h2 id="url-decode">url-decode</h2>
+<p>Decodes URL-encoded strings back to original text.</p>
+<h3 id="usage-1">Usage</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello%20world&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url-decode&quot;</span>
+<span class="hljs-comment"># Output: hello world</span>
+</code></pre>
+<h3 id="examples-1">Examples</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;https%3A%2F%2Fexample.com&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url-decode&quot;</span>
+<span class="hljs-comment"># Output: https://example.com</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;user%40example.com&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url-decode&quot;</span>
+<span class="hljs-comment"># Output: user@example.com</span>
+</code></pre>
+<h2 id="round-trip-example">Round-Trip Example</h2>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Special chars: !@#</span>$<span class="hljs-string">%^&amp;*()&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url-decode&quot;</span>
+<span class="hljs-comment"># Output: Special chars: !@#$%^&amp;*()</span>
+</code></pre>
+<h2 id="use-cases">Use Cases</h2>
+<ul>
+<li>Preparing data for HTTP GET parameters</li>
+<li>Encoding email addresses and special characters in URLs</li>
+<li>Form data submission</li>
+<li>API query parameters</li>
+</ul>
+<h3 id="practical-example-url-processing">Practical Example: URL Processing</h3>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Encode URLs from a file</span>
+cat urls.txt <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&quot;</span>
+
+<span class="hljs-comment"># Encode only the URL part in a line</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Visit https://www.example.com for info&quot;</span> <span class="hljs-punctuation">|</span> eoyc -r <span class="hljs-string">&quot;https?://[^\s]+&quot;</span> -e <span class="hljs-string">&quot;url&quot;</span>
+<span class="hljs-comment"># Output: Visit https%3A%2F%2Fwww.example.com for info</span>
+</code></pre>
+<h2 id="chaining-with-url-encoding">Chaining with URL Encoding</h2>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># URL encode then Base64</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;special@chars.com&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&gt;base64&quot;</span>
+
+<span class="hljs-comment"># URL encode then uppercase</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&gt;upcase&quot;</span>
+<span class="hljs-comment"># Output: TEST%20DATA</span>
+</code></pre>
+<h2 id="note-on-line-feeds">Note on Line Feeds</h2>
+<p>URL encoding will also encode newlines (<code>\n</code>) as <code>%0A</code> if present in the input.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Examples</title>
+      <link>https://eoyc.hahwul.com/get_started/examples/</link>
+      <guid>https://eoyc.hahwul.com/get_started/examples/</guid>
+      <description>Here are practical examples of using eoyc in various scenarios. Encode a simple string with Base64: Hash a string with SHA1: Encode URLs for safe transmission: Apply multiple encodings in sequence: Encode a specific substring through multiple transformations: Process the entire line through a chain:...</description>
+      <content:encoded><![CDATA[<p>Here are practical examples of using eoyc in various scenarios.</p>
+<h2 id="basic-encoding">Basic Encoding</h2>
+<h3 id="single-encoder">Single Encoder</h3>
+<p>Encode a simple string with Base64:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&quot;</span>
+<span class="hljs-comment"># Output: dGVzdA==</span>
+</code></pre>
+<p>Hash a string with SHA1:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;password123&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha1&quot;</span>
+<span class="hljs-comment"># Output: c29tZS1oYXNoLXZhbHVl</span>
+</code></pre>
+<h3 id="url-encoding">URL Encoding</h3>
+<p>Encode URLs for safe transmission:</p>
+<pre><code class="language-bash hljs">cat urls.txt <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&quot;</span>
+<span class="hljs-comment"># Input:</span>
+<span class="hljs-comment"># https://www.hahwul.com</span>
+<span class="hljs-comment"># https://github.com</span>
+<span class="hljs-comment"># https://google.com</span>
+
+<span class="hljs-comment"># Output:</span>
+<span class="hljs-comment"># https%3A%2F%2Fwww.hahwul.com</span>
+<span class="hljs-comment"># https%3A%2F%2Fgithub.com</span>
+<span class="hljs-comment"># https%3A%2F%2Fgoogle.com</span>
+</code></pre>
+<h2 id="chain-encoding">Chain Encoding</h2>
+<h3 id="base64-and-md5-chain">Base64 and MD5 Chain</h3>
+<p>Apply multiple encodings in sequence:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abcdefghijk&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&gt;md5&quot;</span>
+<span class="hljs-comment"># First applies base64, then MD5 to the result</span>
+</code></pre>
+<h3 id="complex-chain-with-string-selection">Complex Chain with String Selection</h3>
+<p>Encode a specific substring through multiple transformations:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abcdefghijk&quot;</span> <span class="hljs-punctuation">|</span> eoyc -s bcde -e <span class="hljs-string">&quot;md5&gt;base64&gt;sha1&quot;</span>
+<span class="hljs-comment"># Output: aCFV4rFRO+h/0cCngUl1Ccahz040=fghijk</span>
+<span class="hljs-comment"># Only &quot;bcde&quot; is encoded through the chain</span>
+</code></pre>
+<h3 id="full-line-chain-encoding">Full Line Chain Encoding</h3>
+<p>Process the entire line through a chain:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abcdefghijk&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;md5&gt;base64&gt;sha1&quot;</span>
+<span class="hljs-comment"># Output: 9EG0tX9wWhKDghHJECSS8E+XZ3U=</span>
+</code></pre>
+<h2 id="pattern-matching-with-regex">Pattern Matching with Regex</h2>
+<h3 id="email-obfuscation">Email Obfuscation</h3>
+<p>Hash email addresses in text:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Contact: user@example.com for info&quot;</span> <span class="hljs-punctuation">|</span> eoyc -r <span class="hljs-string">&quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}&quot;</span> -e <span class="hljs-string">&quot;sha1&quot;</span>
+<span class="hljs-comment"># Output: Contact: w18pVtgE4B7y3sOS7zra42KJEj8= for info</span>
+</code></pre>
+<h3 id="url-pattern-matching">URL Pattern Matching</h3>
+<p>Encode only URLs in a line:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Visit https://www.example.com for details&quot;</span> <span class="hljs-punctuation">|</span> eoyc -r <span class="hljs-string">&quot;https?://[^\s]+&quot;</span> -e <span class="hljs-string">&quot;url&quot;</span>
+<span class="hljs-comment"># Output: Visit https%3A%2F%2Fwww.example.com for details</span>
+</code></pre>
+<h2 id="text-transformations">Text Transformations</h2>
+<h3 id="case-transformations">Case Transformations</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hello World&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;upcase&quot;</span>
+<span class="hljs-comment"># Output: HELLO WORLD</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hello World&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;downcase&quot;</span>
+<span class="hljs-comment"># Output: hello world</span>
+</code></pre>
+<h3 id="rot13-cipher">ROT13 Cipher</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;secret message&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;rot13&quot;</span>
+<span class="hljs-comment"># Output: frperg zrffntr</span>
+
+<span class="hljs-comment"># Decode by applying ROT13 again</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;frperg zrffntr&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;rot13&quot;</span>
+<span class="hljs-comment"># Output: secret message</span>
+</code></pre>
+<h3 id="text-reversal">Text Reversal</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hello World&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;reverse&quot;</span>
+<span class="hljs-comment"># Output: dlroW olleH</span>
+</code></pre>
+<h3 id="redaction">Redaction</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;sensitive data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;redacted&quot;</span>
+<span class="hljs-comment"># Output: ◼◼◼◼◼◼◼◼◼◼◼◼◼◼</span>
+</code></pre>
+<h2 id="binary-and-character-encodings">Binary and Character Encodings</h2>
+<h3 id="binary-encoding">Binary Encoding</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abc&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin&quot;</span>
+<span class="hljs-comment"># Output: 01100001 01100010 01100011</span>
+
+<span class="hljs-comment"># Decode</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;01100001 01100010 01100011&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;bin-decode&quot;</span>
+<span class="hljs-comment"># Output: abc</span>
+</code></pre>
+<h3 id="octal-encoding">Octal Encoding</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abc&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct&quot;</span>
+<span class="hljs-comment"># Output: 141142143</span>
+
+<span class="hljs-comment"># Decode</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;141142143&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;oct-decode&quot;</span>
+<span class="hljs-comment"># Output: abc</span>
+</code></pre>
+<h3 id="unicode-encoding">Unicode Encoding</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode&quot;</span>
+<span class="hljs-comment"># Output: \u0068\u0065\u006c\u006c\u006f</span>
+
+<span class="hljs-comment"># Decode</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;\\u0068\\u0065\\u006c\\u006c\\u006f&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;unicode-decode&quot;</span>
+<span class="hljs-comment"># Output: hello</span>
+</code></pre>
+<h3 id="character-code-ascii-values">Character Code (ASCII Values)</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abc&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode&quot;</span>
+<span class="hljs-comment"># Output: 97 98 99</span>
+
+<span class="hljs-comment"># Decode</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;97 98 99&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;charcode-decode&quot;</span>
+<span class="hljs-comment"># Output: abc</span>
+</code></pre>
+<h2 id="hex-encoding">Hex Encoding</h2>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex&quot;</span>
+<span class="hljs-comment"># Output: 68656c6c6f</span>
+
+<span class="hljs-comment"># Decode</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;68656c6c6f&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;hex-decode&quot;</span>
+<span class="hljs-comment"># Output: hello</span>
+</code></pre>
+<h2 id="batch-processing">Batch Processing</h2>
+<h3 id="processing-multiple-files">Processing Multiple Files</h3>
+<pre><code class="language-bash hljs"><span class="hljs-keyword">for</span> file in *.txt<span class="hljs-punctuation">;</span> <span class="hljs-keyword">do</span>
+    cat <span class="hljs-string">&quot;</span><span class="hljs-variable">$file</span><span class="hljs-string">&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha256&quot;</span> &gt; <span class="hljs-string">&quot;</span><span class="hljs-subst">${</span><span class="hljs-variable">file</span><span class="hljs-subst">}</span><span class="hljs-string">.encoded&quot;</span>
+<span class="hljs-keyword">done</span>
+</code></pre>
+<h3 id="pipeline-integration">Pipeline Integration</h3>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Extract URLs from HTML and encode them</span>
+cat page.html <span class="hljs-punctuation">|</span> grep -oP <span class="hljs-string">&#39;https?://[^\s&lt;&gt;&quot;]+&#39;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&quot;</span>
+</code></pre>
+<h3 id="combining-with-other-tools">Combining with Other Tools</h3>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Find unique encoded values</span>
+cat data.txt <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha1&quot;</span> <span class="hljs-punctuation">|</span> sort <span class="hljs-punctuation">|</span> uniq
+
+<span class="hljs-comment"># Count encoded values</span>
+cat urls.txt <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;md5&quot;</span> <span class="hljs-punctuation">|</span> wc -l
+</code></pre>
+<h2 id="advanced-use-cases">Advanced Use Cases</h2>
+<h3 id="security-testing">Security Testing</h3>
+<p>Prepare payloads with various encodings:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&gt;base64&quot;</span>
+</code></pre>
+<h3 id="data-anonymization">Data Anonymization</h3>
+<p>Hash sensitive information in logs:</p>
+<pre><code class="language-bash hljs">cat access.log <span class="hljs-punctuation">|</span> eoyc -r <span class="hljs-string">&#39;\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}&#39;</span> -e <span class="hljs-string">&quot;sha256&quot;</span>
+</code></pre>
+<h3 id="configuration-obfuscation">Configuration Obfuscation</h3>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;api_key=secret123&quot;</span> <span class="hljs-punctuation">|</span> eoyc -s <span class="hljs-string">&quot;secret123&quot;</span> -e <span class="hljs-string">&quot;base64&gt;rot13&quot;</span>
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li>Explore all available <a href="https://eoyc.hahwul.com/encoders/">Encoders</a> and their options</li>
+<li>Check the <a href="https://eoyc.hahwul.com/get_started/usage/">Usage</a> guide for detailed parameter descriptions</li>
+</ul>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Installation</title>
+      <link>https://eoyc.hahwul.com/get_started/installation/</link>
+      <guid>https://eoyc.hahwul.com/get_started/installation/</guid>
+      <description>Eoyc can be installed in several ways, depending on your preference and environment. For macOS users, Eoyc is available via Homebrew: To build Eoyc from source, you&apos;ll need to have Crystal installed (version 1.7.3 or higher). The compiled binary will be located at bin/eoyc. After installation, verif...</description>
+      <content:encoded><![CDATA[<p>Eoyc can be installed in several ways, depending on your preference and environment.</p>
+<h2 id="from-homebrew">From Homebrew</h2>
+<p>For macOS users, Eoyc is available via Homebrew:</p>
+<pre><code class="language-bash hljs">brew tap hahwul/eoyc
+brew install eoyc
+</code></pre>
+<h2 id="from-source">From Source</h2>
+<p>To build Eoyc from source, you'll need to have Crystal installed (version 1.7.3 or higher).</p>
+<h3 id="clone-the-repository">Clone the repository</h3>
+<pre><code class="language-bash hljs">git clone https://github.com/hahwul/eoyc
+<span class="hljs-built_in">cd</span> eoyc
+</code></pre>
+<h3 id="build-the-application">Build the application</h3>
+<pre><code class="language-bash hljs">shards install
+shards build
+</code></pre>
+<p>The compiled binary will be located at <code>bin/eoyc</code>.</p>
+<h3 id="run">Run</h3>
+<pre><code class="language-bash hljs">./bin/eoyc -h
+</code></pre>
+<h2 id="verify-installation">Verify Installation</h2>
+<p>After installation, verify that eoyc is working correctly:</p>
+<pre><code class="language-bash hljs">eoyc --version
+<span class="hljs-comment"># Output: 0.3.0</span>
+</code></pre>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&quot;</span>
+<span class="hljs-comment"># Output: dGVzdA==</span>
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<p>Now that you have eoyc installed, check out the <a href="https://eoyc.hahwul.com/get_started/usage/">Usage</a> guide to learn how to use it effectively.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Usage</title>
+      <link>https://eoyc.hahwul.com/get_started/usage/</link>
+      <guid>https://eoyc.hahwul.com/get_started/usage/</guid>
+      <description>Eoyc is a command-line tool for encoding and transforming text. It reads from STDIN and applies the specified encoders to your data. Your choice string to encode. When specified, only this exact string within each input line will be encoded. Encode the first match on each line. If the first capture ...</description>
+      <content:encoded><![CDATA[<p>Eoyc is a command-line tool for encoding and transforming text. It reads from STDIN and applies the specified encoders to your data.</p>
+<h2 id="basic-command-structure">Basic Command Structure</h2>
+<pre><code class="language-bash hljs">eoyc <span class="hljs-operator">[</span>arguments<span class="hljs-operator">]</span>
+</code></pre>
+<h2 id="command-line-arguments">Command-Line Arguments</h2>
+<h3 id="s-string-stringstring"><code>-s STRING, --string=STRING</code></h3>
+<p>Your choice string to encode. When specified, only this exact string within each input line will be encoded.</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello world&quot;</span> <span class="hljs-punctuation">|</span> eoyc -s <span class="hljs-string">&quot;world&quot;</span> -e <span class="hljs-string">&quot;base64&quot;</span>
+<span class="hljs-comment"># Output: hello d29ybGQ=</span>
+</code></pre>
+<h3 id="r-regex-regexregex"><code>-r REGEX, --regex=REGEX</code></h3>
+<p>Encode the first match on each line. If the first capture group participates in that match, encode only that group's text.</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;email: user@example.com&quot;</span> <span class="hljs-punctuation">|</span> eoyc -r <span class="hljs-string">&quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}&quot;</span> -e <span class="hljs-string">&quot;sha1&quot;</span>
+<span class="hljs-comment"># Output: email: w18pVtgE4B7y3sOS7zra42KJEj8=</span>
+</code></pre>
+<h3 id="e-encoders-encodersencoders"><code>-e ENCODERS, --encoders=ENCODERS</code></h3>
+<p>Encoders chain. You can use <code>&gt;</code>, <code>|</code>, or <code>,</code> characters to chain multiple encoders together.</p>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Single encoder</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&quot;</span>
+<span class="hljs-comment"># Output: dGVzdA==</span>
+
+<span class="hljs-comment"># Multiple encoders chained</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&gt;md5&quot;</span>
+<span class="hljs-comment"># Output: 65682a9301ce243d376d9b26b0b2c3bb</span>
+
+<span class="hljs-comment"># Alternative chain characters</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url|upcase|md5&quot;</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&gt;upcase,md5&quot;</span>
+</code></pre>
+<h3 id="o-path-outputpath"><code>-o PATH, --output=PATH</code></h3>
+<p>Output file path (currently supported as a flag).</p>
+<h3 id="v-version"><code>-v, --version</code></h3>
+<p>Show version information.</p>
+<pre><code class="language-bash hljs">eoyc --version
+<span class="hljs-comment"># Output: 0.3.0</span>
+</code></pre>
+<h3 id="h-help"><code>-h, --help</code></h3>
+<p>Show help information including all available encoders.</p>
+<pre><code class="language-bash hljs">eoyc --help
+</code></pre>
+<h2 id="encoding-modes">Encoding Modes</h2>
+<h3 id="1-full-line-encoding-default">1. Full Line Encoding (Default)</h3>
+<p>By default, the entire line is encoded:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abcdefghijk&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;md5&quot;</span>
+<span class="hljs-comment"># Output: 06c48e7ea982782c827c8b15fc8c793d</span>
+</code></pre>
+<h3 id="2-string-selection-mode-s">2. String Selection Mode (<code>-s</code>)</h3>
+<p>Encode only a specific substring:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;abcdefghijk&quot;</span> <span class="hljs-punctuation">|</span> eoyc -s <span class="hljs-string">&quot;bcde&quot;</span> -e <span class="hljs-string">&quot;base64&quot;</span>
+<span class="hljs-comment"># Output: aYmNkZWZnaGlqaw==</span>
+</code></pre>
+<h3 id="3-regex-pattern-mode-r">3. Regex Pattern Mode (<code>-r</code>)</h3>
+<p>Encode only the part that matches a regular expression:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;https://www.example.com&quot;</span> <span class="hljs-punctuation">|</span> eoyc -r <span class="hljs-string">&quot;https?://[^\s]+&quot;</span> -e <span class="hljs-string">&quot;url&quot;</span>
+<span class="hljs-comment"># Output: https%3A%2F%2Fwww.example.com</span>
+</code></pre>
+<h2 id="chaining-encoders">Chaining Encoders</h2>
+<p>One of the most powerful features of eoyc is the ability to chain multiple encoders together. The encoders are applied in the order specified:</p>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Apply base64, then md5, then sha1</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&gt;md5&gt;sha1&quot;</span>
+
+<span class="hljs-comment"># Apply URL encoding, then convert to uppercase, then MD5</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;test data&quot;</span> <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;url&gt;upcase&gt;md5&quot;</span>
+</code></pre>
+<p>You can use any of these characters to separate encoders in a chain:</p>
+<ul>
+<li><code>&gt;</code> (greater than)</li>
+<li><code>|</code> (pipe)</li>
+<li><code>,</code> (comma)</li>
+</ul>
+<h2 id="working-with-files">Working with Files</h2>
+<p>Eoyc reads from STDIN, so you can easily process files:</p>
+<pre><code class="language-bash hljs"><span class="hljs-comment"># Process a file line by line</span>
+cat urls.txt <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;sha1&quot;</span>
+
+<span class="hljs-comment"># Process and save to output file</span>
+cat data.txt <span class="hljs-punctuation">|</span> eoyc -e <span class="hljs-string">&quot;base64&quot;</span> &gt; encoded.txt
+</code></pre>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li>Check out <a href="https://eoyc.hahwul.com/get_started/examples/">Examples</a> for more use cases</li>
+<li>Browse the <a href="https://eoyc.hahwul.com/encoders/">Encoders Reference</a> for all available encoders</li>
+</ul>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>
