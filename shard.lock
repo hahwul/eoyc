@@ -2,7 +2,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 1.7.0-dev+git.commit.a753933e6c8becc93883766b6696414cf49a1469
+    version: 1.7.0
 
   cyclonedx-cr:
     git: https://github.com/hahwul/cyclonedx-cr.git

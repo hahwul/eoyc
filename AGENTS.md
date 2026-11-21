@@ -129,7 +129,7 @@ crystal tool format
 ### Linting
 ```bash
 # Uses the project-local ameba installed by `shards install`
-crystal run lib/ameba/bin/ameba.cr
+crystal run lib/ameba/src/cli.cr
 # or simply:
 just check
 ```

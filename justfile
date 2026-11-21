@@ -25,13 +25,13 @@ clean:
 [group('development')]
 fix:
     crystal tool format
-    crystal run lib/ameba/bin/ameba.cr -- --fix
+    crystal run lib/ameba/src/cli.cr -- --fix
 
 # Check code format and lint without changes.
 [group('development')]
 check:
     crystal tool format --check
-    crystal run lib/ameba/bin/ameba.cr
+    crystal run lib/ameba/src/cli.cr
 
 # Run all tests.
 [group('development')]
